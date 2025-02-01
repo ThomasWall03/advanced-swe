@@ -56,8 +56,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.cinder.R
-import de.bilkewall.plugins.database.profile.Profile
 import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.AppProfile
 import de.bilkewall.plugins.view.drinkDetail.DetailViewCard
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -313,11 +313,11 @@ private fun BottomButtonRow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    profiles: List<Profile>,
-    currentProfile: Profile,
-    onProfileSelected: (Profile) -> Unit,
+    profiles: List<AppProfile>,
+    currentProfile: AppProfile,
+    onProfileSelected: (AppProfile) -> Unit,
     onAddProfile: () -> Unit,
-    onDeleteProfile: (Profile) -> Unit
+    onDeleteProfile: (AppProfile) -> Unit
 ) {
     var showProfileDropdown by remember { mutableStateOf(false) }
     val dropdownInteractionSource = remember { MutableInteractionSource() }
@@ -381,11 +381,11 @@ fun TopBar(
 private fun ProfileDropDown(
     showProfileDropdown: Boolean,
     setProfileDropdownState: (Boolean) -> Unit,
-    profiles: List<Profile>,
-    onProfileSelected: (Profile) -> Unit,
+    profiles: List<AppProfile>,
+    onProfileSelected: (AppProfile) -> Unit,
     dropdownInteractionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onAddProfile: () -> Unit,
-    onDeleteProfile: (Profile) -> Unit
+    onDeleteProfile: (AppProfile) -> Unit
 ) {
     DropdownMenu(
         expanded = showProfileDropdown,
@@ -433,9 +433,9 @@ private fun ProfileDropDown(
             },
             text = {
                 val messageProfile = if (profiles.size < 8) {
-                    Profile(0, stringResource(R.string.add_new_profile))
+                    AppProfile(0, stringResource(R.string.add_new_profile))
                 } else {
-                    Profile(0, stringResource(R.string.maximum_profiles_reached))
+                    AppProfile(0, stringResource(R.string.maximum_profiles_reached))
                 }
                 ProfileRow(messageProfile, R.drawable.profile_plus_icon, {}, false)
             },
@@ -452,9 +452,9 @@ private fun ProfileDropDown(
 
 @Composable
 private fun ProfileRow(
-    profile: Profile,
+    profile: AppProfile,
     painterResourceId: Int,
-    onDelete: (Profile) -> Unit,
+    onDelete: (AppProfile) -> Unit,
     showDeleteButton: Boolean = false
 ) {
     Row(

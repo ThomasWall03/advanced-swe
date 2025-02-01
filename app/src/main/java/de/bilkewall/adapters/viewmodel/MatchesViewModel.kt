@@ -17,9 +17,9 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MatchesViewModel(
-    private val matchRepository: MatchRepositoryInterface,
-    private val profileRepository: ProfileRepositoryInterface,
-    private val drinkRepository: DrinkRepositoryInterface
+    private var matchRepository: MatchRepositoryInterface,
+    private var profileRepository: ProfileRepositoryInterface,
+    private var drinkRepository: DrinkRepositoryInterface
 ) : ViewModel() {
 
     private val _visibleDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
@@ -28,6 +28,16 @@ class MatchesViewModel(
     var loading: Boolean by mutableStateOf(false)
 
     var matchSearchText: String by mutableStateOf("")
+
+    fun initializeComponent(
+        pMatchRepository: MatchRepositoryInterface,
+        pProfileRepository: ProfileRepositoryInterface,
+        pDrinkRepository: DrinkRepositoryInterface
+    ) {
+        matchRepository = pMatchRepository
+        profileRepository = pProfileRepository
+        drinkRepository = pDrinkRepository
+    }
 
     fun loadVisibleDrinks() = viewModelScope.launch(Dispatchers.IO) {
         val currentProfile = profileRepository.activeProfile.firstOrNull()

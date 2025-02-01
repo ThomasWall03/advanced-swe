@@ -13,8 +13,8 @@ import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.launch
 
 class DrinkDetailViewModel(
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val drinkIngredientWrapper: DrinkIngredientWrapper
+    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private var drinkIngredientWrapper: DrinkIngredientWrapper
 ) : ViewModel() {
 
     var drink: AppDrink by mutableStateOf(AppDrink())
@@ -22,6 +22,14 @@ class DrinkDetailViewModel(
 
     private var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
+
+    fun initializeComponent(
+        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+        pDrinkIngredientWrapper: DrinkIngredientWrapper
+    ) {
+        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
+        drinkIngredientWrapper = pDrinkIngredientWrapper
+    }
 
     fun setDrinkById(id: String) {
         viewModelScope.launch {

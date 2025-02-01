@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class DrinkListViewModel(
-    private val drinkRepository: DrinkRepositoryInterface
+    private var drinkRepository: DrinkRepositoryInterface
 ) : ViewModel() {
 
     var drinks: List<AppDrink> by mutableStateOf(listOf())
@@ -20,6 +20,10 @@ class DrinkListViewModel(
     var loading: Boolean by mutableStateOf(false)
 
     var drinkSearchText: String by mutableStateOf("")
+
+    fun initializeComponent(pDrinkRepository: DrinkRepositoryInterface) {
+        drinkRepository = pDrinkRepository
+    }
 
     fun fillListIfEmpty() {
         if (drinks.isEmpty()) {

@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.adapters.repository.ProfileRepositoryInterface
-import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.adapters.service.DrinkService
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class LandingPageViewModel(
-    private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkService: APIWrapperInterface,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val profileRepository: ProfileRepositoryInterface
+    private var drinkRepository: DrinkRepositoryInterface,
+    private var drinkService: DrinkService,
+    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private var profileRepository: ProfileRepositoryInterface
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -30,6 +30,18 @@ class LandingPageViewModel(
 
     private val allDrinks = drinkRepository.getAllDrinks()
     private var errorMessage: String by mutableStateOf("")
+
+    fun initializeComponent(
+        pDrinkRepository: DrinkRepositoryInterface,
+        pDrinkService: DrinkService,
+        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+        pProfileRepository: ProfileRepositoryInterface
+    ) {
+        drinkRepository = pDrinkRepository
+        drinkService = pDrinkService
+        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
+        profileRepository = pProfileRepository
+    }
 
     init {
         populateDatabase()

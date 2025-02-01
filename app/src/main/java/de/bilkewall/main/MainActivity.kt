@@ -31,6 +31,12 @@ import de.bilkewall.plugins.view.main.MainView
 import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.plugins.view.matches.MatchesView
 import de.bilkewall.adapters.viewmodel.MatchesViewModel
+import de.bilkewall.main.di.CreateProfileViewModelFactory
+import de.bilkewall.main.di.DrinkDetailViewModelFactory
+import de.bilkewall.main.di.DrinkListViewModelFactory
+import de.bilkewall.main.di.LandingPageViewModelFactory
+import de.bilkewall.main.di.MainViewModelFactory
+import de.bilkewall.main.di.MatchesViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,20 +56,50 @@ fun CinderApp() {
     DependencyProvider.initialize(context)
 
     val navController = rememberNavController()
-    val mainViewModel = viewModel<MainViewModel>()
-    mainViewModel.initializeComponent(
-        DependencyProvider.sharedFilterRepository,
-        DependencyProvider.profileRepository,
-        DependencyProvider.matchRepository,
-        DependencyProvider.drinkRepository,
-        DependencyProvider.drinkIngredientCrossRefRepository,
-        DependencyProvider.drinkService
+    val mainViewModel: MainViewModel = viewModel(
+        factory = MainViewModelFactory(
+            DependencyProvider.sharedFilterRepository,
+            DependencyProvider.profileRepository,
+            DependencyProvider.matchRepository,
+            DependencyProvider.drinkRepository,
+            DependencyProvider.drinkIngredientCrossRefRepository,
+            DependencyProvider.drinkService
+        )
     )
-    val drinkListViewModel = viewModel<DrinkListViewModel>()
-    val drinkViewModel = viewModel<DrinkDetailViewModel>()
-    val matchesViewModel = viewModel<MatchesViewModel>()
-    val createProfileViewModel = viewModel<CreateProfileViewModel>()
-    val landingPageViewModel = viewModel<LandingPageViewModel>()
+    val drinkListViewModel: DrinkListViewModel = viewModel(
+        factory = DrinkListViewModelFactory(
+            DependencyProvider.drinkRepository
+        )
+    )
+    val drinkViewModel: DrinkDetailViewModel = viewModel(
+        factory = DrinkDetailViewModelFactory(
+            DependencyProvider.drinkIngredientCrossRefRepository,
+            DependencyProvider.drinkIngredientWrapper
+        )
+    )
+    val matchesViewModel: MatchesViewModel = viewModel(
+        factory = MatchesViewModelFactory(
+            DependencyProvider.matchRepository,
+            DependencyProvider.profileRepository,
+            DependencyProvider.drinkRepository
+        )
+    )
+    val createProfileViewModel: CreateProfileViewModel = viewModel(
+        factory = CreateProfileViewModelFactory(
+            DependencyProvider.profileRepository,
+            DependencyProvider.sharedFilterRepository,
+            DependencyProvider.drinkIngredientCrossRefRepository,
+            DependencyProvider.drinkService
+        )
+    )
+    val landingPageViewModel: LandingPageViewModel = viewModel(
+        factory = LandingPageViewModelFactory(
+            DependencyProvider.drinkRepository,
+            DependencyProvider.drinkService,
+            DependencyProvider.drinkIngredientCrossRefRepository,
+            DependencyProvider.profileRepository
+        )
+    )
 
     val matchesTab = TabBarItem(
         title = "matchesView",
@@ -126,6 +162,4 @@ fun CinderApp() {
             navController.popBackStack()
         }
     }
-
-
 }

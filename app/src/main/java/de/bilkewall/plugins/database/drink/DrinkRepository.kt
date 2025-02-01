@@ -6,12 +6,11 @@ import de.bilkewall.plugins.util.toAppDrink
 import de.bilkewall.plugins.util.toDrink
 import kotlinx.coroutines.flow.map
 
-class DrinkRepository (private val drinkDao: DrinkDao): DrinkRepositoryInterface {
-    val allDrinks = drinkDao.getAllDrinks()
+class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface {
+    override fun getAllDrinks() =
+        drinkDao.getAllDrinks().map { drinks -> drinks.map { it.toAppDrink() } }
 
-    override fun getAllDrinks() = allDrinks.map { drinks -> drinks.map { it.toAppDrink() } }
-
-   override suspend fun insert(drink: AppDrink) {
+    override suspend fun insert(drink: AppDrink) {
         drinkDao.insert(drink.toDrink())
     }
 
@@ -27,7 +26,7 @@ class DrinkRepository (private val drinkDao: DrinkDao): DrinkRepositoryInterface
         drinkDao.deleteAllDrinks()
     }
 
-    override suspend fun getDrinkById(id: Int): AppDrink{
+    override suspend fun getDrinkById(id: Int): AppDrink {
         return drinkDao.getDrinkById(id).toAppDrink()
     }
 

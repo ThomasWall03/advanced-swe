@@ -9,20 +9,13 @@ import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.adapters.repository.MatchRepositoryInterface
 import de.bilkewall.adapters.repository.ProfileRepositoryInterface
 import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
-import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.adapters.service.DrinkService
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppMatch
 import de.bilkewall.domain.AppProfile
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.plugins.database.filter.DrinkTypeFilter
-import de.bilkewall.plugins.database.filter.IngredientValueFilter
-import de.bilkewall.plugins.database.match.Match
-import de.bilkewall.plugins.database.profile.Profile
-import de.bilkewall.plugins.util.toAppDrinkDto
-import de.bilkewall.plugins.util.toDrinkAndRelations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +30,7 @@ class MainViewModel(
     private var matchRepository: MatchRepositoryInterface,
     private var drinkRepository: DrinkRepositoryInterface,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private var drinkService: APIWrapperInterface
+    private var drinkService: DrinkService
 ) : ViewModel() {
     val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
     val currentProfile = profileRepository.activeProfile
@@ -61,7 +54,7 @@ class MainViewModel(
         pMatchRepository: MatchRepositoryInterface,
         pDrinkRepository: DrinkRepositoryInterface,
         pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-        pDrinkService: APIWrapperInterface
+        pDrinkService: DrinkService
     ) {
         sharedFilterRepository = pSharedFilterRepository
         profileRepository = pProfileRepository
@@ -169,7 +162,7 @@ class MainViewModel(
         }
     }
 
-    fun setCurrentProfile(profile: Profile) = viewModelScope.launch {
+    fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {
         profileRepository.deactivateActiveProfile()
         profileRepository.setActiveProfile(profile.profileId)
         bypassFilter.value = false

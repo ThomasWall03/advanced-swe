@@ -12,16 +12,17 @@ import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppProfile
 import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
+import de.bilkewall.adapters.service.DrinkService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CreateProfileViewModel(
-    private val profileRepository: ProfileRepositoryInterface,
-    private val sharedFilterRepository: SharedFilterRepositoryInterface,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val drinkService: APIWrapperInterface
+    private var profileRepository: ProfileRepositoryInterface,
+    private var sharedFilterRepository: SharedFilterRepositoryInterface,
+    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private var drinkService: DrinkService
 ) : ViewModel() {
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
@@ -36,6 +37,18 @@ class CreateProfileViewModel(
 
     var errorMessage: String by mutableStateOf("")
     private var loading: Boolean by mutableStateOf(false)
+
+    fun initializeComponent(
+        pProfileRepository: ProfileRepositoryInterface,
+        pSharedFilterRepository: SharedFilterRepositoryInterface,
+        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+        pDrinkService: DrinkService
+    ) {
+        profileRepository = pProfileRepository
+        sharedFilterRepository = pSharedFilterRepository
+        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
+        drinkService = pDrinkService
+    }
 
     fun saveProfile(profileName: String) = viewModelScope.launch {
         profileRepository.deactivateActiveProfile()
