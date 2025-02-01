@@ -12,6 +12,8 @@ interface DrinkRepositoryInterface {
 
     suspend fun getDrinkById(drinkId: Int): AppDrink
 
+    suspend fun getDrinksByName(name: String): List<AppDrink>
+
     suspend fun delete(drink: AppDrink)
 
     suspend fun deleteAllDrinks()

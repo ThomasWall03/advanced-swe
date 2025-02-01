@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.database.profile
+package de.bilkewall.adapters.repository
 
 import de.bilkewall.domain.AppProfile
 import kotlinx.coroutines.flow.Flow

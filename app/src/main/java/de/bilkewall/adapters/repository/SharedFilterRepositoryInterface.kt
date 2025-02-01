@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.database.filter
+package de.bilkewall.adapters.repository
 
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter

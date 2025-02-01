@@ -6,16 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.service.DrinkService
-import de.bilkewall.plugins.database.drink.Drink
-import de.bilkewall.plugins.util.toDrinkAndRelations
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.domain.AppDrink
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
-class DrinkListViewModel : ViewModel() {
+class DrinkListViewModel(
+    private val drinkRepository: DrinkRepositoryInterface
+) : ViewModel() {
 
-    private val drinkService = DrinkService()
-
-    var drinks: List<Drink> by mutableStateOf(listOf())
+    var drinks: List<AppDrink> by mutableStateOf(listOf())
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
@@ -33,9 +33,8 @@ class DrinkListViewModel : ViewModel() {
             loading = true
 
             try {
-                val allDrinks =
-                    drinkService.getAllDrinksAtoZ().map { it.toDrinkAndRelations().first }
-                drinks = allDrinks
+                val allDrinks = drinkRepository.getAllDrinks()
+                drinks = allDrinks.toList().flatten()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
                 Log.e("DrinkListViewModel.getAllDrinks", "Error: ${e.message}")
@@ -51,8 +50,8 @@ class DrinkListViewModel : ViewModel() {
             errorMessage = ""
             loading = true
             try {
-                val drinksByName = drinkService.getDrinksByName(name)
-                drinks = drinksByName.map { it.toDrinkAndRelations().first }
+                val drinksByName = drinkRepository.getDrinksByName(name)
+                drinks = drinksByName
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {
