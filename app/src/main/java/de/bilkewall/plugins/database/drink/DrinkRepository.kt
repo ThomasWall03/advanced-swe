@@ -1,29 +1,37 @@
 package de.bilkewall.plugins.database.drink
 
-class DrinkRepository (private val drinkDao: DrinkDao) {
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.domain.AppDrink
+import de.bilkewall.plugins.util.toAppDrink
+import de.bilkewall.plugins.util.toDrink
+import kotlinx.coroutines.flow.map
+
+class DrinkRepository (private val drinkDao: DrinkDao): DrinkRepositoryInterface {
     val allDrinks = drinkDao.getAllDrinks()
 
-    suspend fun insert(drink: Drink) {
-        drinkDao.insert(drink)
+    override fun getAllDrinks() = allDrinks.map { drinks -> drinks.map { it.toAppDrink() } }
+
+   override suspend fun insert(drink: AppDrink) {
+        drinkDao.insert(drink.toDrink())
     }
 
-    suspend fun update(drink: Drink) {
-        drinkDao.update(drink)
+    override suspend fun update(drink: AppDrink) {
+        drinkDao.update(drink.toDrink())
     }
 
-    suspend fun delete(drink: Drink) {
-        drinkDao.delete(drink)
+    override suspend fun delete(drink: AppDrink) {
+        drinkDao.delete(drink.toDrink())
     }
 
-    suspend fun deleteAllDrinks() {
+    override suspend fun deleteAllDrinks() {
         drinkDao.deleteAllDrinks()
     }
 
-    suspend fun getDrinkById(id: Int): Drink{
-        return drinkDao.getDrinkById(id)
+    override suspend fun getDrinkById(id: Int): AppDrink{
+        return drinkDao.getDrinkById(id).toAppDrink()
     }
 
-    suspend fun getDrinkCount(): Int {
+    override suspend fun getDrinkCount(): Int {
         return drinkDao.getDrinkCount()
     }
 }

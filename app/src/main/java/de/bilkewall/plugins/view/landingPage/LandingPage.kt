@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 
 @Composable
@@ -37,6 +38,7 @@ fun StartUpView(navController: NavController, viewModel: LandingPageViewModel) {
 
             LaunchedEffect(isLoading) {
                 if (!isLoading) {
+                    //TODO ins viewmodel hier, nur noch auslesen
                     var navigationRoute = "mainView"
 
                     if (!profilesExist) {
@@ -52,7 +54,6 @@ fun StartUpView(navController: NavController, viewModel: LandingPageViewModel) {
                     }
                 }
             }
-
 
             AnimatedVisibility(isLoading) {
                 CustomLoadingIndicator()

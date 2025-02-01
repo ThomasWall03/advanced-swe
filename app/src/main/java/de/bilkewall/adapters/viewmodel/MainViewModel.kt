@@ -1,10 +1,10 @@
-package de.bilkewall.plugins.view.main
+package de.bilkewall.adapters.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.domain.AppDrinkDto
+import de.bilkewall.domain.AppDrink
 import de.bilkewall.main.di.DependencyProvider
 import de.bilkewall.plugins.database.filter.DrinkTypeFilter
 import de.bilkewall.plugins.database.filter.IngredientValueFilter
@@ -32,11 +32,11 @@ class MainViewModel : ViewModel() {
     val allProfiles: Flow<List<Profile>> = profileRepository.allProfiles
     val currentProfile = profileRepository.activeProfile
 
-    private val _availableDrinks = MutableStateFlow<List<AppDrinkDto>>(emptyList())
-    val availableDrinks: StateFlow<List<AppDrinkDto>> = _availableDrinks
+    private val _availableDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
+    val availableDrinks: StateFlow<List<AppDrink>> = _availableDrinks
 
-    private val _currentDrink = MutableStateFlow(AppDrinkDto())
-    val currentDrink: StateFlow<AppDrinkDto> get() = _currentDrink
+    private val _currentDrink = MutableStateFlow(AppDrink())
+    val currentDrink: StateFlow<AppDrink> get() = _currentDrink
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> get() = _loading
@@ -63,7 +63,7 @@ class MainViewModel : ViewModel() {
                     calculateAvailableDrinks(matches, ingredientFilters, drinkTypeFilters)
                 }
 
-                _currentDrink.value = _availableDrinks.value.firstOrNull() ?: AppDrinkDto()
+                _currentDrink.value = _availableDrinks.value.firstOrNull() ?: AppDrink()
 
                 allDrinksMatched.value =
                     _availableDrinks.value.isEmpty() && bypassFilter.value == true
@@ -118,7 +118,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun updateDataBaseEntry(drink: AppDrinkDto) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateDataBaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val apiDrink = drinkService.getDrinkById(drink.drinkId)[0]
             if (apiDrink.idDrink.toInt() != 0) {

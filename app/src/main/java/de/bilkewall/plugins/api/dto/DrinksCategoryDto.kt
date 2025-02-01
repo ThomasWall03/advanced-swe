@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.dto
+package de.bilkewall.plugins.api.dto
 
 import kotlinx.serialization.Serializable
 

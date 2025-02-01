@@ -54,9 +54,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.database.profile.Profile
-import de.bilkewall.domain.AppDrinkDto
+import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.view.drinkDetail.DetailViewCard
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -72,7 +73,7 @@ fun MainView(
         initial = null
     )
 
-    val currentDrink by viewModel.currentDrink.collectAsState(initial = AppDrinkDto())
+    val currentDrink by viewModel.currentDrink.collectAsState(initial = AppDrink())
     val availableDrinks by viewModel.availableDrinks.collectAsState(initial = emptyList())
     val isLoading by viewModel.loading.collectAsState()
 
@@ -161,7 +162,7 @@ fun MainView(
 
 @Composable
 fun ImageCard(
-    drink: AppDrinkDto,
+    drink: AppDrink,
     onCheckClick: () -> Unit,
     onCrossClick: () -> Unit,
     isFlipped: Boolean,
@@ -234,7 +235,7 @@ fun ImageCard(
 @Composable
 private fun BottomButtonRow(
     isFlipped: Boolean,
-    drink: AppDrinkDto,
+    drink: AppDrink,
     onCrossClick: () -> Unit,
     isLoading: Boolean,
     onCheckClick: () -> Unit

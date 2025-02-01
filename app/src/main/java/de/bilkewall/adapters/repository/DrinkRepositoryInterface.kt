@@ -1,0 +1,20 @@
+package de.bilkewall.adapters.repository
+
+import de.bilkewall.domain.AppDrink
+import kotlinx.coroutines.flow.Flow
+
+interface DrinkRepositoryInterface {
+    fun getAllDrinks(): Flow<List<AppDrink>>
+
+    suspend fun insert(drink: AppDrink)
+
+    suspend fun update(drink: AppDrink)
+
+    suspend fun getDrinkById(drinkId: Int): AppDrink
+
+    suspend fun delete(drink: AppDrink)
+
+    suspend fun deleteAllDrinks()
+
+    suspend fun getDrinkCount(): Int
+}

@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.view.drinkList
+package de.bilkewall.adapters.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue

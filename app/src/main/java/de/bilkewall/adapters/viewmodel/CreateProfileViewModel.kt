@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.view.createProfile
+package de.bilkewall.adapters.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

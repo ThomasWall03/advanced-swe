@@ -1,6 +1,6 @@
 package de.bilkewall.domain
 
-data class AppDrinkDto(
+data class AppDrink(
     val drinkId: Int = 0,
     val drinkName: String = "",
     val videoUrl: String = "",

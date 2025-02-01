@@ -1,9 +1,38 @@
 package de.bilkewall.plugins.util
 
-import de.bilkewall.domain.AppDrinkDto
+import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.database.drink.Drink
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
-import de.bilkewall.plugins.dto.DrinkDto
+import de.bilkewall.plugins.api.dto.DrinkDto
+
+fun DrinkDto.toAppDrink(): AppDrink {
+    val ingredientsList = listOfNotNull(
+        strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5,
+        strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10,
+        strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15
+    )
+
+    val measurementsList = listOfNotNull(
+        strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5,
+        strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10,
+        strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15
+    )
+
+    return AppDrink(
+        drinkId = idDrink.toInt(),
+        drinkName = strDrink,
+        videoUrl = strVideo ?: "",
+        categoryName = strCategory,
+        alcoholic = strAlcoholic,
+        glassType = strGlass,
+        instructionsEN = strInstructions,
+        instructionsDE = strInstructionsDE ?: "",
+        thumbnailUrl = strDrinkThumb,
+        dateModified = dateModified ?: "",
+        ingredients = ingredientsList,
+        measurements = measurementsList
+    )
+}
 
 fun DrinkDto.toDrinkAndRelations(): Pair<Drink, List<DrinkIngredientCrossRef>> {
     val drink = Drink(
@@ -86,24 +115,7 @@ private fun parseMeasurementAmount(amountStr: String): Int {
     }
 }
 
-fun Drink.toAppDrinkDto(ingredients: List<String>, measurements: List<String>): AppDrinkDto {
-    return AppDrinkDto(
-        drinkId = drinkId,
-        drinkName = drinkName,
-        videoUrl = videoUrl,
-        categoryName = categoryName,
-        alcoholic = alcoholic,
-        glassType = glassType,
-        instructionsEN = instructionsEN,
-        instructionsDE = instructionsDE,
-        thumbnailUrl = thumbnailUrl,
-        dateModified = dateModified,
-        ingredients = ingredients,
-        measurements = measurements
-    )
-}
-
-fun AppDrinkDto.toDrink(): Drink {
+fun AppDrink.toDrink(): Drink {
     return Drink(
         drinkId = drinkId,
         drinkName = drinkName,
@@ -118,7 +130,7 @@ fun AppDrinkDto.toDrink(): Drink {
     )
 }
 
-fun DrinkDto.toAppDrinkDto(): AppDrinkDto {
+fun DrinkDto.toAppDrinkDto(): AppDrink {
     val ingredientsList = listOfNotNull(
         strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5,
         strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10,
@@ -131,7 +143,7 @@ fun DrinkDto.toAppDrinkDto(): AppDrinkDto {
         strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15
     )
 
-    return AppDrinkDto(
+    return AppDrink(
         drinkId = idDrink.toInt(),
         drinkName = strDrink,
         videoUrl = strVideo ?: "",
@@ -147,4 +159,19 @@ fun DrinkDto.toAppDrinkDto(): AppDrinkDto {
     )
 }
 
-
+fun Drink.toAppDrink(ingredients: List<String> = emptyList(), measurements: List<String> = emptyList()): AppDrink {
+    return AppDrink(
+        drinkId = drinkId,
+        drinkName = drinkName,
+        videoUrl = videoUrl,
+        categoryName = categoryName,
+        alcoholic = alcoholic,
+        glassType = glassType,
+        instructionsEN = instructionsEN,
+        instructionsDE = instructionsDE,
+        thumbnailUrl = thumbnailUrl,
+        dateModified = dateModified,
+        ingredients = ingredients,
+        measurements = measurements
+    )
+}

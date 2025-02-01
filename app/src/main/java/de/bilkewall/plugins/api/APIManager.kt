@@ -1,5 +1,6 @@
 package de.bilkewall.plugins.api
 
+import de.bilkewall.adapters.service.APIWrapperInterface
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpCallValidator
@@ -7,6 +8,8 @@ import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
@@ -37,6 +40,10 @@ class APIManager {
         HttpResponseValidator {
             getCustomResponseValidator(this)
         }
+    }
+
+    suspend fun get(urlString: String): HttpResponse {
+        return jsonHTTPClient.get(urlString)
     }
 
     private fun getCustomResponseValidator(responseValidator: HttpCallValidator.Config): HttpCallValidator.Config {

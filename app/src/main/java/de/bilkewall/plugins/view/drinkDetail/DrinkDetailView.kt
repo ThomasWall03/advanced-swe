@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 import de.bilkewall.cinder.R
-import de.bilkewall.domain.AppDrinkDto
+import de.bilkewall.domain.AppDrink
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +67,7 @@ fun DrinkDetailView(
 @Composable
 fun DetailViewCard(
     innerPadding: PaddingValues = PaddingValues(0.dp),
-    drink: AppDrinkDto,
+    drink: AppDrink,
     loading: Boolean = false,
     bottomSpacer: Dp = 0.dp
 ) {
@@ -103,7 +104,7 @@ private fun DetailPartCard(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun ImageAndName(drink: AppDrinkDto) {
+private fun ImageAndName(drink: AppDrink) {
     DetailPartCard {
         Column {
             AsyncImage(
@@ -130,7 +131,7 @@ private fun ImageAndName(drink: AppDrinkDto) {
 }
 
 @Composable
-private fun Ingredients(drink: AppDrinkDto) {
+private fun Ingredients(drink: AppDrink) {
     DetailPartCard {
         Text(
             stringResource(R.string.ingredients),
@@ -149,7 +150,7 @@ private fun Ingredients(drink: AppDrinkDto) {
 
 
 @Composable
-private fun Instructions(drink: AppDrinkDto) {
+private fun Instructions(drink: AppDrink) {
     DetailPartCard {
         Text(
             stringResource(R.string.instructions),

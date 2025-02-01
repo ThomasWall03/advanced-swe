@@ -1,4 +1,4 @@
-package de.bilkewall.plugins.view.drinkDetail
+package de.bilkewall.adapters.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.domain.AppDrinkDto
+import de.bilkewall.domain.AppDrink
 import de.bilkewall.main.di.DependencyProvider
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toAppDrinkDto
@@ -16,7 +16,7 @@ class DrinkDetailViewModel : ViewModel() {
     private val drinkIngredientCrossRefRepository = DependencyProvider.drinkIngredientCrossRefRepository
     private val drinkRepository = DependencyProvider.drinkRepository
 
-    var drink: AppDrinkDto by mutableStateOf(AppDrinkDto())
+    var drink: AppDrink by mutableStateOf(AppDrink())
     var ingredients: List<DrinkIngredientCrossRef> by mutableStateOf(listOf())
 
     private var errorMessage: String by mutableStateOf("")
