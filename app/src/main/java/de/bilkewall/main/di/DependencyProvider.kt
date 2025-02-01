@@ -2,6 +2,8 @@ package de.bilkewall.main.di
 
 import android.content.Context
 import de.bilkewall.adapters.service.DrinkService
+import de.bilkewall.plugins.api.APIManager
+import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase
 import de.bilkewall.plugins.database.drink.DrinkRepository
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRefRepository
@@ -11,6 +13,8 @@ import de.bilkewall.plugins.database.profile.ProfileRepository
 
 object DependencyProvider {
     private lateinit var database: CinderDatabase
+    private val apiManager = APIManager()
+    private val apiWrapper = APIWrapper(apiManager)
 
     fun initialize(context: Context) {
         database = CinderDatabase.getInstance(context)
@@ -37,6 +41,6 @@ object DependencyProvider {
     }
 
     val drinkService: DrinkService by lazy {
-        DrinkService()
+        DrinkService(apiWrapper)
     }
 }

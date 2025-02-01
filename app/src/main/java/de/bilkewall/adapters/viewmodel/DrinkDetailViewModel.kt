@@ -6,18 +6,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.adapters.repository.DrinkIngredientWrapper
 import de.bilkewall.domain.AppDrink
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
-import de.bilkewall.plugins.util.toAppDrinkDto
+import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.launch
 
-class DrinkDetailViewModel : ViewModel() {
-    private val drinkIngredientCrossRefRepository = DependencyProvider.drinkIngredientCrossRefRepository
-    private val drinkRepository = DependencyProvider.drinkRepository
+class DrinkDetailViewModel(
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private val drinkIngredientWrapper: DrinkIngredientWrapper
+) : ViewModel() {
 
     var drink: AppDrink by mutableStateOf(AppDrink())
-    var ingredients: List<DrinkIngredientCrossRef> by mutableStateOf(listOf())
+    var ingredients: List<AppDrinkIngredientCrossRef> by mutableStateOf(listOf())
 
     private var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
@@ -27,10 +28,7 @@ class DrinkDetailViewModel : ViewModel() {
             loading = true
             try {
                 ingredients = drinkIngredientCrossRefRepository.getIngredientsForDrink(id.toInt())
-                drink = drinkRepository.getDrinkById(id.toInt()).toAppDrinkDto(
-                    ingredients.map { it.ingredientName },
-                    ingredients.map { it.unit }
-                )
+                drink = drinkIngredientWrapper.getDrinkById(id.toInt())
             } catch (e: Exception) {
                 errorMessage = e.message ?: "Unknown error"
                 Log.e("DrinkDetailViewModel.setDrinkById", errorMessage)
