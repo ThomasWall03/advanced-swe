@@ -5,6 +5,7 @@ import de.bilkewall.plugins.database.profile.Profile
 
 fun Profile.toAppProfile(): AppProfile {
     return AppProfile(
+        profileId = profileId,
         profileName = profileName,
         isActiveProfile = isActiveProfile,
         creationDate = creationDate,
@@ -12,7 +13,7 @@ fun Profile.toAppProfile(): AppProfile {
     )
 }
 
-fun AppProfile.toProfile(profileId: Int = 0): Profile {
+fun AppProfile.toProfile(): Profile {
     return Profile(
         profileId = profileId,
         profileName = profileName,

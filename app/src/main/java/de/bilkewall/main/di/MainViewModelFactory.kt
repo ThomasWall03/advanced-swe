@@ -11,6 +11,7 @@ class MainViewModelFactory(
     private val profileRepository: ProfileRepositoryInterface,
     private val matchRepository: MatchRepositoryInterface,
     private val drinkRepository: DrinkRepositoryInterface,
+    private val drinkWrapper: DrinkIngredientWrapper,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private val drinkService: DrinkService
 ) : ViewModelProvider.Factory {
@@ -22,6 +23,7 @@ class MainViewModelFactory(
                 profileRepository,
                 matchRepository,
                 drinkRepository,
+                drinkWrapper,
                 drinkIngredientCrossRefRepository,
                 drinkService
             ) as T

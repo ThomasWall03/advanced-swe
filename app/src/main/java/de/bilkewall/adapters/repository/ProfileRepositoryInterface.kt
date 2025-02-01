@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepositoryInterface {
     val allProfiles: Flow<List<AppProfile>>
-    val activeProfile: Flow<AppProfile>
+    val activeProfile: Flow<AppProfile?>
 
     suspend fun insert(profile: AppProfile): Long
 

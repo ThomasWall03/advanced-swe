@@ -62,6 +62,7 @@ fun CinderApp() {
             DependencyProvider.profileRepository,
             DependencyProvider.matchRepository,
             DependencyProvider.drinkRepository,
+            DependencyProvider.drinkIngredientWrapper,
             DependencyProvider.drinkIngredientCrossRefRepository,
             DependencyProvider.drinkService
         )
