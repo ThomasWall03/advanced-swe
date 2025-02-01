@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Cinder"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="de.bilkewall.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Cinder">

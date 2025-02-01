@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import de.bilkewall.main.CinderApp
 
 fun ComposeContentTestRule.launchCinderApp(context: Context) {
     setContent {
