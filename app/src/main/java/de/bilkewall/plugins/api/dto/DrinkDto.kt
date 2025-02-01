@@ -3,7 +3,7 @@ package de.bilkewall.plugins.api.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DrinkDto (
+data class DrinkDto(
     val idDrink: String,
     val strDrink: String,
     val strVideo: String?,

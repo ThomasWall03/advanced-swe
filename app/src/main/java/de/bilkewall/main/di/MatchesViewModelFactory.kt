@@ -3,7 +3,9 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.adapters.repository.*
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.adapters.repository.MatchRepositoryInterface
+import de.bilkewall.adapters.repository.ProfileRepositoryInterface
 import de.bilkewall.adapters.viewmodel.MatchesViewModel
 
 class MatchesViewModelFactory(

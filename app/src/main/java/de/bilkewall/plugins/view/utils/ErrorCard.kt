@@ -58,7 +58,7 @@ fun ErrorCard(
                 )
 
                 Text(
-                    text =errorInformation,
+                    text = errorInformation,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

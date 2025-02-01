@@ -1,9 +1,9 @@
 package de.bilkewall.plugins.util
 
 import de.bilkewall.domain.AppDrink
+import de.bilkewall.plugins.api.dto.DrinkDto
 import de.bilkewall.plugins.database.drink.Drink
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
-import de.bilkewall.plugins.api.dto.DrinkDto
 
 fun DrinkDto.toAppDrink(): AppDrink {
     val ingredientsList = listOfNotNull(
@@ -69,7 +69,7 @@ fun DrinkDto.toDrinkAndRelations(): Pair<Drink, List<DrinkIngredientCrossRef>> {
                 DrinkIngredientCrossRef(
                     drinkId = idDrink.toInt(),
                     ingredientName = ingredientName,
-                    unit = measurement?: ""
+                    unit = measurement ?: ""
                 )
             )
         }
@@ -159,7 +159,10 @@ fun DrinkDto.toAppDrinkDto(): AppDrink {
     )
 }
 
-fun Drink.toAppDrink(ingredients: List<String> = emptyList(), measurements: List<String> = emptyList()): AppDrink {
+fun Drink.toAppDrink(
+    ingredients: List<String> = emptyList(),
+    measurements: List<String> = emptyList()
+): AppDrink {
     return AppDrink(
         drinkId = drinkId,
         drinkName = drinkName,

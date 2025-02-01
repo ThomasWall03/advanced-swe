@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.adapters.repository.MatchRepositoryInterface
-import de.bilkewall.domain.AppDrink
 import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,13 +32,17 @@ class MatchesViewModel(
     fun loadVisibleDrinks() = viewModelScope.launch(Dispatchers.IO) {
         val currentProfile = profileRepository.activeProfile.firstOrNull()
         if (currentProfile != null) {
-            val matches = matchRepository.getAllPositiveMatchesForCurrentProfile(currentProfile.profileId)
+            val matches =
+                matchRepository.getAllPositiveMatchesForCurrentProfile(currentProfile.profileId)
 
             val drinksToDisplay = matches.mapNotNull { match ->
                 try {
                     drinkRepository.getDrinkById(match.drinkId)
                 } catch (e: Exception) {
-                    Log.e("loadVisibleDrinks", "Failed to load drink for match ID: ${match.drinkId}")
+                    Log.e(
+                        "loadVisibleDrinks",
+                        "Failed to load drink for match ID: ${match.drinkId}"
+                    )
                     null
                 }
             }
@@ -51,6 +55,11 @@ class MatchesViewModel(
 
     fun getMatchesByName(drinkSearchText: String) {
         _visibleDrinks.value =
-            _visibleDrinks.value.filter { it.drinkName.contains(drinkSearchText, ignoreCase = true) }
+            _visibleDrinks.value.filter {
+                it.drinkName.contains(
+                    drinkSearchText,
+                    ignoreCase = true
+                )
+            }
     }
 }

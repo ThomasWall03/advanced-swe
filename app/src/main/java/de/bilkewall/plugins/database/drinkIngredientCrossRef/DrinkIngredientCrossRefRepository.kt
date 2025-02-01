@@ -6,7 +6,7 @@ import de.bilkewall.plugins.util.toAppDrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toDrinkIngredientCrossRef
 import kotlinx.coroutines.flow.Flow
 
-class DrinkIngredientCrossRefRepository (private val drinkIngredientDao: DrinkIngredientDao) :
+class DrinkIngredientCrossRefRepository(private val drinkIngredientDao: DrinkIngredientDao) :
     DrinkIngredientCrossRefInterface {
     val allIngredients: Flow<List<String>> = drinkIngredientDao.getAllIngredientsSortedByName()
 
@@ -22,11 +22,12 @@ class DrinkIngredientCrossRefRepository (private val drinkIngredientDao: DrinkIn
         drinkIngredientDao.deleteAllRelationsOfADrink(drinkId)
     }
 
-    override suspend fun deleteAllRelations(){
+    override suspend fun deleteAllRelations() {
         drinkIngredientDao.deleteAllDrinkIngredientCrossRefs()
     }
 
     override suspend fun getIngredientsForDrink(id: Int): List<AppDrinkIngredientCrossRef> {
-        return drinkIngredientDao.getIngredientsForDrink(id).map { it.toAppDrinkIngredientCrossRef() }
+        return drinkIngredientDao.getIngredientsForDrink(id)
+            .map { it.toAppDrinkIngredientCrossRef() }
     }
 }

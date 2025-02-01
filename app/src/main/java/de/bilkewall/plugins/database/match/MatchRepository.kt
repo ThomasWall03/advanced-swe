@@ -6,15 +6,15 @@ import de.bilkewall.plugins.util.toAppMatch
 import de.bilkewall.plugins.util.toMatch
 import kotlinx.coroutines.flow.map
 
-class MatchRepository (private val matchDao: MatchDao) : MatchRepositoryInterface {
+class MatchRepository(private val matchDao: MatchDao) : MatchRepositoryInterface {
     override val allMatches = matchDao.getAllMatches().map { it.map { it.toAppMatch() } }
 
     override suspend fun insert(match: AppMatch) {
         matchDao.insert(match.toMatch())
     }
 
-    override suspend fun delete(match: AppMatch){
-       matchDao.delete(match.toMatch())
+    override suspend fun delete(match: AppMatch) {
+        matchDao.delete(match.toMatch())
     }
 
     override fun getAllMatchesForCurrentProfile(profileId: Int): List<AppMatch> {
@@ -25,7 +25,7 @@ class MatchRepository (private val matchDao: MatchDao) : MatchRepositoryInterfac
         return matchDao.getAllPositiveMatchesForProfileId(profileId).map { it.toAppMatch() }
     }
 
-    override fun deleteMatchesForProfile(profileId: Int){
+    override fun deleteMatchesForProfile(profileId: Int) {
         matchDao.deleteMatchesForProfile(profileId)
     }
 }

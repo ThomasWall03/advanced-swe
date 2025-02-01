@@ -14,29 +14,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.bilkewall.cinder.R
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.plugins.theme.CinderTheme
-import de.bilkewall.plugins.view.bottomBar.CinderBar
-import de.bilkewall.plugins.view.bottomBar.TabBarItem
-import de.bilkewall.plugins.view.createProfile.CreateProfileView
 import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
-import de.bilkewall.plugins.view.drinkDetail.DrinkDetailView
 import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
-import de.bilkewall.plugins.view.drinkList.DrinkListView
 import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 import de.bilkewall.adapters.viewmodel.LandingPageViewModel
-import de.bilkewall.plugins.view.landingPage.StartUpView
-import de.bilkewall.plugins.view.main.MainView
 import de.bilkewall.adapters.viewmodel.MainViewModel
-import de.bilkewall.plugins.view.matches.MatchesView
 import de.bilkewall.adapters.viewmodel.MatchesViewModel
+import de.bilkewall.cinder.R
 import de.bilkewall.main.di.CreateProfileViewModelFactory
+import de.bilkewall.main.di.DependencyProvider
 import de.bilkewall.main.di.DrinkDetailViewModelFactory
 import de.bilkewall.main.di.DrinkListViewModelFactory
 import de.bilkewall.main.di.LandingPageViewModelFactory
 import de.bilkewall.main.di.MainViewModelFactory
 import de.bilkewall.main.di.MatchesViewModelFactory
+import de.bilkewall.plugins.theme.CinderTheme
+import de.bilkewall.plugins.view.bottomBar.CinderBar
+import de.bilkewall.plugins.view.bottomBar.TabBarItem
+import de.bilkewall.plugins.view.createProfile.CreateProfileView
+import de.bilkewall.plugins.view.drinkDetail.DrinkDetailView
+import de.bilkewall.plugins.view.drinkList.DrinkListView
+import de.bilkewall.plugins.view.landingPage.StartUpView
+import de.bilkewall.plugins.view.main.MainView
+import de.bilkewall.plugins.view.matches.MatchesView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

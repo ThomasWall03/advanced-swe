@@ -17,8 +17,12 @@ import de.bilkewall.plugins.database.match.MatchDao
 import de.bilkewall.plugins.database.profile.Profile
 import de.bilkewall.plugins.database.profile.ProfileDao
 
-@Database(entities = [Drink::class, DrinkIngredientCrossRef::class, Match::class, Profile::class, DrinkTypeFilter::class, IngredientValueFilter::class], version = 1, exportSchema = false)
-abstract class CinderDatabase: RoomDatabase() {
+@Database(
+    entities = [Drink::class, DrinkIngredientCrossRef::class, Match::class, Profile::class, DrinkTypeFilter::class, IngredientValueFilter::class],
+    version = 1,
+    exportSchema = false
+)
+abstract class CinderDatabase : RoomDatabase() {
     abstract val drinkDao: DrinkDao
     abstract val drinkIngredientDao: DrinkIngredientDao
     abstract val matchDao: MatchDao
@@ -30,10 +34,10 @@ abstract class CinderDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: CinderDatabase? = null
 
-        fun getInstance(context: Context):CinderDatabase {
-            synchronized(this){
+        fun getInstance(context: Context): CinderDatabase {
+            synchronized(this) {
                 var instance = INSTANCE
-                if (instance == null){
+                if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         CinderDatabase::class.java,

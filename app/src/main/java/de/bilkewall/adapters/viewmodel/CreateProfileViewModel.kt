@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.adapters.repository.ProfileRepositoryInterface
-import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
+import de.bilkewall.adapters.service.DrinkService
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppProfile
-import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
-import de.bilkewall.adapters.service.DrinkService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

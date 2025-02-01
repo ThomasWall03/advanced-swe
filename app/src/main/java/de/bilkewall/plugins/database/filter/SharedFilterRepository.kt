@@ -17,7 +17,8 @@ class SharedFilterRepository(
     }
 
     override suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<AppDrinkTypeFilter> {
-        return drinkTypeFilterDao.getDrinkTypeFiltersByProfileId(profileId).map { it.toAppDrinkTypeFilter() }
+        return drinkTypeFilterDao.getDrinkTypeFiltersByProfileId(profileId)
+            .map { it.toAppDrinkTypeFilter() }
     }
 
     override suspend fun deleteDrinkTypeFiltersByProfileId(profileId: Int) {
@@ -33,7 +34,8 @@ class SharedFilterRepository(
     }
 
     override suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<AppIngredientValueFilter> {
-        return ingredientValueFilterDao.getIngredientValueFiltersByProfileId(profileId).map { it.toAppIngredientValueFilter() }
+        return ingredientValueFilterDao.getIngredientValueFiltersByProfileId(profileId)
+            .map { it.toAppIngredientValueFilter() }
     }
 
     override suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int) {

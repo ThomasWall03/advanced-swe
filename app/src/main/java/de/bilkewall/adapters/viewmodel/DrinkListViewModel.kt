@@ -9,9 +9,6 @@ import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class DrinkListViewModel(

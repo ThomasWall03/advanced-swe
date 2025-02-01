@@ -20,7 +20,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,6 @@ import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.view.drinkList.cell.DrinkCell
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
-import kotlinx.coroutines.flow.toList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

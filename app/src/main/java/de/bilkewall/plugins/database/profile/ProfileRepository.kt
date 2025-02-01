@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class ProfileRepository (private val profileDao: ProfileDao) : ProfileRepositoryInterface {
-    override val allProfiles: Flow<List<AppProfile>> = profileDao.getAllProfiles().map { it.map { it.toAppProfile() } }
-    override val activeProfile: Flow<AppProfile?> = profileDao.getActiveProfile().map { it?.toAppProfile() }
+class ProfileRepository(private val profileDao: ProfileDao) : ProfileRepositoryInterface {
+    override val allProfiles: Flow<List<AppProfile>> =
+        profileDao.getAllProfiles().map { it.map { it.toAppProfile() } }
+    override val activeProfile: Flow<AppProfile?> =
+        profileDao.getActiveProfile().map { it?.toAppProfile() }
 
     override suspend fun insert(profile: AppProfile): Long {
         return profileDao.insert(profile.toProfile())
