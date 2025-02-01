@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Cinder</string>
+    <string name="all_drinks">All Drinks</string>
+    <string name="add_new_profile">Add new profile</string>
+    <string name="enter_profile_name">Enter Profile Name</string>
+    <string name="placeholder_profile_name">Profilename</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="search_for_drink">Search for Drink...</string>
+    <string name="search">Search</string>
+    <string name="instructions">Instructions:</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="whats_your_type_filterquestion">Whats your type?</string>
+    <string name="what_are_you_into_filterquestion">What are you into?</string>
+    <string name="what_s_your_kink_filterquestion">What\'s your kink?</string>
+    <string name="maximum_profiles_reached">Maximum Profiles Reached</string>
+    <string name="reset_filter">Reset Filter</string>
+    <string name="all_filter_option">All</string>
+    <string name="alcoholic_drinks_filter_question">Alcoholic Drinks</string>
+    <string name="matches">Matches</string>
+    <string name="no_more_drinks_information">Looks like you\'ve conquered all the matches or your filters are playing it too safe. Ready to break the rules and explore drinks outside your comfort zone?</string>
+    <string name="no_more_drinks_title">Oops! No more drinks available for your current filters.</string>
+    <string name="no_more_drinks_button">See more drinks!</string>
+    <string name="all_drinks_are_matched_title">Oh no! All drinks are matched!</string>
+    <string name="all_drinks_matched_information">How about you try another profile?</string>
+    <string name="generic_error_title">Oh no, something went wrong!</string>
+    <string name="retry">Retry</string>
+    <string name="no_drinks_found">Oh no, we did not find any Drink!😢</string>
+    <string name="no_drinks_found_information">Try it again 🍻</string>
+</resources>

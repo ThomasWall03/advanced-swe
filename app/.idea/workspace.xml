@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2db1e220-1cfa-4681-882c-442660d1d556" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/controller/DrinkController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/controller/DrinkController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/CinderDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/CinderDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkIngredientCrossRefRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkIngredientCrossRefRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkIngredientDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkIngredientDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkWithIngredients.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/DrinkWithIngredients.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/IngredientWithDrinks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/database/drinkIngredientCrossRef/IngredientWithDrinks.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/view/main/MainView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/view/main/MainView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/view/main/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/bilkewall/cinder/view/main/MainViewModel.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "janoschbilke"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MobileApplikationenDHBW/tinf22-7.git",
+    "accountId": "845140c9-ad48-49a0-ba53-e9d9aed5cc60"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="2oQF3eIOVF9y5VzacwqaMGfs7zD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "database",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/i568521/Documents/DHBW/Semester5/MobileApplikationen /tinf22-7/app"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2db1e220-1cfa-4681-882c-442660d1d556" name="Changes" comment="" />
+      <created>1730793695001</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730793695001</updated>
+    </task>
+    <servers />
+  </component>
+</project>
