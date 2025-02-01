@@ -4,7 +4,18 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.adapters.repository.MatchRepositoryInterface
+import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
+import de.bilkewall.adapters.service.APIWrapperInterface
 import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.AppDrinkIngredientCrossRef
+import de.bilkewall.domain.AppDrinkTypeFilter
+import de.bilkewall.domain.AppIngredientValueFilter
+import de.bilkewall.domain.AppMatch
+import de.bilkewall.domain.AppProfile
 import de.bilkewall.main.di.DependencyProvider
 import de.bilkewall.plugins.database.filter.DrinkTypeFilter
 import de.bilkewall.plugins.database.filter.IngredientValueFilter
@@ -20,16 +31,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
-    private val sharedFilterRepository = DependencyProvider.sharedFilterRepository
-    private val profileRepository = DependencyProvider.profileRepository
-    private val matchRepository = DependencyProvider.matchRepository
-    private val drinkRepository = DependencyProvider.drinkRepository
-    private val drinkIngredientCrossRefRepository =
-        DependencyProvider.drinkIngredientCrossRefRepository
-    private val drinkService = DependencyProvider.drinkService
-
-    val allProfiles: Flow<List<Profile>> = profileRepository.allProfiles
+class MainViewModel(
+    private var sharedFilterRepository: SharedFilterRepositoryInterface,
+    private var profileRepository: ProfileRepositoryInterface,
+    private var matchRepository: MatchRepositoryInterface,
+    private var drinkRepository: DrinkRepositoryInterface,
+    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private var drinkService: APIWrapperInterface
+) : ViewModel() {
+    val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
     val currentProfile = profileRepository.activeProfile
 
     private val _availableDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
@@ -44,6 +54,22 @@ class MainViewModel : ViewModel() {
 
     private val bypassFilter = mutableStateOf(false)
     val allDrinksMatched = mutableStateOf(false)
+
+    fun initializeComponent(
+        pSharedFilterRepository: SharedFilterRepositoryInterface,
+        pProfileRepository: ProfileRepositoryInterface,
+        pMatchRepository: MatchRepositoryInterface,
+        pDrinkRepository: DrinkRepositoryInterface,
+        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+        pDrinkService: APIWrapperInterface
+    ) {
+        sharedFilterRepository = pSharedFilterRepository
+        profileRepository = pProfileRepository
+        matchRepository = pMatchRepository
+        drinkRepository = pDrinkRepository
+        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
+        drinkService = pDrinkService
+    }
 
     fun evaluateCurrentDrink() = viewModelScope.launch(Dispatchers.IO) {
         _loading.value = true
@@ -85,11 +111,11 @@ class MainViewModel : ViewModel() {
     }
 
     private suspend fun calculateAvailableDrinks(
-        matches: List<Match>,
-        ingredientFilters: List<IngredientValueFilter>,
-        drinkTypeFilters: List<DrinkTypeFilter>
+        matches: List<AppMatch>,
+        ingredientFilters: List<AppIngredientValueFilter>,
+        drinkTypeFilters: List<AppDrinkTypeFilter>
     ) {
-        val allDrinks = drinkRepository.allDrinks.first()
+        val allDrinks = drinkRepository.getAllDrinks().first()
 
         val drinkTypeFilterValues = drinkTypeFilters.map { it.drinkTypeFilterValue }
         val ingredientFilterValues = ingredientFilters.map { it.ingredientFilterValue }
@@ -108,27 +134,33 @@ class MainViewModel : ViewModel() {
             hasValidCategory && hasMatchingIngredient && isNotMatched
         }
 
-        _availableDrinks.value = availableDrinks.map { drink ->
-            val ingredients =
-                drinkIngredientCrossRefRepository.getIngredientsForDrink(drink.drinkId)
-            drink.toAppDrinkDto(
-                ingredients.map { it.ingredientName },
-                ingredients.map { it.unit },
-            )
-        }
+        _availableDrinks.value = availableDrinks
+//        _availableDrinks.value = availableDrinks.map { drink ->
+//            val ingredients =
+//                drinkIngredientCrossRefRepository.getIngredientsForDrink(drink.drinkId)
+//            drink.toAppDrinkDto(
+//                ingredients.map { it.ingredientName },
+//                ingredients.map { it.unit },
+//            )
+//        }
     }
 
     private fun updateDataBaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val apiDrink = drinkService.getDrinkById(drink.drinkId)[0]
-            if (apiDrink.idDrink.toInt() != 0) {
+            if (apiDrink.drinkId != 0) {
                 if (drink.dateModified != apiDrink.dateModified) {
-                    val (updatedDrink, relations) = apiDrink.toDrinkAndRelations()
-                    drinkRepository.update(updatedDrink)
+                    drinkRepository.update(apiDrink)
 
                     drinkIngredientCrossRefRepository.deleteAllRelationsOfADrink(drink.drinkId)
-                    relations.forEach { relation ->
-                        drinkIngredientCrossRefRepository.insert(relation)
+                    apiDrink.ingredients.forEachIndexed { index, ingredient ->
+                        drinkIngredientCrossRefRepository.insert(
+                            AppDrinkIngredientCrossRef(
+                                drink.drinkId,
+                                ingredient,
+                                apiDrink.measurements[index]
+                            )
+                        )
                     }
                 }
             }
@@ -148,11 +180,11 @@ class MainViewModel : ViewModel() {
 
     fun handleMatchingRequest(match: Boolean, drinkId: Int, profileId: Int) =
         viewModelScope.launch {
-            matchRepository.insert(Match(drinkId, profileId, match))
+            matchRepository.insert(AppMatch(drinkId, profileId, match))
             evaluateCurrentDrink()
         }
 
-    fun deleteProfile(profile: Profile) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteProfile(profile: AppProfile) = viewModelScope.launch(Dispatchers.IO) {
         profileRepository.delete(profile)
         sharedFilterRepository.deleteIngredientValueFiltersByProfileId(profile.profileId)
         sharedFilterRepository.deleteDrinkTypeFiltersByProfileId(profile.profileId)

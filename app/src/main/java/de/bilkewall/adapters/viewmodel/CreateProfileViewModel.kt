@@ -5,21 +5,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.service.DrinkService
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.plugins.database.filter.DrinkTypeFilter
-import de.bilkewall.plugins.database.filter.IngredientValueFilter
-import de.bilkewall.plugins.database.profile.Profile
+import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.domain.AppDrinkTypeFilter
+import de.bilkewall.domain.AppIngredientValueFilter
+import de.bilkewall.domain.AppProfile
+import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class CreateProfileViewModel: ViewModel() {
-    private val profileRepository = DependencyProvider.profileRepository
-    private val sharedFilterRepository = DependencyProvider.sharedFilterRepository
-    private val drinkIngredientCrossRefRepository = DependencyProvider.drinkIngredientCrossRefRepository
-
+class CreateProfileViewModel(
+    private val profileRepository: ProfileRepositoryInterface,
+    private val sharedFilterRepository: SharedFilterRepositoryInterface,
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private val drinkService: APIWrapperInterface
+) : ViewModel() {
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
 
@@ -28,23 +31,28 @@ class CreateProfileViewModel: ViewModel() {
     private val _selectedIngredientOptions = MutableStateFlow<List<String>>(emptyList())
     val selectedIngredientOptions: StateFlow<List<String>> get() = _selectedIngredientOptions
 
-    var allIngredients: Flow<List<String>> = drinkIngredientCrossRefRepository.allIngredients
+    var allIngredients: Flow<List<String>> =
+        drinkIngredientCrossRefRepository.getAllIngredientsSortedByName()
 
     var errorMessage: String by mutableStateOf("")
     private var loading: Boolean by mutableStateOf(false)
 
-    private val drinkService = DrinkService()
-
     fun saveProfile(profileName: String) = viewModelScope.launch {
         profileRepository.deactivateActiveProfile()
-        val id = profileRepository.insert(Profile(profileName = profileName, isActiveProfile = true))
+        val id =
+            profileRepository.insert(AppProfile(profileName = profileName, isActiveProfile = true))
 
         _selectedDrinkTypeOptions.value.forEach { filter ->
-            sharedFilterRepository.insertDrinkTypeFilter(DrinkTypeFilter(filter, id.toInt()))
+            sharedFilterRepository.insertDrinkTypeFilter(AppDrinkTypeFilter(filter, id.toInt()))
         }
 
         _selectedIngredientOptions.value.forEach { filter ->
-            sharedFilterRepository.insertIngredientValueFilter(IngredientValueFilter(filter, id.toInt()))
+            sharedFilterRepository.insertIngredientValueFilter(
+                AppIngredientValueFilter(
+                    filter,
+                    id.toInt()
+                )
+            )
         }
     }
 
@@ -68,6 +76,7 @@ class CreateProfileViewModel: ViewModel() {
             0 -> {
                 _selectedDrinkTypeOptions.value = options
             }
+
             1 -> {
                 _selectedIngredientOptions.value = options
             }

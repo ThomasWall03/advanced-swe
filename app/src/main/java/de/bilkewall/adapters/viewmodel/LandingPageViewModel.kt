@@ -6,27 +6,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.main.di.DependencyProvider.drinkService
-import de.bilkewall.plugins.util.toDrinkAndRelations
+import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class LandingPageViewModel : ViewModel() {
-    private val drinkRepository = DependencyProvider.drinkRepository
-    private val drinkIngredientCrossRefRepository =
-        DependencyProvider.drinkIngredientCrossRefRepository
-    private val profileRepository = DependencyProvider.profileRepository
-
+class LandingPageViewModel(
+    private val drinkRepository: DrinkRepositoryInterface,
+    private val drinkService: APIWrapperInterface,
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private val profileRepository: ProfileRepositoryInterface
+) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _profilesExist = MutableStateFlow(false)
     val profilesExist: StateFlow<Boolean> = _profilesExist
 
-    private val allDrinks = drinkRepository.allDrinks
+    private val allDrinks = drinkRepository.getAllDrinks()
     private var errorMessage: String by mutableStateOf("")
 
     init {
@@ -52,20 +54,26 @@ class LandingPageViewModel : ViewModel() {
         try {
             val allDrinksAPI = drinkService.getAllDrinksAtoZ()
             allDrinksAPI.forEach { drink ->
-                val (drinkType, relations) = drink.toDrinkAndRelations()
-                if (allDrinks.first().map { it.drinkId }.contains(drinkType.drinkId)) {
-                    drinkRepository.update(drinkType)
-                    drinkIngredientCrossRefRepository.deleteAllRelationsOfADrink(drinkType.drinkId)
-                } else
+                if (allDrinks.first().map { it.drinkId }.contains(drink.drinkId)) {
+                    drinkRepository.update(drink)
+                    drinkIngredientCrossRefRepository.deleteAllRelationsOfADrink(drink.drinkId)
+                } else {
                     drinkRepository.insert(
-                        drinkType
+                        drink
                     )
+                }
 
                 var relationInsertionIndex = 0
-                relations.forEach { relation ->
-                    if (!relations.subList(0, relationInsertionIndex).map { it.ingredientName }
-                            .contains(relation.ingredientName)) {
-                        drinkIngredientCrossRefRepository.insert(relation)
+                drink.ingredients.forEach { ingredient ->
+                    if (!drink.ingredients.subList(0, relationInsertionIndex).map { ingredient }
+                            .contains(ingredient)) {
+                        drinkIngredientCrossRefRepository.insert(
+                            AppDrinkIngredientCrossRef(
+                                drink.drinkId,
+                                ingredient,
+                                drink.measurements[relationInsertionIndex]
+                            )
+                        )
                     }
                     relationInsertionIndex++
                 }
