@@ -4,6 +4,7 @@ import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.util.toAppDrink
 import de.bilkewall.plugins.util.toDrink
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface {
@@ -30,8 +31,8 @@ class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface
         return drinkDao.getDrinkById(id).toAppDrink()
     }
 
-    override suspend fun getDrinksByName(name: String): List<AppDrink> {
-        return drinkDao.getDrinksByName(name).map { it.toAppDrink() }
+    override suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {
+        return drinkDao.getDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
     }
 
     override suspend fun getDrinkCount(): Int {

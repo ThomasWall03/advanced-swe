@@ -31,5 +31,5 @@ interface DrinkDao {
     suspend fun getDrinkCount(): Int
 
     @Query("SELECT * FROM drink_table WHERE drinkName LIKE '%' || :name || '%'")
-    fun getDrinksByName(name: String): List<Drink>
+    fun getDrinksByName(name: String): Flow<List<Drink>>
 }

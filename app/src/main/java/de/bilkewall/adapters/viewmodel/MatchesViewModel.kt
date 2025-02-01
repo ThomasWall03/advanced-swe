@@ -29,16 +29,6 @@ class MatchesViewModel(
 
     var matchSearchText: String by mutableStateOf("")
 
-    fun initializeComponent(
-        pMatchRepository: MatchRepositoryInterface,
-        pProfileRepository: ProfileRepositoryInterface,
-        pDrinkRepository: DrinkRepositoryInterface
-    ) {
-        matchRepository = pMatchRepository
-        profileRepository = pProfileRepository
-        drinkRepository = pDrinkRepository
-    }
-
     fun loadVisibleDrinks() = viewModelScope.launch(Dispatchers.IO) {
         val currentProfile = profileRepository.activeProfile.firstOrNull()
         if (currentProfile != null) {
