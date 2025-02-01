@@ -38,18 +38,6 @@ class CreateProfileViewModel(
     var errorMessage: String by mutableStateOf("")
     private var loading: Boolean by mutableStateOf(false)
 
-    fun initializeComponent(
-        pProfileRepository: ProfileRepositoryInterface,
-        pSharedFilterRepository: SharedFilterRepositoryInterface,
-        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-        pDrinkService: DrinkService
-    ) {
-        profileRepository = pProfileRepository
-        sharedFilterRepository = pSharedFilterRepository
-        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
-        drinkService = pDrinkService
-    }
-
     fun saveProfile(profileName: String) = viewModelScope.launch {
         profileRepository.deactivateActiveProfile()
         val id =

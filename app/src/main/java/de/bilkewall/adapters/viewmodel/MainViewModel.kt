@@ -100,9 +100,6 @@ class MainViewModel(
         val drinkTypeFilterValues = drinkTypeFilters.map { it.drinkTypeFilterValue }
         val ingredientFilterValues = ingredientFilters.map { it.ingredientFilterValue }
 
-        Log.i("MainViewModel.calculateAvailableDrinks", "drinkTypeFilterValues: $drinkTypeFilterValues")
-        Log.i("MainViewModel.calculateAvailableDrinks", "ingredientFilterValues: $ingredientFilterValues")
-
         val availableDrinks = allDrinks.filter { drink ->
             val hasValidCategory =
                 drinkTypeFilterValues.isEmpty() || drinkTypeFilterValues.contains(drink.categoryName)
@@ -145,7 +142,6 @@ class MainViewModel(
     }
 
     fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {
-        Log.i("MainViewModel.setCurrentProfile", "Setting active profile to ${profile.profileName + profile.profileId}")
         profileRepository.deactivateActiveProfile()
 
         profileRepository.setActiveProfile(profile.profileId)
@@ -167,7 +163,7 @@ class MainViewModel(
         sharedFilterRepository.deleteDrinkTypeFiltersByProfileId(profile.profileId)
         matchRepository.deleteMatchesForProfile(profile.profileId)
 
-        if(profile.isActiveProfile) {
+        if (profile.isActiveProfile) {
             setCurrentProfile(allProfiles.first().first())
         }
     }

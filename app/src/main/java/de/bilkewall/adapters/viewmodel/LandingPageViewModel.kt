@@ -31,18 +31,6 @@ class LandingPageViewModel(
     private val allDrinks = drinkRepository.getAllDrinks()
     private var errorMessage: String by mutableStateOf("")
 
-    fun initializeComponent(
-        pDrinkRepository: DrinkRepositoryInterface,
-        pDrinkService: DrinkService,
-        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-        pProfileRepository: ProfileRepositoryInterface
-    ) {
-        drinkRepository = pDrinkRepository
-        drinkService = pDrinkService
-        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
-        profileRepository = pProfileRepository
-    }
-
     init {
         populateDatabase()
     }

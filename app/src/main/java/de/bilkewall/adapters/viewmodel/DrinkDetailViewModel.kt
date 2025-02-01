@@ -23,14 +23,6 @@ class DrinkDetailViewModel(
     private var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
-    fun initializeComponent(
-        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-        pDrinkIngredientWrapper: DrinkIngredientWrapper
-    ) {
-        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
-        drinkIngredientWrapper = pDrinkIngredientWrapper
-    }
-
     fun setDrinkById(id: String) {
         viewModelScope.launch {
             loading = true
