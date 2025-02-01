@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.adapters.repository.DrinkIngredientWrapper
 import de.bilkewall.adapters.repository.DrinkRepositoryInterface
 import de.bilkewall.adapters.repository.MatchRepositoryInterface
 import de.bilkewall.adapters.repository.ProfileRepositoryInterface
@@ -29,6 +30,7 @@ class MainViewModel(
     private var profileRepository: ProfileRepositoryInterface,
     private var matchRepository: MatchRepositoryInterface,
     private var drinkRepository: DrinkRepositoryInterface,
+    private var drinkWrapper: DrinkIngredientWrapper,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private var drinkService: DrinkService
 ) : ViewModel() {
@@ -47,22 +49,6 @@ class MainViewModel(
 
     private val bypassFilter = mutableStateOf(false)
     val allDrinksMatched = mutableStateOf(false)
-
-    fun initializeComponent(
-        pSharedFilterRepository: SharedFilterRepositoryInterface,
-        pProfileRepository: ProfileRepositoryInterface,
-        pMatchRepository: MatchRepositoryInterface,
-        pDrinkRepository: DrinkRepositoryInterface,
-        pDrinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-        pDrinkService: DrinkService
-    ) {
-        sharedFilterRepository = pSharedFilterRepository
-        profileRepository = pProfileRepository
-        matchRepository = pMatchRepository
-        drinkRepository = pDrinkRepository
-        drinkIngredientCrossRefRepository = pDrinkIngredientCrossRefRepository
-        drinkService = pDrinkService
-    }
 
     fun evaluateCurrentDrink() = viewModelScope.launch(Dispatchers.IO) {
         _loading.value = true
@@ -83,12 +69,13 @@ class MainViewModel(
                 }
 
                 _currentDrink.value = _availableDrinks.value.firstOrNull() ?: AppDrink()
+                _currentDrink.value = drinkWrapper.getDrinkById(_currentDrink.value.drinkId)
 
                 allDrinksMatched.value =
                     _availableDrinks.value.isEmpty() && bypassFilter.value == true
 
                 if (_currentDrink.value.drinkId != 0) {
-                    updateDataBaseEntry(_currentDrink.value)
+                    updateDatabaseEntry(_currentDrink.value)
                 }
             }
         } catch (e: Exception) {
@@ -113,6 +100,9 @@ class MainViewModel(
         val drinkTypeFilterValues = drinkTypeFilters.map { it.drinkTypeFilterValue }
         val ingredientFilterValues = ingredientFilters.map { it.ingredientFilterValue }
 
+        Log.i("MainViewModel.calculateAvailableDrinks", "drinkTypeFilterValues: $drinkTypeFilterValues")
+        Log.i("MainViewModel.calculateAvailableDrinks", "ingredientFilterValues: $ingredientFilterValues")
+
         val availableDrinks = allDrinks.filter { drink ->
             val hasValidCategory =
                 drinkTypeFilterValues.isEmpty() || drinkTypeFilterValues.contains(drink.categoryName)
@@ -128,17 +118,9 @@ class MainViewModel(
         }
 
         _availableDrinks.value = availableDrinks
-//        _availableDrinks.value = availableDrinks.map { drink ->
-//            val ingredients =
-//                drinkIngredientCrossRefRepository.getIngredientsForDrink(drink.drinkId)
-//            drink.toAppDrinkDto(
-//                ingredients.map { it.ingredientName },
-//                ingredients.map { it.unit },
-//            )
-//        }
     }
 
-    private fun updateDataBaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateDatabaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val apiDrink = drinkService.getDrinkById(drink.drinkId)[0]
             if (apiDrink.drinkId != 0) {
@@ -163,7 +145,9 @@ class MainViewModel(
     }
 
     fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {
+        Log.i("MainViewModel.setCurrentProfile", "Setting active profile to ${profile.profileName + profile.profileId}")
         profileRepository.deactivateActiveProfile()
+
         profileRepository.setActiveProfile(profile.profileId)
         bypassFilter.value = false
         allDrinksMatched.value = false
@@ -182,5 +166,9 @@ class MainViewModel(
         sharedFilterRepository.deleteIngredientValueFiltersByProfileId(profile.profileId)
         sharedFilterRepository.deleteDrinkTypeFiltersByProfileId(profile.profileId)
         matchRepository.deleteMatchesForProfile(profile.profileId)
+
+        if(profile.isActiveProfile) {
+            setCurrentProfile(allProfiles.first().first())
+        }
     }
 }
