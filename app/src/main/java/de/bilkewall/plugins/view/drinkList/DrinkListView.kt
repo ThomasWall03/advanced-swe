@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.database.drink.Drink
 import de.bilkewall.plugins.view.drinkList.cell.DrinkCell

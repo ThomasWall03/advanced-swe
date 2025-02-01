@@ -20,17 +20,17 @@ import de.bilkewall.plugins.theme.CinderTheme
 import de.bilkewall.plugins.view.bottomBar.CinderBar
 import de.bilkewall.plugins.view.bottomBar.TabBarItem
 import de.bilkewall.plugins.view.createProfile.CreateProfileView
-import de.bilkewall.plugins.view.createProfile.CreateProfileViewModel
+import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 import de.bilkewall.plugins.view.drinkDetail.DrinkDetailView
-import de.bilkewall.plugins.view.drinkDetail.DrinkDetailViewModel
+import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 import de.bilkewall.plugins.view.drinkList.DrinkListView
-import de.bilkewall.plugins.view.drinkList.DrinkListViewModel
-import de.bilkewall.plugins.view.landingPage.LandingPageViewModel
+import de.bilkewall.adapters.viewmodel.DrinkListViewModel
+import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 import de.bilkewall.plugins.view.landingPage.StartUpView
 import de.bilkewall.plugins.view.main.MainView
-import de.bilkewall.plugins.view.main.MainViewModel
+import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.plugins.view.matches.MatchesView
-import de.bilkewall.plugins.view.matches.MatchesViewModel
+import de.bilkewall.adapters.viewmodel.MatchesViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

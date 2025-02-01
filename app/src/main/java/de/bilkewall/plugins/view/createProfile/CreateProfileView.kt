@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.view.utils.ErrorCard
 

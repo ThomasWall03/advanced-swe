@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import de.bilkewall.adapters.viewmodel.MatchesViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.view.drinkList.DrinkList
 import de.bilkewall.plugins.view.drinkList.SearchBar
