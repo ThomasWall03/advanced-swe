@@ -29,4 +29,7 @@ interface DrinkDao {
 
     @Query("SELECT COUNT(*) FROM drink_table")
     suspend fun getDrinkCount(): Int
+
+    @Query("SELECT * FROM drink_table WHERE drinkName LIKE '%' || :name || '%'")
+    fun getDrinksByName(name: String): List<Drink>
 }

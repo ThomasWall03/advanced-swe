@@ -18,11 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.database.drink.Drink
 import sv.lib.squircleshape.SquircleShape
 
 @Composable
-fun DrinkCell(drink: Drink, onClick: (String) -> (Unit)) {
+fun DrinkCell(drink: AppDrink, onClick: (String) -> (Unit)) {
     Card(
         modifier = Modifier
             .padding(8.dp)

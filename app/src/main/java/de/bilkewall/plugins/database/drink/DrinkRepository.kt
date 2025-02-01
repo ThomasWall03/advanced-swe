@@ -31,6 +31,10 @@ class DrinkRepository (private val drinkDao: DrinkDao): DrinkRepositoryInterface
         return drinkDao.getDrinkById(id).toAppDrink()
     }
 
+    override suspend fun getDrinksByName(name: String): List<AppDrink> {
+        return drinkDao.getDrinksByName(name).map { it.toAppDrink() }
+    }
+
     override suspend fun getDrinkCount(): Int {
         return drinkDao.getDrinkCount()
     }
