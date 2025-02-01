@@ -6,21 +6,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.main.di.DependencyProvider
-import de.bilkewall.plugins.database.drink.Drink
+import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.adapters.repository.MatchRepositoryInterface
+import de.bilkewall.domain.AppDrink
+import de.bilkewall.adapters.repository.ProfileRepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class MatchesViewModel : ViewModel() {
-    private val matchRepository = DependencyProvider.matchRepository
-    private val profileRepository = DependencyProvider.profileRepository
-    private val drinkRepository = DependencyProvider.drinkRepository
+class MatchesViewModel(
+    private val matchRepository: MatchRepositoryInterface,
+    private val profileRepository: ProfileRepositoryInterface,
+    private val drinkRepository: DrinkRepositoryInterface
+) : ViewModel() {
 
-    private val _visibleDrinks = MutableStateFlow<List<Drink>>(emptyList())
-    val visibleDrinks: StateFlow<List<Drink>> get() = _visibleDrinks
+    private val _visibleDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
+    val visibleDrinks: StateFlow<List<AppDrink>> get() = _visibleDrinks
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
