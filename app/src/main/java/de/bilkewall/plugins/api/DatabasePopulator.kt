@@ -23,7 +23,6 @@ class DatabasePopulator(
 
     override suspend fun insertInitialData() {
         val allCategoriesAPI = apiWrapper.getDrinkCategories()
-        Log.i("DatabasePopulator", "Inserting ${allCategoriesAPI.size} categories")
         allCategoriesAPI.forEach { category ->
             categoryRepository.insert(category)
         }

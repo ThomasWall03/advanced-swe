@@ -51,6 +51,7 @@ class MainViewModel(
     private val bypassFilter = mutableStateOf(false)
     val allDrinksMatched = mutableStateOf(false)
 
+    //TODO finish service outsourcing for these two methods
     fun evaluateCurrentDrink() = viewModelScope.launch(Dispatchers.IO) {
         _loading.value = true
         try {
