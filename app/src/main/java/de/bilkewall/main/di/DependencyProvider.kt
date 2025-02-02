@@ -3,6 +3,7 @@ package de.bilkewall.main.di
 import android.content.Context
 import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.service.api.ApiService
+import de.bilkewall.application.service.database.ProfileService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase
@@ -49,4 +50,7 @@ object DependencyProvider {
         DrinkService(drinkRepository, drinkIngredientCrossRefRepository)
     }
 
+    val profileService: ProfileService by lazy {
+        ProfileService(profileRepository)
+    }
 }

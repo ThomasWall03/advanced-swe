@@ -42,4 +42,8 @@ class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface
     override fun getMatchedDrinksByName(name: String): Flow<List<AppDrink>> {
         return drinkDao.getMatchedDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
     }
+
+    override fun getMatchedDrinksForProfile(profileId: Int): Flow<List<AppDrink>> {
+        return drinkDao.getMatchedDrinksForProfile(profileId).map { drinks -> drinks.map { it.toAppDrink() } }
+    }
 }
