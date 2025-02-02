@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.drinkIngredientCrossRef
 
-import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toAppDrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toDrinkIngredientCrossRef

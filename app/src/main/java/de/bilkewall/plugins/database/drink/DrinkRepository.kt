@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.drink
 
-import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.util.toAppDrink
 import de.bilkewall.plugins.util.toDrink
@@ -32,10 +32,14 @@ class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface
     }
 
     override suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {
-        return drinkDao.getDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
+        return drinkDao.getMatchedDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
     }
 
     override suspend fun getDrinkCount(): Int {
         return drinkDao.getDrinkCount()
+    }
+
+    override fun getMatchedDrinksByName(name: String): Flow<List<AppDrink>> {
+        return drinkDao.getMatchedDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
     }
 }

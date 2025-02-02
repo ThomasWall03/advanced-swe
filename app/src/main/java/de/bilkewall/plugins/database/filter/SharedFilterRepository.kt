@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.filter
 
-import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
+import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.plugins.util.toAppDrinkTypeFilter

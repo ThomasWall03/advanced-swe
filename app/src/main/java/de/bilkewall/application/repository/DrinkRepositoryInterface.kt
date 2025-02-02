@@ -1,4 +1,4 @@
-package de.bilkewall.adapters.repository
+package de.bilkewall.application.repository
 
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.flow.Flow
@@ -19,4 +19,6 @@ interface DrinkRepositoryInterface {
     suspend fun deleteAllDrinks()
 
     suspend fun getDrinkCount(): Int
+
+    fun getMatchedDrinksByName(name: String): Flow<List<AppDrink>>
 }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import de.bilkewall.plugins.database.drink.Drink
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,5 +29,4 @@ interface MatchDao {
 
     @Query("DELETE FROM match_table WHERE profileId = :profileId")
     fun deleteMatchesForProfile(profileId: Int)
-
 }

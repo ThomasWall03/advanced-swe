@@ -3,7 +3,7 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 
 class DrinkListViewModelFactory(

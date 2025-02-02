@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.profile
 
-import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.domain.AppProfile
 import de.bilkewall.plugins.util.toAppProfile
 import de.bilkewall.plugins.util.toProfile

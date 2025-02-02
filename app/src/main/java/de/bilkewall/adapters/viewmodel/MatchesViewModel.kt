@@ -6,13 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.repository.DrinkRepositoryInterface
-import de.bilkewall.adapters.repository.MatchRepositoryInterface
-import de.bilkewall.adapters.repository.ProfileRepositoryInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.MatchRepositoryInterface
+import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -54,12 +55,15 @@ class MatchesViewModel(
     }
 
     fun getMatchesByName(drinkSearchText: String) {
-        _visibleDrinks.value =
-            _visibleDrinks.value.filter {
-                it.drinkName.contains(
-                    drinkSearchText,
-                    ignoreCase = true
-                )
+        viewModelScope.launch {
+            errorMessage = ""
+            loading = true
+            try {
+                _visibleDrinks.value = drinkRepository.getMatchedDrinksByName(drinkSearchText).first()
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
             }
+            loading = false
+        }
     }
 }

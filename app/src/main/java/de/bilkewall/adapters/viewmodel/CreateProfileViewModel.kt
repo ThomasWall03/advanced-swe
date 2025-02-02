@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.adapters.repository.ProfileRepositoryInterface
-import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
+import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.ProfileRepositoryInterface
+import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.adapters.service.DrinkService
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
