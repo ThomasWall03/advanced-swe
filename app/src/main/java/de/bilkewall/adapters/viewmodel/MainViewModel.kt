@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.service.database.DrinkIngredientWrapper
+import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
@@ -30,7 +30,7 @@ class MainViewModel(
     private var profileRepository: ProfileRepositoryInterface,
     private var matchRepository: MatchRepositoryInterface,
     private var drinkRepository: DrinkRepositoryInterface,
-    private var drinkWrapper: DrinkIngredientWrapper,
+    private var drinkWrapper: DrinkService,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private var apiService: ApiService
 ) : ViewModel() {

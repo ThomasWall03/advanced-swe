@@ -38,16 +38,9 @@ fun DrinkListView(
     drinkListViewModel: DrinkListViewModel,
     bottomBar: @Composable () -> Unit
 ) {
-//    LaunchedEffect(Unit) {
-//        drinkListViewModel.fillListIfEmpty()
-//    }
-
     LaunchedEffect(Unit) {
         drinkListViewModel.getAllDrinks()
     }
-
-//    val drinks by drinkListViewModel.drinks.collectAsState()
-
 
     Scaffold(
         topBar = {
