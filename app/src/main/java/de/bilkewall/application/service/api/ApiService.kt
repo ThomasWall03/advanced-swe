@@ -6,6 +6,7 @@ import de.bilkewall.domain.AppDrink
 
 class ApiService(private val apiWrapper: APIWrapperInterface) {
 
+    //TODO: Sollte man das ganze mit APIs aus den Services raushauen, und lieber ins Repository machen?
     suspend fun getDrinkById(id: Int): List<AppDrink> {
         return apiWrapper.getDrinkById(id)
     }

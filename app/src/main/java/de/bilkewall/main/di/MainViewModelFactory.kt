@@ -3,7 +3,7 @@ package de.bilkewall.main.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.service.database.DrinkIngredientWrapper
+import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
@@ -16,7 +16,7 @@ class MainViewModelFactory(
     private val profileRepository: ProfileRepositoryInterface,
     private val matchRepository: MatchRepositoryInterface,
     private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkWrapper: DrinkIngredientWrapper,
+    private val drinkWrapper: DrinkService,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private val apiService: ApiService
 ) : ViewModelProvider.Factory {

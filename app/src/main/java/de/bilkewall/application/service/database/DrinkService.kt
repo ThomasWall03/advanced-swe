@@ -3,10 +3,12 @@ package de.bilkewall.application.service.database
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class DrinkIngredientWrapper(
+class DrinkService(
     val drinkRepository: DrinkRepositoryInterface,
-    val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
 ) {
     suspend fun getDrinkById(id: Int): AppDrink {
         val drink = drinkRepository.getDrinkById(id)
@@ -15,5 +17,21 @@ class DrinkIngredientWrapper(
             ingredients = ingredients.map { it.ingredientName },
             measurements = ingredients.map { it.unit }
         )
+    }
+
+    fun getAllDrinks(): Flow<List<AppDrink>> {
+        return drinkRepository.getAllDrinks().map { drinks ->
+            drinks.map { drink ->
+                getDrinkById(drink.drinkId)
+            }
+        }
+    }
+
+    suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {
+        return drinkRepository.getDrinksByName(name).map { drinks ->
+            drinks.map { drink ->
+                getDrinkById(drink.drinkId)
+            }
+        }
     }
 }
