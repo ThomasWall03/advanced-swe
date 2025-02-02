@@ -4,7 +4,7 @@ import de.bilkewall.application.api.APIWrapperInterface
 import de.bilkewall.domain.AppCategory
 import de.bilkewall.domain.AppDrink
 
-class DrinkService(private val apiWrapper: APIWrapperInterface) {
+class ApiService(private val apiWrapper: APIWrapperInterface) {
 
     suspend fun getDrinkById(id: Int): List<AppDrink> {
         return apiWrapper.getDrinkById(id)

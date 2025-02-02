@@ -8,7 +8,7 @@ import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.adapters.viewmodel.MainViewModel
 
 class MainViewModelFactory(
@@ -18,7 +18,7 @@ class MainViewModelFactory(
     private val drinkRepository: DrinkRepositoryInterface,
     private val drinkWrapper: DrinkIngredientWrapper,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val drinkService: DrinkService
+    private val apiService: ApiService
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
@@ -30,7 +30,7 @@ class MainViewModelFactory(
                 drinkRepository,
                 drinkWrapper,
                 drinkIngredientCrossRefRepository,
-                drinkService
+                apiService
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

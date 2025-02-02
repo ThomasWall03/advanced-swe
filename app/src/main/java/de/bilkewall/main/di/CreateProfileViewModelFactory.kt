@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 
 class CreateProfileViewModelFactory(
     private val profileRepository: ProfileRepositoryInterface,
     private val sharedFilterRepository: SharedFilterRepositoryInterface,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val drinkService: DrinkService
+    private val apiService: ApiService
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CreateProfileViewModel::class.java)) {
@@ -22,7 +22,7 @@ class CreateProfileViewModelFactory(
                 profileRepository,
                 sharedFilterRepository,
                 drinkIngredientCrossRefRepository,
-                drinkService
+                apiService
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

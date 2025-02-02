@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class LandingPageViewModel(
     private var drinkRepository: DrinkRepositoryInterface,
-    private var drinkService: DrinkService,
+    private var apiService: ApiService,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private var profileRepository: ProfileRepositoryInterface
 ) : ViewModel() {
@@ -52,7 +52,7 @@ class LandingPageViewModel(
     private fun insertInitialData() = viewModelScope.launch {
         _isLoading.value = true
         try {
-            val allDrinksAPI = drinkService.getAllDrinksAtoZ()
+            val allDrinksAPI = apiService.getAllDrinksAtoZ()
             allDrinksAPI.forEach { drink ->
                 if (allDrinks.first().map { it.drinkId }.contains(drink.drinkId)) {
                     drinkRepository.update(drink)

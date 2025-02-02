@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppProfile
@@ -21,7 +21,7 @@ class CreateProfileViewModel(
     private var profileRepository: ProfileRepositoryInterface,
     private var sharedFilterRepository: SharedFilterRepositoryInterface,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private var drinkService: DrinkService
+    private var apiService: ApiService
 ) : ViewModel() {
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
@@ -61,7 +61,7 @@ class CreateProfileViewModel(
             errorMessage = ""
             loading = true
             try {
-                val values = drinkService.getDrinkCategories().map { it.strCategory }
+                val values = apiService.getDrinkCategories().map { it.strCategory }
                 _drinkTypeFilterValues.value = values
             } catch (e: Exception) {
                 errorMessage = e.message.toString()

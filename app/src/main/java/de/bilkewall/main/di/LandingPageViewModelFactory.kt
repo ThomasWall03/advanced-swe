@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 
 class LandingPageViewModelFactory(
     private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkService: DrinkService,
+    private val apiService: ApiService,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private val profileRepository: ProfileRepositoryInterface
 ) : ViewModelProvider.Factory {
@@ -20,7 +20,7 @@ class LandingPageViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return LandingPageViewModel(
                 drinkRepository,
-                drinkService,
+                apiService,
                 drinkIngredientCrossRefRepository,
                 profileRepository
             ) as T

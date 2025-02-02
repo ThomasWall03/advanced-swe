@@ -2,7 +2,7 @@ package de.bilkewall.main.di
 
 import android.content.Context
 import de.bilkewall.application.service.database.DrinkIngredientWrapper
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase
@@ -41,8 +41,8 @@ object DependencyProvider {
         SharedFilterRepository(database.drinkTypeFilterDao, database.ingredientValueFilterDao)
     }
 
-    val drinkService: DrinkService by lazy {
-        DrinkService(apiWrapper)
+    val apiService: ApiService by lazy {
+        ApiService(apiWrapper)
     }
 
     val drinkIngredientWrapper: DrinkIngredientWrapper by lazy {

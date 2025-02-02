@@ -10,7 +10,7 @@ import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.application.service.api.DrinkService
+import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import de.bilkewall.domain.AppDrinkTypeFilter
@@ -32,7 +32,7 @@ class MainViewModel(
     private var drinkRepository: DrinkRepositoryInterface,
     private var drinkWrapper: DrinkIngredientWrapper,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private var drinkService: DrinkService
+    private var apiService: ApiService
 ) : ViewModel() {
     val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
     val currentProfile = profileRepository.activeProfile
@@ -119,7 +119,7 @@ class MainViewModel(
 
     private fun updateDatabaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            val apiDrink = drinkService.getDrinkById(drink.drinkId)[0]
+            val apiDrink = apiService.getDrinkById(drink.drinkId)[0]
             if (apiDrink.drinkId != 0) {
                 if (drink.dateModified != apiDrink.dateModified) {
                     drinkRepository.update(apiDrink)
