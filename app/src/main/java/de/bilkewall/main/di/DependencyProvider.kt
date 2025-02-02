@@ -5,6 +5,7 @@ import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.application.service.database.CreateProfileService
 import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.service.database.LandingPageService
+import de.bilkewall.application.service.database.ProfileService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase
@@ -61,5 +62,7 @@ object DependencyProvider {
             sharedFilterRepository,
             drinkIngredientCrossRefRepository
         )
+    val profileService: ProfileService by lazy {
+        ProfileService(profileRepository)
     }
 }

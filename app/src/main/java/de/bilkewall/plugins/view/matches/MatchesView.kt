@@ -36,7 +36,7 @@ fun MatchesView(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             LaunchedEffect(Unit) {
-                matchesViewModel.loadVisibleDrinks()
+                matchesViewModel.loadMatchedDrinks()
             }
 
             SearchBar(
@@ -44,7 +44,7 @@ fun MatchesView(
                 onTextChange = {
                     matchesViewModel.matchSearchText = it
                     if (it.isEmpty()) {
-                        matchesViewModel.loadVisibleDrinks()
+                        matchesViewModel.loadMatchedDrinks()
                     } else {
                         matchesViewModel.getMatchesByName(it)
                     }

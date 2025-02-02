@@ -1,4 +1,3 @@
-// DrinkListViewModelFactory.kt
 package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel

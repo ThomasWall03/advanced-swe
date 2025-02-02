@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
-import de.bilkewall.application.repository.ProfileRepositoryInterface
+import de.bilkewall.application.service.database.DrinkService
+import de.bilkewall.application.service.database.ProfileService
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +18,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MatchesViewModel(
-    private var matchRepository: MatchRepositoryInterface,
-    private var profileRepository: ProfileRepositoryInterface,
-    private var drinkRepository: DrinkRepositoryInterface
+    private var profileService: ProfileService,
+    private var drinkService: DrinkService
 ) : ViewModel() {
 
     private val _visibleDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
@@ -30,25 +29,10 @@ class MatchesViewModel(
 
     var matchSearchText: String by mutableStateOf("")
 
-    fun loadVisibleDrinks() = viewModelScope.launch(Dispatchers.IO) {
-        val currentProfile = profileRepository.activeProfile.firstOrNull()
+    fun loadMatchedDrinks() = viewModelScope.launch(Dispatchers.IO) {
+        val currentProfile = profileService.getActiveProfile().firstOrNull()
         if (currentProfile != null) {
-            val matches =
-                matchRepository.getAllPositiveMatchesForCurrentProfile(currentProfile.profileId)
-
-            val drinksToDisplay = matches.mapNotNull { match ->
-                try {
-                    drinkRepository.getDrinkById(match.drinkId)
-                } catch (e: Exception) {
-                    Log.e(
-                        "loadVisibleDrinks",
-                        "Failed to load drink for match ID: ${match.drinkId}"
-                    )
-                    null
-                }
-            }
-
-            _visibleDrinks.value = drinksToDisplay
+            _visibleDrinks.value = drinkService.getMatchedDrinksForProfile(currentProfile.profileId).first()
         } else {
             Log.e("loadVisibleDrinks", "No active profile found.")
         }
@@ -59,7 +43,7 @@ class MatchesViewModel(
             errorMessage = ""
             loading = true
             try {
-                _visibleDrinks.value = drinkRepository.getMatchedDrinksByName(drinkSearchText).first()
+                _visibleDrinks.value = drinkService.getMatchedDrinksByName(drinkSearchText).first()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             }

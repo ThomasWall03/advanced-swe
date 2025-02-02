@@ -21,4 +21,6 @@ interface DrinkRepositoryInterface {
     suspend fun getDrinkCount(): Int
 
     fun getMatchedDrinksByName(name: String): Flow<List<AppDrink>>
+
+    fun getMatchedDrinksForProfile(profileId: Int): Flow<List<AppDrink>>
 }

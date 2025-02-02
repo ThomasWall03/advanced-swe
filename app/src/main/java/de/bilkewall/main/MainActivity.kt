@@ -79,9 +79,8 @@ fun CinderApp() {
     )
     val matchesViewModel: MatchesViewModel = viewModel(
         factory = MatchesViewModelFactory(
-            DependencyProvider.matchRepository,
-            DependencyProvider.profileRepository,
-            DependencyProvider.drinkRepository
+            DependencyProvider.profileService,
+            DependencyProvider.drinkService
         )
     )
     val createProfileViewModel: CreateProfileViewModel = viewModel(
