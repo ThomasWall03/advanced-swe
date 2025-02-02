@@ -1,8 +1,10 @@
 package de.bilkewall.main.di
 
 import android.content.Context
-import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.service.api.ApiService
+import de.bilkewall.application.service.database.CreateProfileService
+import de.bilkewall.application.service.database.DrinkService
+import de.bilkewall.application.service.database.LandingPageService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase
@@ -49,11 +51,15 @@ object DependencyProvider {
         DrinkService(drinkRepository, drinkIngredientCrossRefRepository)
     }
 
-    val getAllDrinksService: GetAllDrinksService by lazy {
-        GetAllDrinksService(drinkRepository)
+    val landingPageService: LandingPageService by lazy {
+        LandingPageService(drinkRepository, drinkIngredientCrossRefRepository)
     }
 
-    val getDrinksByNameService: GetDrinksByNameService by lazy {
-        GetDrinksByNameService(drinkRepository)
+    val createProfileService: CreateProfileService by lazy {
+        CreateProfileService(
+            profileRepository,
+            sharedFilterRepository,
+            drinkIngredientCrossRefRepository
+        )
     }
 }

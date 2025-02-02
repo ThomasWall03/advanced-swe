@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.api.ApiService
+import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.service.database.LandingPageService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class LandingPageViewModel(
     private val apiService: ApiService,
-    private val landingPageService: LandingPageService
+    private val landingPageService: LandingPageService,
+    private val drinkService: DrinkService
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -29,7 +31,7 @@ class LandingPageViewModel(
     }
 
     private fun populateDatabase() = viewModelScope.launch {
-        val currentDrinkCount = landingPageService.getDrinkCount()
+        val currentDrinkCount = drinkService.getDrinkCount()
 
         if (currentDrinkCount < 100) {
             Log.d("DEBUG", "Insufficient drinks in the database. Populating data...")

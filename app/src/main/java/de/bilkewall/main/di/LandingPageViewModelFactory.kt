@@ -8,21 +8,21 @@ import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.adapters.viewmodel.LandingPageViewModel
+import de.bilkewall.application.service.database.DrinkService
+import de.bilkewall.application.service.database.LandingPageService
 
 class LandingPageViewModelFactory(
-    private val drinkRepository: DrinkRepositoryInterface,
     private val apiService: ApiService,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val profileRepository: ProfileRepositoryInterface
+    private val landingPageService: LandingPageService,
+    private val drinkService: DrinkService
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LandingPageViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return LandingPageViewModel(
-                drinkRepository,
                 apiService,
-                drinkIngredientCrossRefRepository,
-                profileRepository
+                landingPageService,
+                drinkService
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -86,18 +86,15 @@ fun CinderApp() {
     )
     val createProfileViewModel: CreateProfileViewModel = viewModel(
         factory = CreateProfileViewModelFactory(
-            DependencyProvider.profileRepository,
-            DependencyProvider.sharedFilterRepository,
-            DependencyProvider.drinkIngredientCrossRefRepository,
-            DependencyProvider.apiService
+            DependencyProvider.apiService,
+            DependencyProvider.createProfileService
         )
     )
     val landingPageViewModel: LandingPageViewModel = viewModel(
         factory = LandingPageViewModelFactory(
-            DependencyProvider.drinkRepository,
             DependencyProvider.apiService,
-            DependencyProvider.drinkIngredientCrossRefRepository,
-            DependencyProvider.profileRepository
+            DependencyProvider.landingPageService,
+            DependencyProvider.drinkService
         )
     )
 

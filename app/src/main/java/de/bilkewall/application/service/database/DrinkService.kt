@@ -34,4 +34,6 @@ class DrinkService(
             }
         }
     }
+
+    suspend fun getDrinkCount() = drinkRepository.getDrinkCount()
 }

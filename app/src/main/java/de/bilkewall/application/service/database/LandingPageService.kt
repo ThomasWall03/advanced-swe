@@ -12,7 +12,6 @@ class LandingPageService(
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
 ) {
     private val allDrinks = drinkRepository.getAllDrinks()
-    suspend fun getDrinkCount() = drinkRepository.getDrinkCount()
 
     suspend fun clearExistingData() {
         drinkRepository.deleteAllDrinks()
