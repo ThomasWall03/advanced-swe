@@ -4,7 +4,7 @@ package de.bilkewall.main.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.repository.DrinkIngredientWrapper
+import de.bilkewall.application.service.database.DrinkIngredientWrapper
 import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 
 class DrinkDetailViewModelFactory(

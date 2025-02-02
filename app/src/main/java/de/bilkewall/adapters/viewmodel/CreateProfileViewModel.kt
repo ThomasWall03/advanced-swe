@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.adapters.service.DrinkService
+import de.bilkewall.application.service.api.DrinkService
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppProfile
@@ -71,16 +71,12 @@ class CreateProfileViewModel(
         }
     }
 
-    fun updateSelectedOptions(filterType: Int, options: List<String>) {
-        when (filterType) {
-            0 -> {
-                _selectedDrinkTypeOptions.value = options
-            }
+    fun updateIngredientFilterValues(values: List<String>) {
+        _selectedIngredientOptions.value = values
+    }
 
-            1 -> {
-                _selectedIngredientOptions.value = options
-            }
-        }
+    fun updateDrinkTypeFilterValues(values: List<String>) {
+        _drinkTypeFilterValues.value = values
     }
 
     fun clearSelectedOptions() {

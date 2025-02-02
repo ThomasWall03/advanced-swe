@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.repository.DrinkIngredientWrapper
+import de.bilkewall.application.service.database.DrinkIngredientWrapper
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.launch

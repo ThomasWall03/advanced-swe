@@ -84,7 +84,7 @@ fun CreateProfileView(navController: NavController, viewModel: CreateProfileView
             options = drinkTypeFilterValues,
             selectedOptions = viewModel.selectedDrinkTypeOptions.collectAsState().value,
             onOptionSelected = { options ->
-                viewModel.updateSelectedOptions(0, options)
+                viewModel.updateDrinkTypeFilterValues(options)
             },
             onNext = { currentDialogIndex++ },
             onBack = { currentDialogIndex-- },
@@ -97,7 +97,7 @@ fun CreateProfileView(navController: NavController, viewModel: CreateProfileView
             selectedOptions = viewModel.selectedIngredientOptions.collectAsState().value,
             onOptionSelected = { options ->
                 Log.d("DEBUG", "Selected options: ${options.toList()}")
-                viewModel.updateSelectedOptions(1, options)
+                viewModel.updateIngredientFilterValues(options)
             },
             onNext = { currentDialogIndex++ },
             onBack = { currentDialogIndex-- },

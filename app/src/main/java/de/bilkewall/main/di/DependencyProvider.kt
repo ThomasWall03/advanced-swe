@@ -1,8 +1,8 @@
 package de.bilkewall.main.di
 
 import android.content.Context
-import de.bilkewall.application.repository.DrinkIngredientWrapper
-import de.bilkewall.adapters.service.DrinkService
+import de.bilkewall.application.service.database.DrinkIngredientWrapper
+import de.bilkewall.application.service.api.DrinkService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.database.CinderDatabase

@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.api
 
-import de.bilkewall.adapters.service.APIWrapperInterface
+import de.bilkewall.application.api.APIWrapperInterface
 import de.bilkewall.domain.AppCategory
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.api.dto.DrinksCategoryDto

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.adapters.service.DrinkService
+import de.bilkewall.application.service.api.DrinkService
 import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 
 class LandingPageViewModelFactory(

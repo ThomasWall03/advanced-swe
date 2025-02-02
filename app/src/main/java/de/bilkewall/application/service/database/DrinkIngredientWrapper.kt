@@ -1,5 +1,7 @@
-package de.bilkewall.application.repository
+package de.bilkewall.application.service.database
 
+import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 
 class DrinkIngredientWrapper(
