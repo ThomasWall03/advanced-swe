@@ -1,5 +1,6 @@
 package de.bilkewall.adapters.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -58,7 +59,7 @@ class CreateProfileViewModel(
     }
 
     fun updateDrinkTypeFilterValues(values: List<String>) {
-        _drinkTypeFilterValues.value = values
+        _selectedDrinkTypeOptions.value = values
     }
 
     fun clearSelectedOptions() {

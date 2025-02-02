@@ -40,10 +40,15 @@ class MatchesViewModel(
 
     fun getMatchesByName(drinkSearchText: String) {
         viewModelScope.launch {
+            val currentProfile = profileService.getActiveProfile().firstOrNull()
             errorMessage = ""
             loading = true
             try {
-                _visibleDrinks.value = drinkService.getMatchedDrinksByName(drinkSearchText).first()
+                if (currentProfile != null) {
+                    _visibleDrinks.value = drinkService.getMatchedDrinksByName(drinkSearchText, currentProfile.profileId).first()
+                } else {
+                    Log.e("getMatchesByName", "No active profile found.")
+                }
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             }

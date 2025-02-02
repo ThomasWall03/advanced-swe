@@ -62,6 +62,8 @@ object DependencyProvider {
             sharedFilterRepository,
             drinkIngredientCrossRefRepository
         )
+    }
+
     val profileService: ProfileService by lazy {
         ProfileService(profileRepository)
     }

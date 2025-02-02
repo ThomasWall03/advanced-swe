@@ -37,8 +37,8 @@ class DrinkService(
 
     suspend fun getDrinkCount() = drinkRepository.getDrinkCount()
 
-    suspend fun getMatchedDrinksByName(name: String): Flow<List<AppDrink>> {
-        return drinkRepository.getMatchedDrinksByName(name).map { drinks ->
+    suspend fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<AppDrink>> {
+        return drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
             drinks.map { drink ->
                 getDrinkById(drink.drinkId)
             }
