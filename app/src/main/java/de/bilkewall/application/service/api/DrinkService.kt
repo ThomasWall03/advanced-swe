@@ -1,5 +1,6 @@
-package de.bilkewall.adapters.service
+package de.bilkewall.application.service.api
 
+import de.bilkewall.application.api.APIWrapperInterface
 import de.bilkewall.domain.AppCategory
 import de.bilkewall.domain.AppDrink
 

@@ -1,4 +1,4 @@
-package de.bilkewall.adapters.service
+package de.bilkewall.application.api
 
 import de.bilkewall.domain.AppCategory
 import de.bilkewall.domain.AppDrink

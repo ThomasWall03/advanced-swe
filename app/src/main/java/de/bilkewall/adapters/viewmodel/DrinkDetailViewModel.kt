@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.adapters.repository.DrinkIngredientWrapper
+import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.service.database.DrinkIngredientWrapper
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import kotlinx.coroutines.launch

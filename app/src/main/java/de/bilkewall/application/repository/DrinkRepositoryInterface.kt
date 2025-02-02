@@ -1,4 +1,4 @@
-package de.bilkewall.adapters.repository
+package de.bilkewall.application.repository
 
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.flow.Flow

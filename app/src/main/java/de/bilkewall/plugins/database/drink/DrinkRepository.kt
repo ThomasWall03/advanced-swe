@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.drink
 
-import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import de.bilkewall.plugins.util.toAppDrink
 import de.bilkewall.plugins.util.toDrink

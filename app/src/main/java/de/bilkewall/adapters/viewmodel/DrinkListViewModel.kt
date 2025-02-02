@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.adapters.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

@@ -3,10 +3,10 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.adapters.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.adapters.repository.ProfileRepositoryInterface
-import de.bilkewall.adapters.repository.SharedFilterRepositoryInterface
-import de.bilkewall.adapters.service.DrinkService
+import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.ProfileRepositoryInterface
+import de.bilkewall.application.repository.SharedFilterRepositoryInterface
+import de.bilkewall.application.service.api.DrinkService
 import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 
 class CreateProfileViewModelFactory(

@@ -1,6 +1,6 @@
 package de.bilkewall.plugins.database.match
 
-import de.bilkewall.adapters.repository.MatchRepositoryInterface
+import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.domain.AppMatch
 import de.bilkewall.plugins.util.toAppMatch
 import de.bilkewall.plugins.util.toMatch
