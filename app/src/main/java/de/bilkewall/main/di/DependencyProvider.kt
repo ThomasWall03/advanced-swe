@@ -1,7 +1,7 @@
 package de.bilkewall.main.di
 
 import android.content.Context
-import de.bilkewall.application.service.database.DrinkIngredientWrapper
+import de.bilkewall.application.service.database.DrinkService
 import de.bilkewall.application.service.api.ApiService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
@@ -45,7 +45,15 @@ object DependencyProvider {
         ApiService(apiWrapper)
     }
 
-    val drinkIngredientWrapper: DrinkIngredientWrapper by lazy {
-        DrinkIngredientWrapper(drinkRepository, drinkIngredientCrossRefRepository)
+    val drinkService: DrinkService by lazy {
+        DrinkService(drinkRepository, drinkIngredientCrossRefRepository)
+    }
+
+    val getAllDrinksService: GetAllDrinksService by lazy {
+        GetAllDrinksService(drinkRepository)
+    }
+
+    val getDrinksByNameService: GetDrinksByNameService by lazy {
+        GetDrinksByNameService(drinkRepository)
     }
 }

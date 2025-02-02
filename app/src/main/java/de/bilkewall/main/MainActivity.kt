@@ -62,20 +62,19 @@ fun CinderApp() {
             DependencyProvider.profileRepository,
             DependencyProvider.matchRepository,
             DependencyProvider.drinkRepository,
-            DependencyProvider.drinkIngredientWrapper,
+            DependencyProvider.drinkService,
             DependencyProvider.drinkIngredientCrossRefRepository,
             DependencyProvider.apiService
         )
     )
     val drinkListViewModel: DrinkListViewModel = viewModel(
         factory = DrinkListViewModelFactory(
-            DependencyProvider.drinkRepository
+            DependencyProvider.drinkService
         )
     )
     val drinkViewModel: DrinkDetailViewModel = viewModel(
         factory = DrinkDetailViewModelFactory(
-            DependencyProvider.drinkIngredientCrossRefRepository,
-            DependencyProvider.drinkIngredientWrapper
+            DependencyProvider.drinkService
         )
     )
     val matchesViewModel: MatchesViewModel = viewModel(
