@@ -1,4 +1,4 @@
-package de.bilkewall.application.service.database
+package de.bilkewall.application.service
 
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface

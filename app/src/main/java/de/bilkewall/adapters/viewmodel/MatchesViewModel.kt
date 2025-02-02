@@ -6,9 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.repository.MatchRepositoryInterface
-import de.bilkewall.application.service.database.DrinkService
-import de.bilkewall.application.service.database.ProfileService
+import de.bilkewall.application.service.DrinkService
+import de.bilkewall.application.service.ProfileService
 import de.bilkewall.domain.AppDrink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

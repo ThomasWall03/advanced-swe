@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.service.database.DrinkService
+import de.bilkewall.application.service.DrinkService
 import de.bilkewall.application.repository.DrinkRepositoryInterface
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.application.service.api.ApiService
+import de.bilkewall.application.service.MatchService
+import de.bilkewall.application.service.ProfileService
 import de.bilkewall.domain.AppDrink
-import de.bilkewall.domain.AppDrinkIngredientCrossRef
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppMatch
@@ -32,7 +32,8 @@ class MainViewModel(
     private var drinkRepository: DrinkRepositoryInterface,
     private var drinkWrapper: DrinkService,
     private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private var apiService: ApiService
+    private val profileService: ProfileService,
+    private val matchService: MatchService
 ) : ViewModel() {
     val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
     val currentProfile = profileRepository.activeProfile
@@ -73,10 +74,6 @@ class MainViewModel(
 
                 allDrinksMatched.value =
                     _availableDrinks.value.isEmpty() && bypassFilter.value == true
-
-                if (_currentDrink.value.drinkId != 0) {
-                    updateDatabaseEntry(_currentDrink.value)
-                }
             }
         } catch (e: Exception) {
             Log.e("MainViewModel.evaluateCurrentDrink", "Error: ${e.message}")
@@ -117,34 +114,9 @@ class MainViewModel(
         _availableDrinks.value = availableDrinks
     }
 
-    private fun updateDatabaseEntry(drink: AppDrink) = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            val apiDrink = apiService.getDrinkById(drink.drinkId)[0]
-            if (apiDrink.drinkId != 0) {
-                if (drink.dateModified != apiDrink.dateModified) {
-                    drinkRepository.update(apiDrink)
-
-                    drinkIngredientCrossRefRepository.deleteAllRelationsOfADrink(drink.drinkId)
-                    apiDrink.ingredients.forEachIndexed { index, ingredient ->
-                        drinkIngredientCrossRefRepository.insert(
-                            AppDrinkIngredientCrossRef(
-                                drink.drinkId,
-                                ingredient,
-                                apiDrink.measurements[index]
-                            )
-                        )
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("MainViewModel.updateDataBaseEntry", "Error: ${e.message}")
-        }
-    }
-
     fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {
-        profileRepository.deactivateActiveProfile()
+        profileService.setCurrentProfile(profile)
 
-        profileRepository.setActiveProfile(profile.profileId)
         bypassFilter.value = false
         allDrinksMatched.value = false
         isInitialLoad.value = true
@@ -153,18 +125,12 @@ class MainViewModel(
 
     fun handleMatchingRequest(match: Boolean, drinkId: Int, profileId: Int) =
         viewModelScope.launch {
-            matchRepository.insert(AppMatch(drinkId, profileId, match))
+            matchService.insert(AppMatch(drinkId, profileId, match))
             evaluateCurrentDrink()
         }
 
     fun deleteProfile(profile: AppProfile) = viewModelScope.launch(Dispatchers.IO) {
-        profileRepository.delete(profile)
-        sharedFilterRepository.deleteIngredientValueFiltersByProfileId(profile.profileId)
-        sharedFilterRepository.deleteDrinkTypeFiltersByProfileId(profile.profileId)
-        matchRepository.deleteMatchesForProfile(profile.profileId)
-
-        if (profile.isActiveProfile) {
-            setCurrentProfile(allProfiles.first().first())
-        }
+        profileService.deleteProfile(profile)
+        setCurrentProfile(profileService.allProfiles.first().first())
     }
 }

@@ -2,13 +2,9 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.application.repository.MatchRepositoryInterface
-import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.adapters.viewmodel.MatchesViewModel
-import de.bilkewall.application.service.database.DrinkService
-import de.bilkewall.application.service.database.ProfileService
-import de.bilkewall.main.di.DependencyProvider.drinkService
+import de.bilkewall.application.service.DrinkService
+import de.bilkewall.application.service.ProfileService
 
 class MatchesViewModelFactory(
     private var profileService: ProfileService,

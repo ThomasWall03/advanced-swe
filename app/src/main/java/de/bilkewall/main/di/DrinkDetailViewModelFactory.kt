@@ -3,7 +3,7 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.application.service.database.DrinkService
+import de.bilkewall.application.service.DrinkService
 import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 
 class DrinkDetailViewModelFactory(

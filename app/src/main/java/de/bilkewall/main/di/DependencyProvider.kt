@@ -1,14 +1,16 @@
 package de.bilkewall.main.di
 
 import android.content.Context
-import de.bilkewall.application.service.api.ApiService
-import de.bilkewall.application.service.database.CreateProfileService
-import de.bilkewall.application.service.database.DrinkService
-import de.bilkewall.application.service.database.LandingPageService
-import de.bilkewall.application.service.database.ProfileService
+import de.bilkewall.application.service.CategoryService
+import de.bilkewall.application.service.DrinkService
+import de.bilkewall.application.service.IngredientService
+import de.bilkewall.application.service.MatchService
+import de.bilkewall.application.service.ProfileService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
+import de.bilkewall.plugins.api.DatabasePopulator
 import de.bilkewall.plugins.database.CinderDatabase
+import de.bilkewall.plugins.database.category.CategoryRepository
 import de.bilkewall.plugins.database.drink.DrinkRepository
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRefRepository
 import de.bilkewall.plugins.database.filter.SharedFilterRepository
@@ -44,27 +46,31 @@ object DependencyProvider {
         SharedFilterRepository(database.drinkTypeFilterDao, database.ingredientValueFilterDao)
     }
 
-    val apiService: ApiService by lazy {
-        ApiService(apiWrapper)
+    val categoryRepository: CategoryRepository by lazy {
+        CategoryRepository(database.categoryDao)
     }
 
     val drinkService: DrinkService by lazy {
         DrinkService(drinkRepository, drinkIngredientCrossRefRepository)
     }
 
-    val landingPageService: LandingPageService by lazy {
-        LandingPageService(drinkRepository, drinkIngredientCrossRefRepository)
-    }
-
-    val createProfileService: CreateProfileService by lazy {
-        CreateProfileService(
-            profileRepository,
-            sharedFilterRepository,
-            drinkIngredientCrossRefRepository
-        )
+    val ingredientService: IngredientService by lazy {
+        IngredientService(drinkIngredientCrossRefRepository)
     }
 
     val profileService: ProfileService by lazy {
-        ProfileService(profileRepository)
+        ProfileService(profileRepository, sharedFilterRepository, matchRepository)
+    }
+
+    val matchService: MatchService by lazy {
+        MatchService(matchRepository)
+    }
+
+    val categoryService: CategoryService by lazy {
+        CategoryService(categoryRepository)
+    }
+
+    val databasePopulator: DatabasePopulator by lazy {
+        DatabasePopulator(drinkRepository, drinkIngredientCrossRefRepository, categoryRepository, apiWrapper)
     }
 }

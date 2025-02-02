@@ -33,7 +33,6 @@ interface DrinkDao {
     @Query("SELECT * FROM drink_table WHERE drinkName LIKE '%' || :name || '%'")
     fun getDrinksByName(name: String): Flow<List<Drink>>
 
-    // TODO: Fix this to use a profileId
     @Query("""
         SELECT d.*
         FROM drink_table d
