@@ -27,8 +27,8 @@ class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface
         drinkDao.deleteAllDrinks()
     }
 
-    override suspend fun getDrinkById(id: Int): AppDrink {
-        return drinkDao.getDrinkById(id).toAppDrink()
+    override suspend fun getDrinkById(drinkId: Int): AppDrink {
+        return drinkDao.getDrinkById(drinkId).toAppDrink()
     }
 
     override suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {

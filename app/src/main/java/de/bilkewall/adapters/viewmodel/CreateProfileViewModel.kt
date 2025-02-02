@@ -5,23 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.application.service.api.ApiService
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
-import de.bilkewall.domain.AppProfile
+import de.bilkewall.application.service.database.CreateProfileService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CreateProfileViewModel(
-    private var profileRepository: ProfileRepositoryInterface,
-    private var sharedFilterRepository: SharedFilterRepositoryInterface,
-    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private var apiService: ApiService
+    private val apiService: ApiService,
+    private val createProfileService: CreateProfileService
 ) : ViewModel() {
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
@@ -32,28 +25,17 @@ class CreateProfileViewModel(
     val selectedIngredientOptions: StateFlow<List<String>> get() = _selectedIngredientOptions
 
     var allIngredients: Flow<List<String>> =
-        drinkIngredientCrossRefRepository.getAllIngredientsSortedByName()
+        createProfileService.getAllIngredientsSortedByName()
 
     var errorMessage: String by mutableStateOf("")
     private var loading: Boolean by mutableStateOf(false)
 
     fun saveProfile(profileName: String) = viewModelScope.launch {
-        profileRepository.deactivateActiveProfile()
-        val id =
-            profileRepository.insert(AppProfile(profileName = profileName, isActiveProfile = true))
-
-        _selectedDrinkTypeOptions.value.forEach { filter ->
-            sharedFilterRepository.insertDrinkTypeFilter(AppDrinkTypeFilter(filter, id.toInt()))
-        }
-
-        _selectedIngredientOptions.value.forEach { filter ->
-            sharedFilterRepository.insertIngredientValueFilter(
-                AppIngredientValueFilter(
-                    filter,
-                    id.toInt()
-                )
-            )
-        }
+        createProfileService.saveProfile(
+            profileName,
+            _selectedDrinkTypeOptions.value,
+            _selectedIngredientOptions.value
+        )
     }
 
     fun fetchDrinkTypeFilterValues() {
