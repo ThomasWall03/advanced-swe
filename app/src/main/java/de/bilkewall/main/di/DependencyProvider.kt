@@ -6,6 +6,7 @@ import de.bilkewall.application.service.DrinkService
 import de.bilkewall.application.service.IngredientService
 import de.bilkewall.application.service.MatchService
 import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.SharedFilterService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.api.DatabasePopulator
@@ -26,27 +27,27 @@ object DependencyProvider {
         database = CinderDatabase.getInstance(context)
     }
 
-    val drinkRepository: DrinkRepository by lazy {
+    private val drinkRepository: DrinkRepository by lazy {
         DrinkRepository(database.drinkDao)
     }
 
-    val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefRepository by lazy {
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefRepository by lazy {
         DrinkIngredientCrossRefRepository(database.drinkIngredientDao)
     }
 
-    val matchRepository: MatchRepository by lazy {
+    private val matchRepository: MatchRepository by lazy {
         MatchRepository(database.matchDao)
     }
 
-    val profileRepository: ProfileRepository by lazy {
+    private val profileRepository: ProfileRepository by lazy {
         ProfileRepository(database.profileDao)
     }
 
-    val sharedFilterRepository: SharedFilterRepository by lazy {
+    private val sharedFilterRepository: SharedFilterRepository by lazy {
         SharedFilterRepository(database.drinkTypeFilterDao, database.ingredientValueFilterDao)
     }
 
-    val categoryRepository: CategoryRepository by lazy {
+    private val categoryRepository: CategoryRepository by lazy {
         CategoryRepository(database.categoryDao)
     }
 
@@ -68,6 +69,10 @@ object DependencyProvider {
 
     val categoryService: CategoryService by lazy {
         CategoryService(categoryRepository)
+    }
+
+    val sharedFilterService: SharedFilterService by lazy {
+        SharedFilterService(sharedFilterRepository)
     }
 
     val databasePopulator: DatabasePopulator by lazy {

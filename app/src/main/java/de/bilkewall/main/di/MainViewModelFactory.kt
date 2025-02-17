@@ -11,29 +11,22 @@ import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.application.service.MatchService
 import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.SharedFilterService
 
 class MainViewModelFactory(
-    private val sharedFilterRepository: SharedFilterRepositoryInterface,
-    private val profileRepository: ProfileRepositoryInterface,
-    private val matchRepository: MatchRepositoryInterface,
-    private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkWrapper: DrinkService,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private val drinkService: DrinkService,
     private val profileService: ProfileService,
-    private val matchService: MatchService
+    private val matchService: MatchService,
+    private val sharedFilterService: SharedFilterService
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return MainViewModel(
-                sharedFilterRepository,
-                profileRepository,
-                matchRepository,
-                drinkRepository,
-                drinkWrapper,
-                drinkIngredientCrossRefRepository,
                 profileService,
-                matchService
+                matchService,
+                drinkService,
+                sharedFilterService
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

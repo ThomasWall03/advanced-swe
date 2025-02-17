@@ -7,4 +7,6 @@ class MatchService (
     private val matchRepository: MatchRepositoryInterface
 ) {
     suspend fun insert(appMatch: AppMatch) = matchRepository.insert(appMatch)
+
+    suspend fun getMatchesForProfile(profileId: Int) = matchRepository.getAllMatchesForCurrentProfile(profileId)
 }

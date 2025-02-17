@@ -6,7 +6,6 @@ import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.domain.AppDrinkTypeFilter
 import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppProfile
-import de.bilkewall.main.di.DependencyProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -56,5 +55,5 @@ class ProfileService(
         profileRepository.setActiveProfile(profile.profileId)
     }
 
-    suspend fun checkIfProfilesExist() = DependencyProvider.profileRepository.getProfileCount() > 0
+    suspend fun checkIfProfilesExist() = profileRepository.getProfileCount() > 0
 }

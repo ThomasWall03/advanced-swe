@@ -4,17 +4,11 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.service.DrinkService
-import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.application.repository.MatchRepositoryInterface
-import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.application.service.MatchService
 import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.SharedFilterService
 import de.bilkewall.domain.AppDrink
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
 import de.bilkewall.domain.AppMatch
 import de.bilkewall.domain.AppProfile
 import kotlinx.coroutines.Dispatchers
@@ -26,20 +20,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private var sharedFilterRepository: SharedFilterRepositoryInterface,
-    private var profileRepository: ProfileRepositoryInterface,
-    private var matchRepository: MatchRepositoryInterface,
-    private var drinkRepository: DrinkRepositoryInterface,
-    private var drinkWrapper: DrinkService,
-    private var drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private val profileService: ProfileService,
-    private val matchService: MatchService
+    private val matchService: MatchService,
+    private val drinkService: DrinkService,
+    private val sharedFilterService: SharedFilterService
 ) : ViewModel() {
-    val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
-    val currentProfile = profileRepository.activeProfile
+    val allProfiles: Flow<List<AppProfile>> = profileService.allProfiles
+    val currentProfile = profileService.getActiveProfile()
 
-    private val _availableDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
-    val availableDrinks: StateFlow<List<AppDrink>> = _availableDrinks
+    val availableDrinks: StateFlow<List<AppDrink>> = drinkService.availableDrinks
 
     private val _currentDrink = MutableStateFlow(AppDrink())
     val currentDrink: StateFlow<AppDrink> get() = _currentDrink
@@ -51,31 +40,20 @@ class MainViewModel(
     private val bypassFilter = mutableStateOf(false)
     val allDrinksMatched = mutableStateOf(false)
 
-    //TODO finish service outsourcing for these two methods
     fun evaluateCurrentDrink() = viewModelScope.launch(Dispatchers.IO) {
         _loading.value = true
         try {
-            val currentProfile = profileRepository.activeProfile.firstOrNull()
-            if (currentProfile != null) {
-                val matches =
-                    matchRepository.getAllMatchesForCurrentProfile(currentProfile.profileId)
-                if (bypassFilter.value) {
-                    calculateAvailableDrinks(matches, emptyList(), emptyList())
-                } else {
-                    val ingredientFilters =
-                        sharedFilterRepository.getIngredientValueFiltersByProfileId(currentProfile.profileId)
-                    val drinkTypeFilters =
-                        sharedFilterRepository.getDrinkTypeFiltersByProfileId(currentProfile.profileId)
-
-                    calculateAvailableDrinks(matches, ingredientFilters, drinkTypeFilters)
-                }
-
-                _currentDrink.value = _availableDrinks.value.firstOrNull() ?: AppDrink()
-                _currentDrink.value = drinkWrapper.getDrinkById(_currentDrink.value.drinkId)
-
-                allDrinksMatched.value =
-                    _availableDrinks.value.isEmpty() && bypassFilter.value == true
+            val profile = currentProfile.firstOrNull()
+            if(profile!=null){
+                _currentDrink.value = drinkService.evaluateCurrentDrink(
+                    bypassFilter.value,
+                    matchService.getMatchesForProfile(profile.profileId),
+                    sharedFilterService.getIngredientFilterValues(profile.profileId),
+                    sharedFilterService.getDrinkTypeFilterValues(profile.profileId)
+                )
+                allDrinksMatched.value = drinkService.isAllDrinkMatched(bypassFilter.value)
             }
+
         } catch (e: Exception) {
             Log.e("MainViewModel.evaluateCurrentDrink", "Error: ${e.message}")
         } finally {
@@ -86,33 +64,6 @@ class MainViewModel(
 
     fun toggleFilterBypass(byPassFilter: Boolean) {
         bypassFilter.value = byPassFilter
-    }
-
-    private suspend fun calculateAvailableDrinks(
-        matches: List<AppMatch>,
-        ingredientFilters: List<AppIngredientValueFilter>,
-        drinkTypeFilters: List<AppDrinkTypeFilter>
-    ) {
-        val allDrinks = drinkRepository.getAllDrinks().first()
-
-        val drinkTypeFilterValues = drinkTypeFilters.map { it.drinkTypeFilterValue }
-        val ingredientFilterValues = ingredientFilters.map { it.ingredientFilterValue }
-
-        val availableDrinks = allDrinks.filter { drink ->
-            val hasValidCategory =
-                drinkTypeFilterValues.isEmpty() || drinkTypeFilterValues.contains(drink.categoryName)
-
-            val hasMatchingIngredient =
-                ingredientFilterValues.isEmpty() || drinkIngredientCrossRefRepository
-                    .getIngredientsForDrink(drink.drinkId)
-                    .any { ingredient -> ingredientFilterValues.contains(ingredient.ingredientName) }
-
-            val isNotMatched = matches.none { it.drinkId == drink.drinkId }
-
-            hasValidCategory && hasMatchingIngredient && isNotMatched
-        }
-
-        _availableDrinks.value = availableDrinks
     }
 
     fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {

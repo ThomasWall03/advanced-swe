@@ -58,14 +58,10 @@ fun CinderApp() {
     val navController = rememberNavController()
     val mainViewModel: MainViewModel = viewModel(
         factory = MainViewModelFactory(
-            DependencyProvider.sharedFilterRepository,
-            DependencyProvider.profileRepository,
-            DependencyProvider.matchRepository,
-            DependencyProvider.drinkRepository,
             DependencyProvider.drinkService,
-            DependencyProvider.drinkIngredientCrossRefRepository,
             DependencyProvider.profileService,
-            DependencyProvider.matchService
+            DependencyProvider.matchService,
+            DependencyProvider.sharedFilterService
         )
     )
     val drinkListViewModel: DrinkListViewModel = viewModel(
