@@ -37,7 +37,7 @@ interface DrinkDao {
         SELECT d.*
         FROM drink_table d
         INNER JOIN match_table m ON d.drinkId = m.drinkId
-        WHERE d.drinkName LIKE '%' || :name || '%' AND m.profileId = :profileId
+        WHERE d.drinkName LIKE '%' || :name || '%' AND m.profileId = :profileId AND m.outcome = 1
     """)
     fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<Drink>>
 
@@ -45,7 +45,7 @@ interface DrinkDao {
         SELECT d.*
         FROM drink_table d
         INNER JOIN match_table m ON d.drinkId = m.drinkId
-        WHERE m.profileId = :profileId
+        WHERE m.profileId = :profileId and m.outcome = 1
     """)
 fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>>
 }
