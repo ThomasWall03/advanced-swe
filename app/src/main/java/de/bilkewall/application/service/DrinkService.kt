@@ -12,10 +12,26 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class DrinkService(
+class DrinkService private constructor(
     private val drinkRepository: DrinkRepositoryInterface,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
 ) {
+
+    companion object {
+        @Volatile
+        private var instance: DrinkService? = null
+
+        fun getInstance(
+            drinkRepository: DrinkRepositoryInterface,
+            drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
+        ): DrinkService {
+            return instance ?: synchronized(this) {
+                instance ?: DrinkService(drinkRepository, drinkIngredientCrossRefRepository).also {
+                    instance = it
+                }
+            }
+        }
+    }
 
     private val _availableDrinks = MutableStateFlow<List<Drink>>(emptyList())
     val availableDrinks: StateFlow<List<Drink>> = _availableDrinks

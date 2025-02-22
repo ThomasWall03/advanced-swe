@@ -9,11 +9,29 @@ import de.bilkewall.domain.Profile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-class ProfileService(
+class ProfileService private constructor(
     private var profileRepository: ProfileRepositoryInterface,
     private val sharedFilterRepository: SharedFilterRepositoryInterface,
     private val matchRepository: MatchRepositoryInterface
 ) {
+
+    companion object {
+        @Volatile
+        private var instance: ProfileService? = null
+
+        fun getInstance(
+            profileRepository: ProfileRepositoryInterface,
+            sharedFilterRepository: SharedFilterRepositoryInterface,
+            matchRepository: MatchRepositoryInterface
+        ): ProfileService {
+            return instance ?: synchronized(this) {
+                instance ?: ProfileService(profileRepository, sharedFilterRepository, matchRepository).also {
+                    instance = it
+                }
+            }
+        }
+    }
+
     val allProfiles: Flow<List<Profile>> = profileRepository.allProfiles
 
     fun getActiveProfile(): Flow<Profile?> {

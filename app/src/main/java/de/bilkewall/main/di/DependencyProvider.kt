@@ -27,52 +27,28 @@ object DependencyProvider {
         database = CinderDatabase.getInstance(context)
     }
 
-    private val drinkRepository: DrinkRepository by lazy {
+    val drinkRepository: DrinkRepository by lazy {
         DrinkRepository(database.drinkDao)
     }
 
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefRepository by lazy {
+    val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefRepository by lazy {
         DrinkIngredientCrossRefRepository(database.drinkIngredientDao)
     }
 
-    private val matchRepository: MatchRepository by lazy {
+    val matchRepository: MatchRepository by lazy {
         MatchRepository(database.matchDao)
     }
 
-    private val profileRepository: ProfileRepository by lazy {
+    val profileRepository: ProfileRepository by lazy {
         ProfileRepository(database.profileDao)
     }
 
-    private val sharedFilterRepository: SharedFilterRepository by lazy {
+    val sharedFilterRepository: SharedFilterRepository by lazy {
         SharedFilterRepository(database.drinkTypeFilterDao, database.ingredientValueFilterDao)
     }
 
-    private val categoryRepository: CategoryRepository by lazy {
+    val categoryRepository: CategoryRepository by lazy {
         CategoryRepository(database.categoryDao)
-    }
-
-    val drinkService: DrinkService by lazy {
-        DrinkService(drinkRepository, drinkIngredientCrossRefRepository)
-    }
-
-    val ingredientService: IngredientService by lazy {
-        IngredientService(drinkIngredientCrossRefRepository)
-    }
-
-    val profileService: ProfileService by lazy {
-        ProfileService(profileRepository, sharedFilterRepository, matchRepository)
-    }
-
-    val matchService: MatchService by lazy {
-        MatchService(matchRepository)
-    }
-
-    val categoryService: CategoryService by lazy {
-        CategoryService(categoryRepository)
-    }
-
-    val sharedFilterService: SharedFilterService by lazy {
-        SharedFilterService(sharedFilterRepository)
     }
 
     val databasePopulator: DatabasePopulator by lazy {
