@@ -1,10 +1,10 @@
 package de.bilkewall.plugins.util
 
-import de.bilkewall.domain.AppProfile
-import de.bilkewall.plugins.database.profile.Profile
+import de.bilkewall.domain.Profile
+import de.bilkewall.plugins.database.profile.ProfileEntity
 
-fun Profile.toAppProfile(): AppProfile {
-    return AppProfile(
+fun ProfileEntity.toProfile(): Profile {
+    return Profile(
         profileId = profileId,
         profileName = profileName,
         isActiveProfile = isActiveProfile,
@@ -13,8 +13,8 @@ fun Profile.toAppProfile(): AppProfile {
     )
 }
 
-fun AppProfile.toProfile(): Profile {
-    return Profile(
+fun Profile.toProfileEntity(): ProfileEntity {
+    return ProfileEntity(
         profileId = profileId,
         profileName = profileName,
         isActiveProfile = isActiveProfile,

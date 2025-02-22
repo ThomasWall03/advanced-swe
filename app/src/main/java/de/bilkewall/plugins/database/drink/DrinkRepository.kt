@@ -1,49 +1,49 @@
 package de.bilkewall.plugins.database.drink
 
 import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.domain.AppDrink
-import de.bilkewall.plugins.util.toAppDrink
+import de.bilkewall.domain.Drink
 import de.bilkewall.plugins.util.toDrink
+import de.bilkewall.plugins.util.toDrinkEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface {
     override fun getAllDrinks() =
-        drinkDao.getAllDrinks().map { drinks -> drinks.map { it.toAppDrink() } }
+        drinkDao.getAllDrinks().map { drinks -> drinks.map { it.toDrink() } }
 
-    override suspend fun insert(drink: AppDrink) {
-        drinkDao.insert(drink.toDrink())
+    override suspend fun insert(drink: Drink) {
+        drinkDao.insert(drink.toDrinkEntity())
     }
 
-    override suspend fun update(drink: AppDrink) {
-        drinkDao.update(drink.toDrink())
+    override suspend fun update(drink: Drink) {
+        drinkDao.update(drink.toDrinkEntity())
     }
 
-    override suspend fun delete(drink: AppDrink) {
-        drinkDao.delete(drink.toDrink())
+    override suspend fun delete(drink: Drink) {
+        drinkDao.delete(drink.toDrinkEntity())
     }
 
     override suspend fun deleteAllDrinks() {
         drinkDao.deleteAllDrinks()
     }
 
-    override suspend fun getDrinkById(drinkId: Int): AppDrink {
-        return drinkDao.getDrinkById(drinkId).toAppDrink()
+    override suspend fun getDrinkById(drinkId: Int): Drink {
+        return drinkDao.getDrinkById(drinkId).toDrink()
     }
 
-    override suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {
-        return drinkDao.getDrinksByName(name).map { drinks -> drinks.map { it.toAppDrink() } }
+    override suspend fun getDrinksByName(name: String): Flow<List<Drink>> {
+        return drinkDao.getDrinksByName(name).map { drinks -> drinks.map { it.toDrink() } }
     }
 
     override suspend fun getDrinkCount(): Int {
         return drinkDao.getDrinkCount()
     }
 
-    override fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<AppDrink>> {
-        return drinkDao.getMatchedDrinksByName(name, profileId).map { drinks -> drinks.map { it.toAppDrink() } }
+    override fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<Drink>> {
+        return drinkDao.getMatchedDrinksByName(name, profileId).map { drinks -> drinks.map { it.toDrink() } }
     }
 
-    override fun getMatchedDrinksForProfile(profileId: Int): Flow<List<AppDrink>> {
-        return drinkDao.getMatchedDrinksForProfile(profileId).map { drinks -> drinks.map { it.toAppDrink() } }
+    override fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>> {
+        return drinkDao.getMatchedDrinksForProfile(profileId).map { drinks -> drinks.map { it.toDrink() } }
     }
 }

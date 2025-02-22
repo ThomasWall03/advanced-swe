@@ -1,20 +1,20 @@
 package de.bilkewall.application.repository
 
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
+import de.bilkewall.domain.DrinkTypeFilter
+import de.bilkewall.domain.IngredientValueFilter
 
 interface SharedFilterRepositoryInterface {
-    suspend fun insertDrinkTypeFilter(drinkTypeFilter: AppDrinkTypeFilter)
+    suspend fun insertDrinkTypeFilter(drinkTypeFilter: DrinkTypeFilter)
 
-    suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<AppDrinkTypeFilter>
+    suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<DrinkTypeFilter>
 
     suspend fun deleteDrinkTypeFiltersByProfileId(profileId: Int)
 
     suspend fun deleteAllDrinkTypeFilters()
 
-    suspend fun insertIngredientValueFilter(ingredientValueFilter: AppIngredientValueFilter)
+    suspend fun insertIngredientValueFilter(ingredientValueFilter: IngredientValueFilter)
 
-    suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<AppIngredientValueFilter>
+    suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<IngredientValueFilter>
 
     suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int)
 

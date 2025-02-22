@@ -7,13 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.DrinkService
-import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.Drink
 import kotlinx.coroutines.launch
 
 class DrinkDetailViewModel(
     private var drinkService: DrinkService
 ) : ViewModel() {
-    var drink: AppDrink by mutableStateOf(AppDrink())
+    var drink: Drink by mutableStateOf(Drink())
     private var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
 @Entity(tableName = "profile_table")
-data class Profile(
+data class ProfileEntity(
     @PrimaryKey(autoGenerate = true) val profileId: Int = 0,
     val profileName: String,
     val isActiveProfile: Boolean = false,

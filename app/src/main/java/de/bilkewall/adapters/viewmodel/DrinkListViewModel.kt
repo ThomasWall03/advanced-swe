@@ -7,14 +7,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.DrinkService
-import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.Drink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class DrinkListViewModel(
     private val drinkService: DrinkService
 ) : ViewModel() {
-    var drinks: Flow<List<AppDrink>> = drinkService.getAllDrinks()
+    var drinks: Flow<List<Drink>> = drinkService.getAllDrinks()
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 

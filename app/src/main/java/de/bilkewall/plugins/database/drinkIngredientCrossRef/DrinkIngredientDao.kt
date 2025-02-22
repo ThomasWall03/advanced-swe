@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DrinkIngredientDao {
     @Insert
-    suspend fun insertDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRef)
+    suspend fun insertDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRefEntity)
 
     @Update
-    suspend fun updateDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRef)
+    suspend fun updateDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRefEntity)
 
     @Delete
-    suspend fun deleteDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRef)
+    suspend fun deleteDrinkIngredientCrossRef(crossRef: DrinkIngredientCrossRefEntity)
 
     @Query("DELETE FROM drink_ingredient_cross_ref")
     suspend fun deleteAllDrinkIngredientCrossRefs()
@@ -31,5 +31,5 @@ interface DrinkIngredientDao {
     fun getAllIngredients(): Flow<List<String>>
 
     @Query("SELECT * FROM drink_ingredient_cross_ref WHERE drinkId = :drinkId")
-    suspend fun getIngredientsForDrink(drinkId: Int): List<DrinkIngredientCrossRef>
+    suspend fun getIngredientsForDrink(drinkId: Int): List<DrinkIngredientCrossRefEntity>
 }

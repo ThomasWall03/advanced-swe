@@ -7,10 +7,10 @@ import androidx.room.Query
 @Dao
 interface IngredientValueFilterDao {
     @Insert
-    suspend fun insertIngredientValueFilter(ingredientValueFilter: IngredientValueFilter)
+    suspend fun insertIngredientValueFilter(ingredientValueFilter: IngredientValueFilterEntity)
 
     @Query("SELECT * FROM ingredient_value_filter_table WHERE profileId = :profileId")
-    suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<IngredientValueFilter>
+    suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<IngredientValueFilterEntity>
 
     @Query("DELETE FROM ingredient_value_filter_table WHERE profileId = :profileId")
     suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int)

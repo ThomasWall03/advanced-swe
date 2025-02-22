@@ -4,29 +4,29 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import de.bilkewall.plugins.database.category.Category
+import de.bilkewall.plugins.database.category.CategoryEntity
 import de.bilkewall.plugins.database.category.CategoryDao
-import de.bilkewall.plugins.database.drink.Drink
+import de.bilkewall.plugins.database.drink.DrinkEntity
 import de.bilkewall.plugins.database.drink.DrinkDao
-import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
+import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRefEntity
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientDao
-import de.bilkewall.plugins.database.filter.DrinkTypeFilter
+import de.bilkewall.plugins.database.filter.DrinkTypeFilterEntity
 import de.bilkewall.plugins.database.filter.DrinkTypeFilterDao
-import de.bilkewall.plugins.database.filter.IngredientValueFilter
+import de.bilkewall.plugins.database.filter.IngredientValueFilterEntity
 import de.bilkewall.plugins.database.filter.IngredientValueFilterDao
-import de.bilkewall.plugins.database.match.Match
+import de.bilkewall.plugins.database.match.MatchEntity
 import de.bilkewall.plugins.database.match.MatchDao
-import de.bilkewall.plugins.database.profile.Profile
+import de.bilkewall.plugins.database.profile.ProfileEntity
 import de.bilkewall.plugins.database.profile.ProfileDao
 
 @Database(
-    entities = [Drink::class,
-        DrinkIngredientCrossRef::class,
-        Match::class,
-        Profile::class,
-        DrinkTypeFilter::class,
-        IngredientValueFilter::class,
-        Category::class],
+    entities = [DrinkEntity::class,
+        DrinkIngredientCrossRefEntity::class,
+        MatchEntity::class,
+        ProfileEntity::class,
+        DrinkTypeFilterEntity::class,
+        IngredientValueFilterEntity::class,
+        CategoryEntity::class],
     version = 1,
     exportSchema = false
 )

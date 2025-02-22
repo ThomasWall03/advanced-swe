@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 import de.bilkewall.cinder.R
-import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.Drink
 import de.bilkewall.plugins.view.drinkList.cell.DrinkCell
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -103,7 +103,7 @@ fun SearchBar(searchBarText: String, onTextChange: (String) -> (Unit)) {
 @Composable
 fun DrinkList(
     errorMessage: String,
-    drinks: List<AppDrink>,
+    drinks: List<Drink>,
     onClick: (String) -> (Unit),
     onRetryClick: () -> Unit
 ) {

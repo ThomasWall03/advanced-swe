@@ -1,18 +1,18 @@
 package de.bilkewall.plugins.util
 
-import de.bilkewall.domain.AppDrinkIngredientCrossRef
-import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRef
+import de.bilkewall.domain.DrinkIngredientCrossRef
+import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCrossRefEntity
 
-fun DrinkIngredientCrossRef.toAppDrinkIngredientCrossRef(): AppDrinkIngredientCrossRef {
-    return AppDrinkIngredientCrossRef(
+fun DrinkIngredientCrossRefEntity.toDrinkIngredientCrossRef(): DrinkIngredientCrossRef {
+    return DrinkIngredientCrossRef(
         drinkId = drinkId,
         ingredientName = ingredientName,
         unit = unit
     )
 }
 
-fun AppDrinkIngredientCrossRef.toDrinkIngredientCrossRef(): DrinkIngredientCrossRef {
-    return DrinkIngredientCrossRef(
+fun DrinkIngredientCrossRef.toDrinkIngredientCrossRefEntity(): DrinkIngredientCrossRefEntity {
+    return DrinkIngredientCrossRefEntity(
         drinkId = drinkId,
         ingredientName = ingredientName,
         unit = unit

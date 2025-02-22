@@ -56,8 +56,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.cinder.R
-import de.bilkewall.domain.AppDrink
-import de.bilkewall.domain.AppProfile
+import de.bilkewall.domain.Drink
+import de.bilkewall.domain.Profile
 import de.bilkewall.plugins.view.drinkDetail.DetailViewCard
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -73,7 +73,7 @@ fun MainView(
         initial = null
     )
 
-    val currentDrink by viewModel.currentDrink.collectAsState(initial = AppDrink())
+    val currentDrink by viewModel.currentDrink.collectAsState(initial = Drink())
     val availableDrinks by viewModel.availableDrinks.collectAsState(initial = emptyList())
     val isLoading by viewModel.loading.collectAsState()
 
@@ -162,7 +162,7 @@ fun MainView(
 
 @Composable
 fun ImageCard(
-    drink: AppDrink,
+    drink: Drink,
     onCheckClick: () -> Unit,
     onCrossClick: () -> Unit,
     isFlipped: Boolean,
@@ -235,7 +235,7 @@ fun ImageCard(
 @Composable
 private fun BottomButtonRow(
     isFlipped: Boolean,
-    drink: AppDrink,
+    drink: Drink,
     onCrossClick: () -> Unit,
     isLoading: Boolean,
     onCheckClick: () -> Unit
@@ -313,11 +313,11 @@ private fun BottomButtonRow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    profiles: List<AppProfile>,
-    currentProfile: AppProfile,
-    onProfileSelected: (AppProfile) -> Unit,
+    profiles: List<Profile>,
+    currentProfile: Profile,
+    onProfileSelected: (Profile) -> Unit,
     onAddProfile: () -> Unit,
-    onDeleteProfile: (AppProfile) -> Unit
+    onDeleteProfile: (Profile) -> Unit
 ) {
     var showProfileDropdown by remember { mutableStateOf(false) }
     val dropdownInteractionSource = remember { MutableInteractionSource() }
@@ -381,11 +381,11 @@ fun TopBar(
 private fun ProfileDropDown(
     showProfileDropdown: Boolean,
     setProfileDropdownState: (Boolean) -> Unit,
-    profiles: List<AppProfile>,
-    onProfileSelected: (AppProfile) -> Unit,
+    profiles: List<Profile>,
+    onProfileSelected: (Profile) -> Unit,
     dropdownInteractionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onAddProfile: () -> Unit,
-    onDeleteProfile: (AppProfile) -> Unit
+    onDeleteProfile: (Profile) -> Unit
 ) {
     DropdownMenu(
         expanded = showProfileDropdown,
@@ -433,9 +433,9 @@ private fun ProfileDropDown(
             },
             text = {
                 val messageProfile = if (profiles.size < 8) {
-                    AppProfile(0, stringResource(R.string.add_new_profile))
+                    Profile(0, stringResource(R.string.add_new_profile))
                 } else {
-                    AppProfile(0, stringResource(R.string.maximum_profiles_reached))
+                    Profile(0, stringResource(R.string.maximum_profiles_reached))
                 }
                 ProfileRow(messageProfile, R.drawable.profile_plus_icon, {}, false)
             },
@@ -452,9 +452,9 @@ private fun ProfileDropDown(
 
 @Composable
 private fun ProfileRow(
-    profile: AppProfile,
+    profile: Profile,
     painterResourceId: Int,
-    onDelete: (AppProfile) -> Unit,
+    onDelete: (Profile) -> Unit,
     showDeleteButton: Boolean = false
 ) {
     Row(

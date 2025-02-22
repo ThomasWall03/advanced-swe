@@ -3,9 +3,9 @@ package de.bilkewall.application.service
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
-import de.bilkewall.domain.AppProfile
+import de.bilkewall.domain.DrinkTypeFilter
+import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.Profile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -14,24 +14,24 @@ class ProfileService(
     private val sharedFilterRepository: SharedFilterRepositoryInterface,
     private val matchRepository: MatchRepositoryInterface
 ) {
-    val allProfiles: Flow<List<AppProfile>> = profileRepository.allProfiles
+    val allProfiles: Flow<List<Profile>> = profileRepository.allProfiles
 
-    fun getActiveProfile(): Flow<AppProfile?> {
+    fun getActiveProfile(): Flow<Profile?> {
         return profileRepository.activeProfile
     }
 
     suspend fun saveProfile(profileName: String, selectedDrinkTypeOptions: List<String>, selectedIngredientOptions: List<String>) {
         profileRepository.deactivateActiveProfile()
         val id =
-            profileRepository.insert(AppProfile(profileName = profileName, isActiveProfile = true))
+            profileRepository.insert(Profile(profileName = profileName, isActiveProfile = true))
 
         selectedDrinkTypeOptions.forEach { filter ->
-            sharedFilterRepository.insertDrinkTypeFilter(AppDrinkTypeFilter(filter, id.toInt()))
+            sharedFilterRepository.insertDrinkTypeFilter(DrinkTypeFilter(filter, id.toInt()))
         }
 
         selectedIngredientOptions.forEach { filter ->
             sharedFilterRepository.insertIngredientValueFilter(
-                AppIngredientValueFilter(
+                IngredientValueFilter(
                     filter,
                     id.toInt()
                 )
@@ -39,7 +39,7 @@ class ProfileService(
         }
     }
 
-    suspend fun deleteProfile(profile: AppProfile){
+    suspend fun deleteProfile(profile: Profile){
         profileRepository.delete(profile)
         sharedFilterRepository.deleteIngredientValueFiltersByProfileId(profile.profileId)
         sharedFilterRepository.deleteDrinkTypeFiltersByProfileId(profile.profileId)
@@ -50,7 +50,7 @@ class ProfileService(
         }
     }
 
-    suspend fun setCurrentProfile(profile: AppProfile) {
+    suspend fun setCurrentProfile(profile: Profile) {
         profileRepository.deactivateActiveProfile()
         profileRepository.setActiveProfile(profile.profileId)
     }

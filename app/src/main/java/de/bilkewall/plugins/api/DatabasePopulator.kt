@@ -5,7 +5,7 @@ import de.bilkewall.adapters.DatabasePopulator
 import de.bilkewall.application.repository.CategoryRepositoryInterface
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.domain.AppDrinkIngredientCrossRef
+import de.bilkewall.domain.DrinkIngredientCrossRef
 import kotlinx.coroutines.flow.first
 
 class DatabasePopulator(
@@ -53,7 +53,7 @@ class DatabasePopulator(
                     }
 
                     drinkIngredientCrossRefRepository.insert(
-                        AppDrinkIngredientCrossRef(
+                        DrinkIngredientCrossRef(
                             drink.drinkId,
                             ingredient,
                             measurement

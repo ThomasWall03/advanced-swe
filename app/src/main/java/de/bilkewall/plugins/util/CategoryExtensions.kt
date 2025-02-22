@@ -1,18 +1,18 @@
 package de.bilkewall.plugins.util
 
-import de.bilkewall.domain.AppCategory
-import de.bilkewall.plugins.database.category.Category
+import de.bilkewall.domain.Category
+import de.bilkewall.plugins.database.category.CategoryEntity
 
 // Converting from Category to AppCategory
-fun Category.toAppCategory(): AppCategory {
-    return AppCategory(
+fun CategoryEntity.toCategory(): Category {
+    return Category(
         strCategory = this.strCategory
     )
 }
 
 // Converting from AppCategory to Category
-fun AppCategory.toCategory(): Category {
-    return Category(
+fun Category.toCategoryEntity(): CategoryEntity {
+    return CategoryEntity(
         strCategory = this.strCategory
     )
 }

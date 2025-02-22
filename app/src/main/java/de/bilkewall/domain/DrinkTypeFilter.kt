@@ -1,6 +1,6 @@
 package de.bilkewall.domain
 
-data class AppDrinkTypeFilter(
+data class DrinkTypeFilter(
     val drinkTypeFilterValue: String,
     val profileId: Int
 )

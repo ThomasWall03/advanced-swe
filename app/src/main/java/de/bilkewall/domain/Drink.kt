@@ -1,11 +1,6 @@
-package de.bilkewall.plugins.database.drink
+package de.bilkewall.domain
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "drink_table")
 data class Drink(
-    @PrimaryKey(autoGenerate = false)
     val drinkId: Int = 0,
     val drinkName: String = "",
     val videoUrl: String = "",
@@ -15,5 +10,7 @@ data class Drink(
     val instructionsEN: String = "",
     val instructionsDE: String = "",
     val thumbnailUrl: String = "",
-    val dateModified: String = ""
+    val dateModified: String = "",
+    val ingredients: List<String> = emptyList(),
+    val measurements: List<String> = emptyList()
 )

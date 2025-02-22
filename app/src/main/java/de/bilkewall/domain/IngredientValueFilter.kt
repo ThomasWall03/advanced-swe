@@ -1,6 +1,6 @@
 package de.bilkewall.domain
 
-data class AppIngredientValueFilter(
+data class IngredientValueFilter(
     val ingredientFilterValue: String,
     val profileId: Int
 )

@@ -2,7 +2,7 @@ package de.bilkewall.domain
 
 import java.time.LocalDateTime
 
-data class AppProfile(
+data class Profile(
     val profileId: Int = 0,
     val profileName: String,
     val isActiveProfile: Boolean = false,

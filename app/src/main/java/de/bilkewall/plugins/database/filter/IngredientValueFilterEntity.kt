@@ -6,7 +6,7 @@ import androidx.room.Entity
     tableName = "ingredient_value_filter_table",
     primaryKeys = ["ingredientFilterValue", "profileId"]
 )
-data class IngredientValueFilter(
+data class IngredientValueFilterEntity(
     val ingredientFilterValue: String,
     val profileId: Int
 )

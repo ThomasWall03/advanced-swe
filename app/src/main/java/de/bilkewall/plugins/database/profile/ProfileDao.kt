@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProfileDao {
     @Insert
-    suspend fun insert(profile: Profile): Long
+    suspend fun insert(profile: ProfileEntity): Long
 
     @Query("SELECT * FROM profile_table")
-    fun getAllProfiles(): Flow<List<Profile>>
+    fun getAllProfiles(): Flow<List<ProfileEntity>>
 
     @Delete
-    suspend fun delete(profile: Profile)
+    suspend fun delete(profile: ProfileEntity)
 
     @Query("DELETE FROM profile_table")
     suspend fun deleteAllProfiles()
@@ -24,7 +24,7 @@ interface ProfileDao {
     suspend fun getProfileCount(): Int
 
     @Query("SELECT * FROM profile_table WHERE isActiveProfile = 1")
-    fun getActiveProfile(): Flow<Profile>
+    fun getActiveProfile(): Flow<ProfileEntity>
 
     @Query("UPDATE profile_table SET isActiveProfile = 0 WHERE isActiveProfile = 1")
     suspend fun deactivateActiveProfile()

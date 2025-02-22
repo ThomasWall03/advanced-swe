@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoryDao {
     @Query("SELECT * FROM category_table")
-    fun getAllCategories(): Flow<List<Category>>
+    fun getAllCategories(): Flow<List<CategoryEntity>>
 
     @Insert
-    suspend fun insert(category: Category)
+    suspend fun insert(category: CategoryEntity)
 
     @Update
-    suspend fun update(category: Category)
+    suspend fun update(category: CategoryEntity)
 
     @Delete
-    suspend fun delete(category: Category)
+    suspend fun delete(category: CategoryEntity)
 
     @Query("DELETE FROM category_table")
     suspend fun deleteAllCategories()

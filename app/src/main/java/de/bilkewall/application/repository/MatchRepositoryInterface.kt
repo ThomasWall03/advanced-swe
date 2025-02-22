@@ -1,18 +1,18 @@
 package de.bilkewall.application.repository
 
-import de.bilkewall.domain.AppMatch
+import de.bilkewall.domain.Match
 import kotlinx.coroutines.flow.Flow
 
 interface MatchRepositoryInterface {
-    val allMatches: Flow<List<AppMatch>>
+    val allMatches: Flow<List<Match>>
 
-    suspend fun insert(match: AppMatch)
+    suspend fun insert(match: Match)
 
-    suspend fun delete(match: AppMatch)
+    suspend fun delete(match: Match)
 
-    fun getAllMatchesForCurrentProfile(profileId: Int): List<AppMatch>
+    fun getAllMatchesForCurrentProfile(profileId: Int): List<Match>
 
-    fun getAllPositiveMatchesForCurrentProfile(profileId: Int): List<AppMatch>
+    fun getAllPositiveMatchesForCurrentProfile(profileId: Int): List<Match>
 
     fun deleteMatchesForProfile(profileId: Int)
 }

@@ -1,24 +1,24 @@
 package de.bilkewall.plugins.database.filter
 
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
-import de.bilkewall.plugins.util.toAppDrinkTypeFilter
-import de.bilkewall.plugins.util.toAppIngredientValueFilter
+import de.bilkewall.domain.DrinkTypeFilter
+import de.bilkewall.domain.IngredientValueFilter
 import de.bilkewall.plugins.util.toDrinkTypeFilter
+import de.bilkewall.plugins.util.toDrinkTypeFilterEntity
 import de.bilkewall.plugins.util.toIngredientValueFilter
+import de.bilkewall.plugins.util.toIngredientValueFilterEntity
 
 class SharedFilterRepository(
     private val drinkTypeFilterDao: DrinkTypeFilterDao,
     private val ingredientValueFilterDao: IngredientValueFilterDao
 ) : SharedFilterRepositoryInterface {
-    override suspend fun insertDrinkTypeFilter(drinkTypeFilter: AppDrinkTypeFilter) {
-        drinkTypeFilterDao.insertDrinkTypeFilter(drinkTypeFilter.toDrinkTypeFilter())
+    override suspend fun insertDrinkTypeFilter(drinkTypeFilter: DrinkTypeFilter) {
+        drinkTypeFilterDao.insertDrinkTypeFilter(drinkTypeFilter.toDrinkTypeFilterEntity())
     }
 
-    override suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<AppDrinkTypeFilter> {
+    override suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<DrinkTypeFilter> {
         return drinkTypeFilterDao.getDrinkTypeFiltersByProfileId(profileId)
-            .map { it.toAppDrinkTypeFilter() }
+            .map { it.toDrinkTypeFilter() }
     }
 
     override suspend fun deleteDrinkTypeFiltersByProfileId(profileId: Int) {
@@ -29,13 +29,13 @@ class SharedFilterRepository(
         drinkTypeFilterDao.deleteAllDrinkTypeFilters()
     }
 
-    override suspend fun insertIngredientValueFilter(ingredientValueFilter: AppIngredientValueFilter) {
-        ingredientValueFilterDao.insertIngredientValueFilter(ingredientValueFilter.toIngredientValueFilter())
+    override suspend fun insertIngredientValueFilter(ingredientValueFilter: IngredientValueFilter) {
+        ingredientValueFilterDao.insertIngredientValueFilter(ingredientValueFilter.toIngredientValueFilterEntity())
     }
 
-    override suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<AppIngredientValueFilter> {
+    override suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<IngredientValueFilter> {
         return ingredientValueFilterDao.getIngredientValueFiltersByProfileId(profileId)
-            .map { it.toAppIngredientValueFilter() }
+            .map { it.toIngredientValueFilter() }
     }
 
     override suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int) {

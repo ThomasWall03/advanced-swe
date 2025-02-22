@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.DrinkService
 import de.bilkewall.application.service.ProfileService
-import de.bilkewall.domain.AppDrink
+import de.bilkewall.domain.Drink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +21,8 @@ class MatchesViewModel(
     private var drinkService: DrinkService
 ) : ViewModel() {
 
-    private val _visibleDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
-    val visibleDrinks: StateFlow<List<AppDrink>> get() = _visibleDrinks
+    private val _visibleDrinks = MutableStateFlow<List<Drink>>(emptyList())
+    val visibleDrinks: StateFlow<List<Drink>> get() = _visibleDrinks
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 

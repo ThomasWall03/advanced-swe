@@ -1,5 +1,5 @@
 package de.bilkewall.domain
 
-data class AppCategory(
+data class Category(
     val strCategory: String
 )

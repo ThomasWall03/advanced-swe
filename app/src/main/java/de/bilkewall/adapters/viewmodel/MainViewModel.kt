@@ -8,9 +8,9 @@ import de.bilkewall.application.service.DrinkService
 import de.bilkewall.application.service.MatchService
 import de.bilkewall.application.service.ProfileService
 import de.bilkewall.application.service.SharedFilterService
-import de.bilkewall.domain.AppDrink
-import de.bilkewall.domain.AppMatch
-import de.bilkewall.domain.AppProfile
+import de.bilkewall.domain.Drink
+import de.bilkewall.domain.Match
+import de.bilkewall.domain.Profile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,13 +25,13 @@ class MainViewModel(
     private val drinkService: DrinkService,
     private val sharedFilterService: SharedFilterService
 ) : ViewModel() {
-    val allProfiles: Flow<List<AppProfile>> = profileService.allProfiles
+    val allProfiles: Flow<List<Profile>> = profileService.allProfiles
     val currentProfile = profileService.getActiveProfile()
 
-    val availableDrinks: StateFlow<List<AppDrink>> = drinkService.availableDrinks
+    val availableDrinks: StateFlow<List<Drink>> = drinkService.availableDrinks
 
-    private val _currentDrink = MutableStateFlow(AppDrink())
-    val currentDrink: StateFlow<AppDrink> get() = _currentDrink
+    private val _currentDrink = MutableStateFlow(Drink())
+    val currentDrink: StateFlow<Drink> get() = _currentDrink
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> get() = _loading
@@ -66,7 +66,7 @@ class MainViewModel(
         bypassFilter.value = byPassFilter
     }
 
-    fun setCurrentProfile(profile: AppProfile) = viewModelScope.launch {
+    fun setCurrentProfile(profile: Profile) = viewModelScope.launch {
         profileService.setCurrentProfile(profile)
 
         bypassFilter.value = false
@@ -77,11 +77,11 @@ class MainViewModel(
 
     fun handleMatchingRequest(match: Boolean, drinkId: Int, profileId: Int) =
         viewModelScope.launch {
-            matchService.insert(AppMatch(drinkId, profileId, match))
+            matchService.insert(Match(drinkId, profileId, match))
             evaluateCurrentDrink()
         }
 
-    fun deleteProfile(profile: AppProfile) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteProfile(profile: Profile) = viewModelScope.launch(Dispatchers.IO) {
         profileService.deleteProfile(profile)
         setCurrentProfile(profileService.allProfiles.first().first())
     }

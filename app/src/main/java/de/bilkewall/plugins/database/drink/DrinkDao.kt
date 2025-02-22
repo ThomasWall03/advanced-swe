@@ -10,19 +10,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DrinkDao {
     @Query("SELECT * FROM drink_table")
-    fun getAllDrinks(): Flow<List<Drink>>
+    fun getAllDrinks(): Flow<List<DrinkEntity>>
 
     @Insert
-    suspend fun insert(drink: Drink)
+    suspend fun insert(drink: DrinkEntity)
 
     @Update
-    suspend fun update(drink: Drink)
+    suspend fun update(drink: DrinkEntity)
 
     @Query("SELECT * FROM drink_table WHERE drinkId = :drinkId")
-    suspend fun getDrinkById(drinkId: Int): Drink
+    suspend fun getDrinkById(drinkId: Int): DrinkEntity
 
     @Delete
-    suspend fun delete(drink: Drink)
+    suspend fun delete(drink: DrinkEntity)
 
     @Query("DELETE FROM drink_table")
     suspend fun deleteAllDrinks()
@@ -31,7 +31,7 @@ interface DrinkDao {
     suspend fun getDrinkCount(): Int
 
     @Query("SELECT * FROM drink_table WHERE drinkName LIKE '%' || :name || '%'")
-    fun getDrinksByName(name: String): Flow<List<Drink>>
+    fun getDrinksByName(name: String): Flow<List<DrinkEntity>>
 
     @Query("""
         SELECT d.*
@@ -39,7 +39,7 @@ interface DrinkDao {
         INNER JOIN match_table m ON d.drinkId = m.drinkId
         WHERE d.drinkName LIKE '%' || :name || '%' AND m.profileId = :profileId AND m.outcome = 1
     """)
-    fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<Drink>>
+    fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<DrinkEntity>>
 
     @Query("""
         SELECT d.*
@@ -47,5 +47,5 @@ interface DrinkDao {
         INNER JOIN match_table m ON d.drinkId = m.drinkId
         WHERE m.profileId = :profileId and m.outcome = 1
     """)
-fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>>
+fun getMatchedDrinksForProfile(profileId: Int): Flow<List<DrinkEntity>>
 }

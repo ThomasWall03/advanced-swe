@@ -1,18 +1,18 @@
 package de.bilkewall.plugins.util
 
-import de.bilkewall.domain.AppMatch
-import de.bilkewall.plugins.database.match.Match
+import de.bilkewall.domain.Match
+import de.bilkewall.plugins.database.match.MatchEntity
 
-fun Match.toAppMatch(): AppMatch {
-    return AppMatch(
+fun MatchEntity.toMatch(): Match {
+    return Match(
         drinkId = drinkId,
         profileId = profileId,
         outcome = outcome
     )
 }
 
-fun AppMatch.toMatch(): Match {
-    return Match(
+fun Match.toMatchEntity(): MatchEntity {
+    return MatchEntity(
         drinkId = drinkId,
         profileId = profileId,
         outcome = outcome

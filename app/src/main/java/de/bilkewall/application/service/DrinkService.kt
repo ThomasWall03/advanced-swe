@@ -2,10 +2,10 @@ package de.bilkewall.application.service
 
 import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.domain.AppDrink
-import de.bilkewall.domain.AppDrinkTypeFilter
-import de.bilkewall.domain.AppIngredientValueFilter
-import de.bilkewall.domain.AppMatch
+import de.bilkewall.domain.Drink
+import de.bilkewall.domain.DrinkTypeFilter
+import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.Match
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,10 +17,10 @@ class DrinkService(
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
 ) {
 
-    private val _availableDrinks = MutableStateFlow<List<AppDrink>>(emptyList())
-    val availableDrinks: StateFlow<List<AppDrink>> = _availableDrinks
+    private val _availableDrinks = MutableStateFlow<List<Drink>>(emptyList())
+    val availableDrinks: StateFlow<List<Drink>> = _availableDrinks
 
-    suspend fun getDrinkById(id: Int): AppDrink {
+    suspend fun getDrinkById(id: Int): Drink {
         val drink = drinkRepository.getDrinkById(id)
         val ingredients = drinkIngredientCrossRefRepository.getIngredientsForDrink(id)
         return drink.copy(
@@ -29,7 +29,7 @@ class DrinkService(
         )
     }
 
-    fun getAllDrinks(): Flow<List<AppDrink>> {
+    fun getAllDrinks(): Flow<List<Drink>> {
         return drinkRepository.getAllDrinks().map { drinks ->
             drinks.map { drink ->
                 getDrinkById(drink.drinkId)
@@ -37,7 +37,7 @@ class DrinkService(
         }
     }
 
-    suspend fun getDrinksByName(name: String): Flow<List<AppDrink>> {
+    suspend fun getDrinksByName(name: String): Flow<List<Drink>> {
         return drinkRepository.getDrinksByName(name).map { drinks ->
             drinks.map { drink ->
                 getDrinkById(drink.drinkId)
@@ -47,7 +47,7 @@ class DrinkService(
 
     suspend fun getDrinkCount() = drinkRepository.getDrinkCount()
 
-    suspend fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<AppDrink>> {
+    suspend fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<Drink>> {
         return drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
             drinks.map { drink ->
                 getDrinkById(drink.drinkId)
@@ -55,7 +55,7 @@ class DrinkService(
         }
     }
 
-    suspend fun getMatchedDrinksForProfile(profileId: Int): Flow<List<AppDrink>> {
+    suspend fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>> {
         return drinkRepository.getMatchedDrinksForProfile(profileId).map { drinks ->
             drinks.map { drink ->
                 getDrinkById(drink.drinkId)
@@ -65,16 +65,16 @@ class DrinkService(
 
     suspend fun evaluateCurrentDrink(
         bypassFilter: Boolean,
-        matches: List<AppMatch>,
-        ingredientFilters: List<AppIngredientValueFilter>,
-        drinkTypeFilters: List<AppDrinkTypeFilter>
-    ): AppDrink {
+        matches: List<Match>,
+        ingredientFilters: List<IngredientValueFilter>,
+        drinkTypeFilters: List<DrinkTypeFilter>
+    ): Drink {
         if (bypassFilter) {
             calculateAvailableDrinks(matches, emptyList(), emptyList())
         } else {
             calculateAvailableDrinks(matches, ingredientFilters, drinkTypeFilters)
         }
-        return getDrinkById((_availableDrinks.value.firstOrNull() ?: AppDrink()).drinkId)
+        return getDrinkById((_availableDrinks.value.firstOrNull() ?: Drink()).drinkId)
     }
 
     fun isAllDrinkMatched(bypassFilter: Boolean): Boolean {
@@ -82,9 +82,9 @@ class DrinkService(
     }
 
     private suspend fun calculateAvailableDrinks(
-        matches: List<AppMatch>,
-        ingredientFilters: List<AppIngredientValueFilter>,
-        drinkTypeFilters: List<AppDrinkTypeFilter>
+        matches: List<Match>,
+        ingredientFilters: List<IngredientValueFilter>,
+        drinkTypeFilters: List<DrinkTypeFilter>
     ) {
         val allDrinks = drinkRepository.getAllDrinks().first()
 
