@@ -32,7 +32,7 @@ class ProfileService private constructor(
         }
     }
 
-    val allProfiles: Flow<List<Profile>> = profileRepository.allProfiles
+    val allProfiles: Flow<List<Profile>> by lazy { profileRepository.allProfiles }
 
     fun getActiveProfile(): Flow<Profile?> {
         return profileRepository.activeProfile
@@ -64,7 +64,9 @@ class ProfileService private constructor(
         matchRepository.deleteMatchesForProfile(profile.profileId)
 
         if (profile.isActiveProfile) {
-            setCurrentProfile(allProfiles.first().first())
+            if(allProfiles.first().isNotEmpty()) {
+                setCurrentProfile(allProfiles.first().first())
+            }
         }
     }
 

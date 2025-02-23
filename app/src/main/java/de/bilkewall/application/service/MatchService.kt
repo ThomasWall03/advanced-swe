@@ -22,7 +22,7 @@ class MatchService private constructor(
         }
     }
 
-    suspend fun insert(appMatch: Match) = matchRepository.insert(appMatch)
+    suspend fun insert(match: Match) = matchRepository.insert(match)
 
-    suspend fun getMatchesForProfile(profileId: Int) = matchRepository.getAllMatchesForCurrentProfile(profileId)
+    fun getMatchesForProfile(profileId: Int) = matchRepository.getAllMatchesForCurrentProfile(profileId)
 }

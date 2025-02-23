@@ -2,6 +2,7 @@
 
 *.iml
 .gradle
+/htmlReport
 /local.properties
 /.idea/caches
 /.idea/libraries

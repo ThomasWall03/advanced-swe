@@ -44,7 +44,7 @@ class MatchesViewModel(
             loading = true
             try {
                 if (currentProfile != null) {
-                    _visibleDrinks.value = drinkService.getMatchedDrinksByName(drinkSearchText, currentProfile.profileId).first()
+                    _visibleDrinks.value = drinkService.getMatchedDrinksByNameAndProfile(drinkSearchText, currentProfile.profileId).first()
                 } else {
                     Log.e("getMatchesByName", "No active profile found.")
                 }
