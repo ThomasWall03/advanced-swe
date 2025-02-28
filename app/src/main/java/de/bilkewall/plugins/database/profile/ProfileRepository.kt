@@ -12,7 +12,7 @@ class ProfileRepository(private val profileDao: ProfileDao) : ProfileRepositoryI
     override val allProfiles: Flow<List<Profile>> =
         profileDao.getAllProfiles().map { profileEntities -> profileEntities.map { it.toProfile() } }
     override val activeProfile: Flow<Profile?> =
-        profileDao.getActiveProfile().map { it.toProfile() }
+        profileDao.getActiveProfile().map { it?.toProfile() }
 
     override suspend fun insert(profile: Profile): Long {
         return profileDao.insert(profile.toProfileEntity())

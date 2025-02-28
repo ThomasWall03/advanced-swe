@@ -24,7 +24,7 @@ interface ProfileDao {
     suspend fun getProfileCount(): Int
 
     @Query("SELECT * FROM profile_table WHERE isActiveProfile = 1")
-    fun getActiveProfile(): Flow<ProfileEntity>
+    fun getActiveProfile(): Flow<ProfileEntity?>
 
     @Query("UPDATE profile_table SET isActiveProfile = 0 WHERE isActiveProfile = 1")
     suspend fun deactivateActiveProfile()

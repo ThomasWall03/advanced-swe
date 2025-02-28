@@ -2,7 +2,7 @@ package de.bilkewall.application.service
 
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.domain.DrinkTypeFilter
-import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.IngredientFilter
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -38,10 +38,10 @@ class SharedFilterServiceTest {
     fun `getIngredientFilterValues returns ingredient filters`() = runTest {
         val profileId = 1
         val ingredientFilters = listOf(
-            IngredientValueFilter("Rum", profileId),
-            IngredientValueFilter("Lime", profileId)
+            IngredientFilter("Rum", profileId),
+            IngredientFilter("Lime", profileId)
         )
-        whenever(sharedFilterRepository.getIngredientValueFiltersByProfileId(profileId)).thenReturn(ingredientFilters)
+        whenever(sharedFilterRepository.getIngredientFiltersByProfileId(profileId)).thenReturn(ingredientFilters)
 
         val result = sharedFilterService.getIngredientFilterValues(profileId)
 

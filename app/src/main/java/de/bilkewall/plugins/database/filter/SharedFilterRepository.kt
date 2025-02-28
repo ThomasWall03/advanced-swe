@@ -2,7 +2,7 @@ package de.bilkewall.plugins.database.filter
 
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.domain.DrinkTypeFilter
-import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.IngredientFilter
 import de.bilkewall.plugins.util.toDrinkTypeFilter
 import de.bilkewall.plugins.util.toDrinkTypeFilterEntity
 import de.bilkewall.plugins.util.toIngredientValueFilter
@@ -29,11 +29,11 @@ class SharedFilterRepository(
         drinkTypeFilterDao.deleteAllDrinkTypeFilters()
     }
 
-    override suspend fun insertIngredientValueFilter(ingredientValueFilter: IngredientValueFilter) {
-        ingredientValueFilterDao.insertIngredientValueFilter(ingredientValueFilter.toIngredientValueFilterEntity())
+    override suspend fun insertIngredientFilter(ingredientFilter: IngredientFilter) {
+        ingredientValueFilterDao.insertIngredientValueFilter(ingredientFilter.toIngredientValueFilterEntity())
     }
 
-    override suspend fun getIngredientValueFiltersByProfileId(profileId: Int): List<IngredientValueFilter> {
+    override suspend fun getIngredientFiltersByProfileId(profileId: Int): List<IngredientFilter> {
         return ingredientValueFilterDao.getIngredientValueFiltersByProfileId(profileId)
             .map { it.toIngredientValueFilter() }
     }

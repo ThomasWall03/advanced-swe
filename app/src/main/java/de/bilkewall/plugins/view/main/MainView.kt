@@ -54,10 +54,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.Profile
+import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.plugins.view.drinkDetail.DetailViewCard
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -65,17 +65,16 @@ import de.bilkewall.plugins.view.utils.ErrorCard
 @Composable
 fun MainView(
     navController: NavController,
-    viewModel: MainViewModel,
+    mainViewModel: MainViewModel,
     bottomBar: @Composable () -> Unit
 ) {
-    val profiles by viewModel.allProfiles.collectAsState(initial = emptyList())
-    val currentProfile by viewModel.currentProfile.collectAsState(
+    val profiles by mainViewModel.allProfiles.collectAsState(initial = emptyList())
+    val currentProfile by mainViewModel.currentProfile.collectAsState(
         initial = null
     )
 
-    val currentDrink by viewModel.currentDrink.collectAsState(initial = Drink())
-    val availableDrinks by viewModel.availableDrinks.collectAsState(initial = emptyList())
-    val isLoading by viewModel.loading.collectAsState()
+    val currentDrink by mainViewModel.currentDrink.collectAsState(initial = Drink())
+    val isLoading by mainViewModel.loading.collectAsState()
 
     var isFlipped by remember { mutableStateOf(false) }
 
@@ -86,13 +85,13 @@ fun MainView(
                     profiles = profiles,
                     currentProfile = currentProfile!!,
                     onProfileSelected = { selectedProfile ->
-                        viewModel.setCurrentProfile(selectedProfile)
+                        mainViewModel.setCurrentProfile(selectedProfile)
                     },
                     onAddProfile = {
                         navController.navigate("createProfileView")
                     },
                     onDeleteProfile = { profile ->
-                        viewModel.deleteProfile(profile)
+                        mainViewModel.deleteProfile(profile)
                     }
                 )
             }
@@ -101,14 +100,14 @@ fun MainView(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             LaunchedEffect(Unit) {
-                viewModel.evaluateCurrentDrink()
+                mainViewModel.evaluateCurrentDrink()
             }
 
-            if (availableDrinks.isNotEmpty() && !viewModel.allDrinksMatched.value) {
+            if (!mainViewModel.noMoreDrinksAvailable.value && !mainViewModel.allDrinksMatched.value) {
                 ImageCard(
                     currentDrink,
                     onCheckClick = {
-                        viewModel.handleMatchingRequest(
+                        mainViewModel.handleMatchingRequest(
                             true,
                             currentDrink.drinkId,
                             currentProfile!!.profileId
@@ -116,7 +115,7 @@ fun MainView(
                         isFlipped = false
                     },
                     onCrossClick = {
-                        viewModel.handleMatchingRequest(
+                        mainViewModel.handleMatchingRequest(
                             false,
                             currentDrink.drinkId,
                             currentProfile!!.profileId
@@ -127,17 +126,17 @@ fun MainView(
                     setIsFlipped = { isFlipped = it },
                     isLoading = isLoading
                 )
-            } else if (viewModel.isInitialLoad.value) {
+            } else if (mainViewModel.isInitialLoad.value) {
                 CustomLoadingIndicator()
-            } else if (availableDrinks.isEmpty() && !viewModel.allDrinksMatched.value) {
+            } else if (mainViewModel.noMoreDrinksAvailable.value && !mainViewModel.allDrinksMatched.value) {
                 ErrorCard(
                     errorHeading = stringResource(R.string.no_more_drinks_title),
                     errorInformation = stringResource(R.string.no_more_drinks_information),
                     bottomComposable = {
                         Button(
                             onClick = {
-                                viewModel.toggleFilterBypass(true)
-                                viewModel.evaluateCurrentDrink()
+                                mainViewModel.toggleFilterBypass(true)
+                                mainViewModel.evaluateCurrentDrink()
                             },
                             shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)

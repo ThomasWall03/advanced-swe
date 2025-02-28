@@ -2,30 +2,28 @@ package de.bilkewall.main.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.service.DrinkService
-import de.bilkewall.application.repository.DrinkRepositoryInterface
-import de.bilkewall.application.repository.MatchRepositoryInterface
-import de.bilkewall.application.repository.ProfileRepositoryInterface
-import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.adapters.viewmodel.MainViewModel
+import de.bilkewall.application.service.DrinkFetchingService
+import de.bilkewall.application.service.DrinkFilterService
 import de.bilkewall.application.service.MatchService
-import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.ProfileManagementService
 import de.bilkewall.application.service.SharedFilterService
 
 class MainViewModelFactory(
-    private val drinkService: DrinkService,
-    private val profileService: ProfileService,
+    private val drinkFilterService: DrinkFilterService,
+    private val profileManagementService: ProfileManagementService,
     private val matchService: MatchService,
-    private val sharedFilterService: SharedFilterService
+    private val sharedFilterService: SharedFilterService,
+    private val drinkFetchingService: DrinkFetchingService
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return MainViewModel(
-                profileService,
+                profileManagementService,
                 matchService,
-                drinkService,
+                drinkFilterService,
+                drinkFetchingService,
                 sharedFilterService
             ) as T
         }

@@ -25,4 +25,6 @@ class MatchService private constructor(
     suspend fun insert(match: Match) = matchRepository.insert(match)
 
     fun getMatchesForProfile(profileId: Int) = matchRepository.getAllMatchesForCurrentProfile(profileId)
+
+    fun deleteMatchesForProfile(profileId: Int) = matchRepository.deleteMatchesForProfile(profileId)
 }

@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 import de.bilkewall.application.service.CategoryService
 import de.bilkewall.application.service.IngredientService
-import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.MatchService
+import de.bilkewall.application.service.ProfileManagementService
+import de.bilkewall.application.service.SharedFilterService
 
 class CreateProfileViewModelFactory(
-    private val profileService: ProfileService,
+    private val profileManagementService: ProfileManagementService,
+    private val sharedFilterService: SharedFilterService,
     private val ingredientService: IngredientService,
     private val categoryService: CategoryService
 ) : ViewModelProvider.Factory {
@@ -17,7 +20,8 @@ class CreateProfileViewModelFactory(
         if (modelClass.isAssignableFrom(CreateProfileViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CreateProfileViewModel(
-                profileService,
+                profileManagementService,
+                sharedFilterService,
                 ingredientService,
                 categoryService
             ) as T

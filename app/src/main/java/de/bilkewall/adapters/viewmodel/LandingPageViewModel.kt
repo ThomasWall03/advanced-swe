@@ -7,15 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.adapters.DatabasePopulator
-import de.bilkewall.application.service.DrinkService
-import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.DrinkFetchingService
+import de.bilkewall.application.service.ProfileManagementService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class LandingPageViewModel(
-    private val drinkService: DrinkService,
-    private val profileService: ProfileService,
+    private val drinkFetchingService: DrinkFetchingService,
+    private val profileManagementService: ProfileManagementService,
     private val populator: DatabasePopulator
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
@@ -31,7 +31,7 @@ class LandingPageViewModel(
     }
 
     private fun populateDatabase() = viewModelScope.launch {
-        val currentDrinkCount = drinkService.getDrinkCount()
+        val currentDrinkCount = drinkFetchingService.getDrinkCount()
 
         if (currentDrinkCount < 100) {
             Log.d("DEBUG", "Insufficient drinks in the database. Populating data...")
@@ -56,6 +56,6 @@ class LandingPageViewModel(
     }
 
     fun checkIfProfilesExist() = viewModelScope.launch {
-        _profilesExist.value = profileService.checkIfProfilesExist()
+        _profilesExist.value = profileManagementService.checkIfProfilesExist()
     }
 }

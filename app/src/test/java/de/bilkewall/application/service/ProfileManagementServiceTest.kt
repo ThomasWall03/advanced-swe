@@ -4,7 +4,7 @@ import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.application.repository.ProfileRepositoryInterface
 import de.bilkewall.application.repository.SharedFilterRepositoryInterface
 import de.bilkewall.domain.DrinkTypeFilter
-import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.IngredientFilter
 import de.bilkewall.domain.Profile
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -19,27 +19,27 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.whenever
 
-class ProfileServiceTest {
+class ProfileManagementServiceTest {
     //Mocking
     private val profileRepository: ProfileRepositoryInterface = mock()
     private val sharedFilterRepository: SharedFilterRepositoryInterface = mock()
     private val matchRepository: MatchRepositoryInterface = mock()
 
-    private lateinit var profileService: ProfileService
+    private lateinit var profileManagementService: ProfileManagementService
 
     @Before
     fun setup() {
-        val field = ProfileService::class.java.getDeclaredField("instance")
+        val field = ProfileManagementService::class.java.getDeclaredField("instance")
         field.isAccessible = true
         field.set(null, null)
 
-        profileService = ProfileService.getInstance(profileRepository, sharedFilterRepository, matchRepository)
+        profileManagementService = ProfileManagementService.getInstance(profileRepository)
     }
 
     @Test
     fun `getInstance returns singleton instance`() {
-        val instance1 = ProfileService.getInstance(profileRepository, sharedFilterRepository, matchRepository)
-        val instance2 = ProfileService.getInstance(profileRepository, sharedFilterRepository, matchRepository)
+        val instance1 = ProfileManagementService.getInstance(profileRepository)
+        val instance2 = ProfileManagementService.getInstance(profileRepository)
 
         assertSame(instance1, instance2, "getInstance should return the same instance")
     }
@@ -49,7 +49,7 @@ class ProfileServiceTest {
         val activeProfile = Profile(profileId = 1, profileName = "ActiveProfile", isActiveProfile = true)
         whenever(profileRepository.activeProfile).thenReturn(flowOf(activeProfile))
 
-        val result = profileService.getActiveProfile().first()
+        val result = profileManagementService.getActiveProfile().first()
 
         assertEquals(activeProfile, result)
     }
@@ -58,7 +58,7 @@ class ProfileServiceTest {
     fun `getActiveProfile returns null`() = runTest {
         whenever(profileRepository.activeProfile).thenReturn(flowOf(null))
 
-        val result = profileService.getActiveProfile().first()
+        val result = profileManagementService.getActiveProfile().first()
 
         assertNull(result)
     }
@@ -71,7 +71,7 @@ class ProfileServiceTest {
 
         whenever(profileRepository.insert(any())).thenReturn(10)
 
-        profileService.saveProfile(profileName, drinkFilters, ingredientFilters)
+        profileManagementService.saveProfile(profileName)
 
 
         verify(profileRepository).deactivateActiveProfile()
@@ -80,8 +80,8 @@ class ProfileServiceTest {
         })
         verify(sharedFilterRepository).insertDrinkTypeFilter(DrinkTypeFilter("Cocktail", 10))
         verify(sharedFilterRepository).insertDrinkTypeFilter(DrinkTypeFilter("Mocktail", 10))
-        verify(sharedFilterRepository).insertIngredientValueFilter(IngredientValueFilter("Rum", 10))
-        verify(sharedFilterRepository).insertIngredientValueFilter(IngredientValueFilter("Lime", 10))
+        verify(sharedFilterRepository).insertIngredientFilter(IngredientFilter("Rum", 10))
+        verify(sharedFilterRepository).insertIngredientFilter(IngredientFilter("Lime", 10))
     }
 
     @Test
@@ -96,7 +96,7 @@ class ProfileServiceTest {
             )
         )
 
-        profileService.deleteProfile(profile)
+        profileManagementService.deleteProfile(profile)
 
         verify(profileRepository).delete(profile)
         verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
@@ -118,7 +118,7 @@ class ProfileServiceTest {
             )
         )
 
-        profileService.deleteProfile(profile)
+        profileManagementService.deleteProfile(profile)
 
         verify(profileRepository).delete(profile)
         verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
@@ -136,7 +136,7 @@ class ProfileServiceTest {
             )
         )
 
-        profileService.deleteProfile(profile)
+        profileManagementService.deleteProfile(profile)
 
         verify(profileRepository).delete(profile)
         verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
@@ -150,7 +150,7 @@ class ProfileServiceTest {
     fun `setCurrentProfile deactivates current profile and sets new active profile`() = runTest {
         val profile = Profile(profileId = 1, profileName = "TestProfile", isActiveProfile = true)
 
-        profileService.setCurrentProfile(profile)
+        profileManagementService.setCurrentProfile(profile)
 
         verify(profileRepository).deactivateActiveProfile()
         verify(profileRepository).setActiveProfile(profile.profileId)
@@ -160,7 +160,7 @@ class ProfileServiceTest {
     fun `checkIfProfilesExist returns true if profiles exist`() = runTest {
         whenever(profileRepository.getProfileCount()).thenReturn(1)
 
-        val result = profileService.checkIfProfilesExist()
+        val result = profileManagementService.checkIfProfilesExist()
 
         assertTrue(result)
     }
@@ -169,7 +169,7 @@ class ProfileServiceTest {
     fun `checkIfProfilesExist returns false if no profiles exist`() = runTest {
         whenever(profileRepository.getProfileCount()).thenReturn(0)
 
-        val result = profileService.checkIfProfilesExist()
+        val result = profileManagementService.checkIfProfilesExist()
 
         assertFalse(result)
     }

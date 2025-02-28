@@ -6,15 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.service.DrinkService
+import de.bilkewall.application.service.DrinkFetchingService
 import de.bilkewall.domain.Drink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class DrinkListViewModel(
-    private val drinkService: DrinkService
+    private val drinkFetchingService: DrinkFetchingService
 ) : ViewModel() {
-    var drinks: Flow<List<Drink>> = drinkService.getAllDrinks()
+    var drinks: Flow<List<Drink>> = drinkFetchingService.getAllDrinks()
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
@@ -26,7 +26,7 @@ class DrinkListViewModel(
             loading = true
 
             try {
-                drinks = drinkService.getAllDrinks()
+                drinks = drinkFetchingService.getAllDrinks()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
                 Log.e("DrinkListViewModel.getAllDrinks", "Error: ${e.message}")
@@ -41,7 +41,7 @@ class DrinkListViewModel(
             errorMessage = ""
             loading = true
             try {
-                drinks = drinkService.getDrinksByName(name)
+                drinks = drinkFetchingService.getDrinksByName(name)
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {

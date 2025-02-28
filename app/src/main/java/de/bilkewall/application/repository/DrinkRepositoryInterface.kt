@@ -12,7 +12,7 @@ interface DrinkRepositoryInterface {
 
     suspend fun getDrinkById(drinkId: Int): Drink
 
-    suspend fun getDrinksByName(name: String): Flow<List<Drink>>
+    fun getDrinksByName(name: String): Flow<List<Drink>>
 
     suspend fun delete(drink: Drink)
 

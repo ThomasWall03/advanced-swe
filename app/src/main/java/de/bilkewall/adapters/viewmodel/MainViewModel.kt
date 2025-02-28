@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.bilkewall.application.service.DrinkService
+import de.bilkewall.application.service.DrinkFetchingService
+import de.bilkewall.application.service.DrinkFilterService
 import de.bilkewall.application.service.MatchService
-import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.ProfileManagementService
 import de.bilkewall.application.service.SharedFilterService
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.Match
@@ -15,20 +16,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val profileService: ProfileService,
+    private val profileManagementService: ProfileManagementService,
     private val matchService: MatchService,
-    private val drinkService: DrinkService,
+    private val drinkFilterService: DrinkFilterService,
+    private val drinkFetchingService: DrinkFetchingService,
     private val sharedFilterService: SharedFilterService
 ) : ViewModel() {
-    val allProfiles: Flow<List<Profile>> = profileService.allProfiles
-    val currentProfile = profileService.getActiveProfile()
-
-    val availableDrinks: StateFlow<List<Drink>> = drinkService.availableDrinks
+    val allProfiles: Flow<List<Profile>> = profileManagementService.allProfiles
+    val currentProfile = profileManagementService.getActiveProfile()
 
     private val _currentDrink = MutableStateFlow(Drink())
     val currentDrink: StateFlow<Drink> get() = _currentDrink
@@ -39,21 +38,30 @@ class MainViewModel(
 
     private val bypassFilter = mutableStateOf(false)
     val allDrinksMatched = mutableStateOf(false)
+    val noMoreDrinksAvailable = mutableStateOf(false)
 
     fun evaluateCurrentDrink() = viewModelScope.launch(Dispatchers.IO) {
         _loading.value = true
         try {
             val profile = currentProfile.firstOrNull()
             if(profile!=null){
-                _currentDrink.value = drinkService.evaluateCurrentDrink(
-                    bypassFilter.value,
-                    matchService.getMatchesForProfile(profile.profileId),
+                val filters = listOf(
                     sharedFilterService.getIngredientFilterValues(profile.profileId),
                     sharedFilterService.getDrinkTypeFilterValues(profile.profileId)
                 )
-                allDrinksMatched.value = drinkService.isAllDrinkMatched(bypassFilter.value)
+                val filteredDrinks = drinkFilterService.evaluateCurrentDrinks(
+                    bypassFilter.value,
+                    matchService.getMatchesForProfile(profile.profileId),
+                    filters
+                )
+                allDrinksMatched.value = drinkFilterService.areAllDrinksMatched(bypassFilter.value, filteredDrinks)
+                noMoreDrinksAvailable.value = drinkFilterService.noMoreDrinksAvailable(filteredDrinks)
+                if(noMoreDrinksAvailable.value) {
+                    _currentDrink.value = Drink()
+                } else {
+                    _currentDrink.value = drinkFetchingService.getDrinkById(filteredDrinks.first().drinkId)
+                }
             }
-
         } catch (e: Exception) {
             Log.e("MainViewModel.evaluateCurrentDrink", "Error: ${e.message}")
         } finally {
@@ -67,7 +75,7 @@ class MainViewModel(
     }
 
     fun setCurrentProfile(profile: Profile) = viewModelScope.launch {
-        profileService.setCurrentProfile(profile)
+        profileManagementService.setCurrentProfile(profile)
 
         bypassFilter.value = false
         allDrinksMatched.value = false
@@ -82,7 +90,15 @@ class MainViewModel(
         }
 
     fun deleteProfile(profile: Profile) = viewModelScope.launch(Dispatchers.IO) {
-        profileService.deleteProfile(profile)
-        setCurrentProfile(profileService.allProfiles.first().first())
+        sharedFilterService.deleteFiltersForProfile(profile.profileId)
+        matchService.deleteMatchesForProfile(profile.profileId)
+        profileManagementService.deleteProfile(profile)
+
+        if (profile.isActiveProfile) {
+            val firstProfile = allProfiles.firstOrNull()?.first()
+            firstProfile?.let {
+                setCurrentProfile(it)
+            }
+        }
     }
 }

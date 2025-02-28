@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.CategoryService
 import de.bilkewall.application.service.IngredientService
-import de.bilkewall.application.service.ProfileService
+import de.bilkewall.application.service.ProfileManagementService
+import de.bilkewall.application.service.SharedFilterService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class CreateProfileViewModel(
-    private val profileService: ProfileService,
+    private val profileManagementService: ProfileManagementService,
+    private val sharedFilterService: SharedFilterService,
     private val ingredientService: IngredientService,
     private val categoryService: CategoryService
 ) : ViewModel() {
@@ -35,11 +37,15 @@ class CreateProfileViewModel(
     private var loading: Boolean by mutableStateOf(false)
 
     fun saveProfile(profileName: String) = viewModelScope.launch {
-        profileService.saveProfile(
-            profileName,
+        val id = profileManagementService.saveProfile(
+            profileName
+        )
+        sharedFilterService.saveFiltersForProfile(
+            id,
             _selectedDrinkTypeOptions.value,
             _selectedIngredientOptions.value
         )
+
     }
 
     fun fetchDrinkTypeFilterValues() {

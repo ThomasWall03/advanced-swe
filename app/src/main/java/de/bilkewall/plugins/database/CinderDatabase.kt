@@ -12,7 +12,7 @@ import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientCros
 import de.bilkewall.plugins.database.drinkIngredientCrossRef.DrinkIngredientDao
 import de.bilkewall.plugins.database.filter.DrinkTypeFilterEntity
 import de.bilkewall.plugins.database.filter.DrinkTypeFilterDao
-import de.bilkewall.plugins.database.filter.IngredientValueFilterEntity
+import de.bilkewall.plugins.database.filter.IngredientFilterEntity
 import de.bilkewall.plugins.database.filter.IngredientValueFilterDao
 import de.bilkewall.plugins.database.match.MatchEntity
 import de.bilkewall.plugins.database.match.MatchDao
@@ -25,7 +25,7 @@ import de.bilkewall.plugins.database.profile.ProfileDao
         MatchEntity::class,
         ProfileEntity::class,
         DrinkTypeFilterEntity::class,
-        IngredientValueFilterEntity::class,
+        IngredientFilterEntity::class,
         CategoryEntity::class],
     version = 1,
     exportSchema = false

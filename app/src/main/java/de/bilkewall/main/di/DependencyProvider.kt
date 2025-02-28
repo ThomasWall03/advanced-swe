@@ -1,12 +1,6 @@
 package de.bilkewall.main.di
 
 import android.content.Context
-import de.bilkewall.application.service.CategoryService
-import de.bilkewall.application.service.DrinkService
-import de.bilkewall.application.service.IngredientService
-import de.bilkewall.application.service.MatchService
-import de.bilkewall.application.service.ProfileService
-import de.bilkewall.application.service.SharedFilterService
 import de.bilkewall.plugins.api.APIManager
 import de.bilkewall.plugins.api.APIWrapper
 import de.bilkewall.plugins.api.DatabasePopulator

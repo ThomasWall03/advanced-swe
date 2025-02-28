@@ -31,7 +31,7 @@ class DrinkRepository(private val drinkDao: DrinkDao) : DrinkRepositoryInterface
         return drinkDao.getDrinkById(drinkId).toDrink()
     }
 
-    override suspend fun getDrinksByName(name: String): Flow<List<Drink>> {
+    override fun getDrinksByName(name: String): Flow<List<Drink>> {
         return drinkDao.getDrinksByName(name).map { drinks -> drinks.map { it.toDrink() } }
     }
 

@@ -1,9 +1,9 @@
 package de.bilkewall.plugins.util
 
 import de.bilkewall.domain.DrinkTypeFilter
-import de.bilkewall.domain.IngredientValueFilter
+import de.bilkewall.domain.IngredientFilter
 import de.bilkewall.plugins.database.filter.DrinkTypeFilterEntity
-import de.bilkewall.plugins.database.filter.IngredientValueFilterEntity
+import de.bilkewall.plugins.database.filter.IngredientFilterEntity
 
 fun DrinkTypeFilterEntity.toDrinkTypeFilter(): DrinkTypeFilter {
     return DrinkTypeFilter(
@@ -19,15 +19,15 @@ fun DrinkTypeFilter.toDrinkTypeFilterEntity(): DrinkTypeFilterEntity {
     )
 }
 
-fun IngredientValueFilterEntity.toIngredientValueFilter(): IngredientValueFilter {
-    return IngredientValueFilter(
+fun IngredientFilterEntity.toIngredientValueFilter(): IngredientFilter {
+    return IngredientFilter(
         ingredientFilterValue = ingredientFilterValue,
         profileId = profileId
     )
 }
 
-fun IngredientValueFilter.toIngredientValueFilterEntity(): IngredientValueFilterEntity {
-    return IngredientValueFilterEntity(
+fun IngredientFilter.toIngredientValueFilterEntity(): IngredientFilterEntity {
+    return IngredientFilterEntity(
         ingredientFilterValue = ingredientFilterValue,
         profileId = profileId
     )

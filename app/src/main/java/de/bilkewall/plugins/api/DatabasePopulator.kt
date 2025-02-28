@@ -15,6 +15,7 @@ class DatabasePopulator(
     private val apiWrapper: APIWrapper
 ) : DatabasePopulator {
     private val allDrinks = drinkRepository.getAllDrinks()
+    private val allCategories = categoryRepository.getAllCategories()
 
     override suspend fun clearExistingData() {
         drinkRepository.deleteAllDrinks()
@@ -24,7 +25,9 @@ class DatabasePopulator(
     override suspend fun insertInitialData() {
         val allCategoriesAPI = apiWrapper.getDrinkCategories()
         allCategoriesAPI.forEach { category ->
-            categoryRepository.insert(category)
+            if(!allCategories.first().map { it.strCategory }.contains(category.strCategory)) {
+                categoryRepository.insert(category)
+            }
         }
 
         val allDrinksAPI = apiWrapper.getAllDrinksAtoZ()
@@ -48,7 +51,7 @@ class DatabasePopulator(
                     } catch (e: Exception) {
                         Log.e(
                             "LandingPageService.insertInitialData",
-                            "Error while getting the measurement for drink with DrinkId: ${drink.drinkId}"
+                            "Caught error while getting the measurement for drink with DrinkId: ${drink.drinkId}, because length of measurements (${drink.measurements.size}) < length of ingredients (${drink.ingredients.size})"
                         )
                     }
 

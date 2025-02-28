@@ -47,5 +47,5 @@ interface DrinkDao {
         INNER JOIN match_table m ON d.drinkId = m.drinkId
         WHERE m.profileId = :profileId and m.outcome = 1
     """)
-fun getMatchedDrinksForProfile(profileId: Int): Flow<List<DrinkEntity>>
+    fun getMatchedDrinksForProfile(profileId: Int): Flow<List<DrinkEntity>>
 }
