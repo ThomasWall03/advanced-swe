@@ -45,6 +45,19 @@ class ProfileManagementServiceTest {
     }
 
     @Test
+    fun `allProfiles returns flow of profiles`() = runTest {
+        val profiles = listOf(
+            Profile(profileId = 1, profileName = "Profile1", isActiveProfile = true),
+            Profile(profileId = 2, profileName = "Profile2", isActiveProfile = false)
+        )
+        whenever(profileRepository.allProfiles).thenReturn(flowOf(profiles))
+
+        val result = profileManagementService.allProfiles
+
+        assertEquals(profiles, result.first())
+    }
+
+    @Test
     fun `getActiveProfile returns active profile`() = runTest {
         val activeProfile = Profile(profileId = 1, profileName = "ActiveProfile", isActiveProfile = true)
         whenever(profileRepository.activeProfile).thenReturn(flowOf(activeProfile))
@@ -66,84 +79,26 @@ class ProfileManagementServiceTest {
     @Test
     fun `saveProfile creates profile and adds filters`() = runTest {
         val profileName = "TestProfile"
-        val drinkFilters = listOf("Cocktail", "Mocktail")
-        val ingredientFilters = listOf("Rum", "Lime")
 
         whenever(profileRepository.insert(any())).thenReturn(10)
 
-        profileManagementService.saveProfile(profileName)
+        val resultId = profileManagementService.saveProfile(profileName)
 
+        assertEquals(10, resultId)
 
         verify(profileRepository).deactivateActiveProfile()
         verify(profileRepository).insert(argThat { profile ->
             profile.profileName == profileName && profile.isActiveProfile
         })
-        verify(sharedFilterRepository).insertDrinkTypeFilter(DrinkTypeFilter("Cocktail", 10))
-        verify(sharedFilterRepository).insertDrinkTypeFilter(DrinkTypeFilter("Mocktail", 10))
-        verify(sharedFilterRepository).insertIngredientFilter(IngredientFilter("Rum", 10))
-        verify(sharedFilterRepository).insertIngredientFilter(IngredientFilter("Lime", 10))
     }
 
     @Test
     fun `deleteProfile removes profile and cleans up related data`() = runTest {
         val profile = Profile(profileId = 1, profileName = "Test", isActiveProfile = true)
-        whenever(profileRepository.allProfiles).thenReturn(
-            flowOf(
-                listOf(
-                    Profile(profileId = 1, profileName = "Test1", isActiveProfile = true),
-                    Profile(profileId = 2, profileName = "Test2", isActiveProfile = false)
-                )
-            )
-        )
 
         profileManagementService.deleteProfile(profile)
 
         verify(profileRepository).delete(profile)
-        verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
-        verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(1)
-        verify(matchRepository).deleteMatchesForProfile(1)
-        verify(profileRepository).deactivateActiveProfile()
-        verify(profileRepository).setActiveProfile(profile.profileId)
-    }
-
-    @Test
-    fun `deleteProfile removes profile and cleans up related data, but is not active profile`() = runTest {
-        val profile = Profile(profileId = 1, profileName = "Test", isActiveProfile = false)
-        whenever(profileRepository.allProfiles).thenReturn(
-            flowOf(
-                listOf(
-                    Profile(profileId = 1, profileName = "Test1", isActiveProfile = false),
-                    Profile(profileId = 2, profileName = "Test2", isActiveProfile = true)
-                )
-            )
-        )
-
-        profileManagementService.deleteProfile(profile)
-
-        verify(profileRepository).delete(profile)
-        verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
-        verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(1)
-        verify(matchRepository).deleteMatchesForProfile(1)
-        verify(profileRepository, times(0)).deactivateActiveProfile()
-        verify(profileRepository, times(0)).setActiveProfile(profile.profileId)
-    }
-    @Test
-    fun `deleteProfile removes profile and cleans up related data, but allProfiles is empty`() = runTest {
-        val profile = Profile(profileId = 1, profileName = "Test", isActiveProfile = false)
-        whenever(profileRepository.allProfiles).thenReturn(
-            flowOf(
-                emptyList()
-            )
-        )
-
-        profileManagementService.deleteProfile(profile)
-
-        verify(profileRepository).delete(profile)
-        verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(1)
-        verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(1)
-        verify(matchRepository).deleteMatchesForProfile(1)
-        verify(profileRepository, times(0)).deactivateActiveProfile()
-        verify(profileRepository, times(0)).setActiveProfile(profile.profileId)
     }
 
     @Test

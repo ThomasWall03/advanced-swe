@@ -56,4 +56,13 @@ class MatchServiceTest {
 
         assertEquals(matches, result)
     }
+
+    @Test
+    fun `deleteMatchesForProfile deletes matches for profile`() = runTest {
+        val profileId = 1
+
+        matchService.deleteMatchesForProfile(profileId)
+
+        verify(matchRepository).deleteMatchesForProfile(profileId)
+    }
 }

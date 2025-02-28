@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertSame
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 
 class SharedFilterServiceTest {
@@ -60,5 +61,45 @@ class SharedFilterServiceTest {
         val result = sharedFilterService.getDrinkTypeFilterValues(profileId)
 
         assertEquals(drinkTypeFilters, result)
+    }
+
+    @Test
+    fun `saveFiltersForProfile saves filter options`() = runTest {
+        val profileId = 1
+        val drinkTypeFilters = listOf(
+            "Cocktail",
+            "Mocktail"
+        )
+        val ingredientFilters = listOf(
+            "Rum",
+            "Lime"
+        )
+
+        val drinkTypeFilterList = listOf(
+            DrinkTypeFilter("Cocktail", profileId),
+            DrinkTypeFilter("Mocktail", profileId)
+        )
+
+        val ingredientFilterList = listOf(
+            IngredientFilter("Rum", profileId),
+            IngredientFilter("Lime", profileId)
+        )
+
+        sharedFilterService.saveFiltersForProfile(profileId, drinkTypeFilters, ingredientFilters)
+
+        verify(sharedFilterRepository).insertDrinkTypeFilter(drinkTypeFilterList[0])
+        verify(sharedFilterRepository).insertDrinkTypeFilter(drinkTypeFilterList[1])
+        verify(sharedFilterRepository).insertIngredientFilter(ingredientFilterList[0])
+        verify(sharedFilterRepository).insertIngredientFilter(ingredientFilterList[1])
+    }
+
+    @Test
+    fun `deleteFiltersForProfile deletes filters`() = runTest {
+        val profileId = 1
+
+        sharedFilterService.deleteFiltersForProfile(profileId)
+
+        verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(profileId)
+        verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(profileId)
     }
 }
