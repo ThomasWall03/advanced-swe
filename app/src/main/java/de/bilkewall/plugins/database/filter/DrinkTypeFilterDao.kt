@@ -17,5 +17,4 @@ interface DrinkTypeFilterDao {
 
     @Query("DELETE FROM drink_type_filter_table")
     suspend fun deleteAllDrinkTypeFilters()
-
 }

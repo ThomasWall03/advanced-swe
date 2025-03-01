@@ -7,13 +7,13 @@ import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 import de.bilkewall.application.service.DrinkFetchingService
 
 class DrinkDetailViewModelFactory(
-    private val drinkFetchingService: DrinkFetchingService
+    private val drinkFetchingService: DrinkFetchingService,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DrinkDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return DrinkDetailViewModel(
-                drinkFetchingService
+                drinkFetchingService,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

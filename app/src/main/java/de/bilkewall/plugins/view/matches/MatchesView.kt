@@ -24,7 +24,7 @@ import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 fun MatchesView(
     navController: NavController,
     matchesViewModel: MatchesViewModel,
-    bottomBar: @Composable () -> Unit
+    bottomBar: @Composable () -> Unit,
 ) {
     val visibleDrinks by matchesViewModel.visibleDrinks.collectAsState()
 
@@ -32,7 +32,7 @@ fun MatchesView(
         topBar = {
             TopAppBar(title = { Text(stringResource(R.string.matches)) })
         },
-        bottomBar = bottomBar
+        bottomBar = bottomBar,
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             LaunchedEffect(Unit) {
@@ -48,7 +48,8 @@ fun MatchesView(
                     } else {
                         matchesViewModel.getMatchesByName(it)
                     }
-                })
+                },
+            )
             if (matchesViewModel.loading) {
                 CustomLoadingIndicator()
             } else {
@@ -60,7 +61,7 @@ fun MatchesView(
                     },
                     onRetryClick = {
                         matchesViewModel.getMatchesByName(matchesViewModel.matchSearchText)
-                    }
+                    },
                 )
             }
         }

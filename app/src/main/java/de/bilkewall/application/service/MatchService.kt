@@ -4,22 +4,18 @@ import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.domain.Match
 
 class MatchService private constructor(
-    private val matchRepository: MatchRepositoryInterface
+    private val matchRepository: MatchRepositoryInterface,
 ) {
-
     companion object {
         @Volatile
         private var instance: MatchService? = null
 
-        fun getInstance(
-            matchRepository: MatchRepositoryInterface
-        ): MatchService {
-            return instance ?: synchronized(this) {
+        fun getInstance(matchRepository: MatchRepositoryInterface): MatchService =
+            instance ?: synchronized(this) {
                 instance ?: MatchService(matchRepository).also {
                     instance = it
                 }
             }
-        }
     }
 
     suspend fun insert(match: Match) = matchRepository.insert(match)

@@ -6,58 +6,54 @@ import de.bilkewall.domain.Match
 import kotlinx.coroutines.flow.first
 
 class DrinkFilterService private constructor(
-    private val drinkFetchingService: DrinkFetchingService
+    private val drinkFetchingService: DrinkFetchingService,
 ) {
     companion object {
         @Volatile
         private var instance: DrinkFilterService? = null
 
-        fun getInstance(
-            drinkFetchingService: DrinkFetchingService
-        ): DrinkFilterService {
-            return instance ?: synchronized(this) {
+        fun getInstance(drinkFetchingService: DrinkFetchingService): DrinkFilterService =
+            instance ?: synchronized(this) {
                 instance ?: DrinkFilterService(
-                    drinkFetchingService
+                    drinkFetchingService,
                 ).also {
                     instance = it
                 }
             }
-        }
     }
 
     suspend fun evaluateCurrentDrinks(
         bypassFilter: Boolean,
         matches: List<Match>,
-        filters: List<List<DrinkFilterStrategy>>
-    ): List<Drink> {
-        return if (bypassFilter) {
+        filters: List<List<DrinkFilterStrategy>>,
+    ): List<Drink> =
+        if (bypassFilter) {
             filterDrinks(matches, emptyList())
         } else {
             filterDrinks(matches, filters)
         }
-    }
 
     private suspend fun filterDrinks(
         matches: List<Match>,
-        filters: List<List<DrinkFilterStrategy>>
+        filters: List<List<DrinkFilterStrategy>>,
     ): List<Drink> {
         val allDrinks = drinkFetchingService.getAllDrinks().first()
 
         return allDrinks.filter { drink ->
             val isNotMatched = matches.none { it.drinkId == drink.drinkId }
-            val passesAtLeastOneInEachFilterList = filters.all { filterList ->
-                filterList.any { it.apply(drink) }
-            }
+            val passesAtLeastOneInEachFilterList =
+                filters.all { filterList ->
+                    filterList.any { it.apply(drink) }
+                }
 
             isNotMatched && passesAtLeastOneInEachFilterList
         }
     }
 
-    fun areAllDrinksMatched(bypassFilter: Boolean, filteredDrinks: List<Drink>): Boolean {
-        return filteredDrinks.isEmpty() && bypassFilter
-    }
+    fun areAllDrinksMatched(
+        bypassFilter: Boolean,
+        filteredDrinks: List<Drink>,
+    ): Boolean = filteredDrinks.isEmpty() && bypassFilter
 
-    fun noMoreDrinksAvailable(filteredDrinks: List<Drink>): Boolean {
-        return filteredDrinks.isEmpty()
-    }
+    fun noMoreDrinksAvailable(filteredDrinks: List<Drink>): Boolean = filteredDrinks.isEmpty()
 }

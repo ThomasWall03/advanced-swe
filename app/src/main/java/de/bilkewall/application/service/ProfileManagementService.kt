@@ -5,29 +5,23 @@ import de.bilkewall.domain.Profile
 import kotlinx.coroutines.flow.Flow
 
 class ProfileManagementService private constructor(
-    private var profileRepository: ProfileRepositoryInterface
+    private var profileRepository: ProfileRepositoryInterface,
 ) {
-
     companion object {
         @Volatile
         private var instance: ProfileManagementService? = null
 
-        fun getInstance(
-            profileRepository: ProfileRepositoryInterface
-        ): ProfileManagementService {
-            return instance ?: synchronized(this) {
+        fun getInstance(profileRepository: ProfileRepositoryInterface): ProfileManagementService =
+            instance ?: synchronized(this) {
                 instance ?: ProfileManagementService(profileRepository).also {
                     instance = it
                 }
             }
-        }
     }
 
     val allProfiles: Flow<List<Profile>> by lazy { profileRepository.allProfiles }
 
-    fun getActiveProfile(): Flow<Profile?> {
-        return profileRepository.activeProfile
-    }
+    fun getActiveProfile(): Flow<Profile?> = profileRepository.activeProfile
 
     suspend fun saveProfile(profileName: String): Int {
         profileRepository.deactivateActiveProfile()
@@ -37,7 +31,7 @@ class ProfileManagementService private constructor(
         return id.toInt()
     }
 
-    suspend fun deleteProfile(profile: Profile){
+    suspend fun deleteProfile(profile: Profile) {
         profileRepository.delete(profile)
     }
 

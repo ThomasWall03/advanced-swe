@@ -11,7 +11,7 @@ import de.bilkewall.domain.Drink
 import kotlinx.coroutines.launch
 
 class DrinkDetailViewModel(
-    private var drinkFetchingService: DrinkFetchingService
+    private var drinkFetchingService: DrinkFetchingService,
 ) : ViewModel() {
     var drink: Drink by mutableStateOf(Drink())
     private var errorMessage: String by mutableStateOf("")

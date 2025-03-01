@@ -5,30 +5,26 @@ import de.bilkewall.domain.IngredientFilter
 import de.bilkewall.plugins.database.filter.DrinkTypeFilterEntity
 import de.bilkewall.plugins.database.filter.IngredientFilterEntity
 
-fun DrinkTypeFilterEntity.toDrinkTypeFilter(): DrinkTypeFilter {
-    return DrinkTypeFilter(
+fun DrinkTypeFilterEntity.toDrinkTypeFilter(): DrinkTypeFilter =
+    DrinkTypeFilter(
         drinkTypeFilterValue = drinkTypeFilterValue,
-        profileId = profileId
+        profileId = profileId,
     )
-}
 
-fun DrinkTypeFilter.toDrinkTypeFilterEntity(): DrinkTypeFilterEntity {
-    return DrinkTypeFilterEntity(
+fun DrinkTypeFilter.toDrinkTypeFilterEntity(): DrinkTypeFilterEntity =
+    DrinkTypeFilterEntity(
         drinkTypeFilterValue = drinkTypeFilterValue,
-        profileId = profileId
+        profileId = profileId,
     )
-}
 
-fun IngredientFilterEntity.toIngredientValueFilter(): IngredientFilter {
-    return IngredientFilter(
+fun IngredientFilterEntity.toIngredientValueFilter(): IngredientFilter =
+    IngredientFilter(
         ingredientFilterValue = ingredientFilterValue,
-        profileId = profileId
+        profileId = profileId,
     )
-}
 
-fun IngredientFilter.toIngredientValueFilterEntity(): IngredientFilterEntity {
-    return IngredientFilterEntity(
+fun IngredientFilter.toIngredientValueFilterEntity(): IngredientFilterEntity =
+    IngredientFilterEntity(
         ingredientFilterValue = ingredientFilterValue,
-        profileId = profileId
+        profileId = profileId,
     )
-}

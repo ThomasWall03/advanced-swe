@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DrinksDto(
-    val drinks: List<DrinkDto>?
+    val drinks: List<DrinkDto>?,
 )

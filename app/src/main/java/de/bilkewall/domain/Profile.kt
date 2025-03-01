@@ -7,5 +7,5 @@ data class Profile(
     val profileName: String,
     val isActiveProfile: Boolean = false,
     val creationDate: Long = System.currentTimeMillis(),
-    val creationDateString: String = LocalDateTime.now().toString()
+    val creationDateString: String = LocalDateTime.now().toString(),
 )

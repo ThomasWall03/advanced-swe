@@ -10,9 +10,8 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-
 class MatchServiceTest {
-    //Mocking
+    // Mocking
     private val matchRepository: MatchRepositoryInterface = mock()
 
     private lateinit var matchService: MatchService
@@ -35,34 +34,38 @@ class MatchServiceTest {
     }
 
     @Test
-    fun `insert calls repository to insert match`() = runTest {
-        val match = Match(drinkId = 1, profileId = 1, outcome = true)
+    fun `insert calls repository to insert match`() =
+        runTest {
+            val match = Match(drinkId = 1, profileId = 1, outcome = true)
 
-        matchService.insert(match)
+            matchService.insert(match)
 
-        verify(matchRepository).insert(match)
-    }
-
-    @Test
-    fun `getMatchesForProfile returns matches for given profile`() = runTest {
-        val profileId = 1
-        val matches = listOf(
-            Match(drinkId = 1, profileId = profileId, outcome = true),
-            Match(drinkId = 2, profileId = profileId, outcome = true)
-        )
-        whenever(matchRepository.getAllMatchesForCurrentProfile(profileId)).thenReturn(matches)
-
-        val result = matchService.getMatchesForProfile(profileId)
-
-        assertEquals(matches, result)
-    }
+            verify(matchRepository).insert(match)
+        }
 
     @Test
-    fun `deleteMatchesForProfile deletes matches for profile`() = runTest {
-        val profileId = 1
+    fun `getMatchesForProfile returns matches for given profile`() =
+        runTest {
+            val profileId = 1
+            val matches =
+                listOf(
+                    Match(drinkId = 1, profileId = profileId, outcome = true),
+                    Match(drinkId = 2, profileId = profileId, outcome = true),
+                )
+            whenever(matchRepository.getAllMatchesForCurrentProfile(profileId)).thenReturn(matches)
 
-        matchService.deleteMatchesForProfile(profileId)
+            val result = matchService.getMatchesForProfile(profileId)
 
-        verify(matchRepository).deleteMatchesForProfile(profileId)
-    }
+            assertEquals(matches, result)
+        }
+
+    @Test
+    fun `deleteMatchesForProfile deletes matches for profile`() =
+        runTest {
+            val profileId = 1
+
+            matchService.deleteMatchesForProfile(profileId)
+
+            verify(matchRepository).deleteMatchesForProfile(profileId)
+        }
 }

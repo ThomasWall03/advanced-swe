@@ -8,29 +8,30 @@ import de.bilkewall.main.CinderApp
 
 fun ComposeContentTestRule.launchCinderApp(context: Context) {
     setContent {
-        CinderApp(
-
-        )
+        CinderApp()
     }
 }
 
 fun ComposeContentTestRule.waitUntilNodeIsDisplayed(
     text: String,
-    timeoutMillis: Long = 5000
+    timeoutMillis: Long = 5000,
 ) {
     this.waitUntil(timeoutMillis = timeoutMillis) {
-        this.onAllNodesWithText(text)
-            .fetchSemanticsNodes(atLeastOneRootRequired = true).isNotEmpty()
+        this
+            .onAllNodesWithText(text)
+            .fetchSemanticsNodes(atLeastOneRootRequired = true)
+            .isNotEmpty()
     }
 }
 
-
 fun ComposeContentTestRule.waitUntilNodeWithTestTagIsDisplayed(
     tag: String,
-    timeoutMillis: Long = 5000
+    timeoutMillis: Long = 5000,
 ) {
     this.waitUntil(timeoutMillis = timeoutMillis) {
-        this.onAllNodesWithTag(tag)
-            .fetchSemanticsNodes(atLeastOneRootRequired = true).isNotEmpty()
+        this
+            .onAllNodesWithTag(tag)
+            .fetchSemanticsNodes(atLeastOneRootRequired = true)
+            .isNotEmpty()
     }
 }

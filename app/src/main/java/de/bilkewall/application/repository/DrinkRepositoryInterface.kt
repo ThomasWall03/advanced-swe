@@ -20,7 +20,10 @@ interface DrinkRepositoryInterface {
 
     suspend fun getDrinkCount(): Int
 
-    fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<Drink>>
+    fun getMatchedDrinksByName(
+        name: String,
+        profileId: Int,
+    ): Flow<List<Drink>>
 
     fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>>
 }

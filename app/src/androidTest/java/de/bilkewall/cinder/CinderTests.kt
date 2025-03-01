@@ -42,28 +42,31 @@ class CinderTests {
     }
 
     @Test
-    fun profileCreationTest() { //Testfall 1
-        //Wait on Database Population
+    fun profileCreationTest() { // Testfall 1
+        // Wait on Database Population
         composeTestRule.waitUntilNodeIsDisplayed("Create Profile", 30000)
 
-        //Test Naming Page
+        // Test Naming Page
         composeTestRule.onNodeWithText("Create Profile").assertExists()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
 
-        composeTestRule.onNodeWithText("Enter Profile Name")
+        composeTestRule
+            .onNodeWithText("Enter Profile Name")
             .performTextInput("Schnitzel")
 
-        composeTestRule.onNodeWithText("Enter Profile Name")
+        composeTestRule
+            .onNodeWithText("Enter Profile Name")
             .assert(hasText("Schnitzel"))
 
         composeTestRule.onNodeWithText("Next").assertIsEnabled()
         composeTestRule.onNodeWithText("Next").performClick()
 
-        //Test Drink Type Page
+        // Test Drink Type Page
         composeTestRule.waitUntilNodeIsDisplayed("Cocktail")
 
         composeTestRule.onNodeWithText("Whats your type?").assertExists()
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .assertIsEnabled()
         composeTestRule.onNodeWithText("All").assertIsEnabled()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
@@ -71,7 +74,8 @@ class CinderTests {
         composeTestRule.onNodeWithText("Cocktail").performClick()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
 
-        composeTestRule.onNodeWithText("Search")
+        composeTestRule
+            .onNodeWithText("Search")
             .performTextInput("Sho")
 
         composeTestRule.onNodeWithText("Shot").assertExists()
@@ -79,12 +83,14 @@ class CinderTests {
 
         composeTestRule.onNodeWithText("Next").assertIsEnabled()
 
-        //Test Back Rule to Name Setting Page
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        // Test Back Rule to Name Setting Page
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .performClick()
         composeTestRule.waitUntilNodeIsDisplayed("Create Profile")
 
-        composeTestRule.onNodeWithText("Enter Profile Name")
+        composeTestRule
+            .onNodeWithText("Enter Profile Name")
             .assert(hasText("Schnitzel"))
         composeTestRule.onNodeWithText("Next").performClick()
 
@@ -93,17 +99,18 @@ class CinderTests {
         composeTestRule.onNodeWithText("Next").assertIsEnabled()
         composeTestRule.onNodeWithText("Next").performClick()
 
-        //Test Ingredient Page
+        // Test Ingredient Page
         composeTestRule.waitUntilNodeIsDisplayed("Vodka", 10000)
         composeTestRule.waitUntilNodeIsDisplayed("Advocaat", 10000)
 
         composeTestRule.onNodeWithText("What are you into?").assertExists()
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .assertIsEnabled()
         composeTestRule.onNodeWithText("All").assertIsEnabled()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
 
-        //Filter specific ingredients
+        // Filter specific ingredients
         composeTestRule.onNodeWithText("Advocaat").performClick()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
 
@@ -116,7 +123,8 @@ class CinderTests {
         composeTestRule.onNodeWithText("Apfelkorn").performClick()
         composeTestRule.onNodeWithText("Next").assertIsNotEnabled()
 
-        composeTestRule.onNodeWithText("Search")
+        composeTestRule
+            .onNodeWithText("Search")
             .performTextInput("Vodk")
 
         composeTestRule.onNodeWithText("Vodka").assertExists()
@@ -126,8 +134,9 @@ class CinderTests {
         composeTestRule.onNodeWithText("Absolut Vodka").performClick()
         composeTestRule.onNodeWithText("Next").assertIsEnabled()
 
-        //Test Back Rule To Drink Type Page
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        // Test Back Rule To Drink Type Page
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .performClick()
         composeTestRule.waitUntilNodeIsDisplayed("Whats your type?")
 
@@ -139,24 +148,28 @@ class CinderTests {
         composeTestRule.waitUntilNodeIsDisplayed("Vodka")
         composeTestRule.onNodeWithText("Next").performClick()
 
-        //Test alcoholic filter page
+        // Test alcoholic filter page
         composeTestRule.waitUntilNodeIsDisplayed("Finish")
 
         composeTestRule.onNodeWithText("What's your kink?").assertExists()
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .assertIsEnabled()
         composeTestRule.onNodeWithText("Finish").assertIsEnabled()
 
-        composeTestRule.onNode(withRole(Role.Checkbox))
+        composeTestRule
+            .onNode(withRole(Role.Checkbox))
             .performClick()
         composeTestRule.onNodeWithText("Finish").assertIsNotEnabled()
 
-        composeTestRule.onNode(withRole(Role.Checkbox))
+        composeTestRule
+            .onNode(withRole(Role.Checkbox))
             .performClick()
         composeTestRule.onNodeWithText("Finish").assertIsEnabled()
 
-        //Test Back Rule To Ingredient Filter Page
-        composeTestRule.onNode(hasContentDescription("Back") and hasClickAction())
+        // Test Back Rule To Ingredient Filter Page
+        composeTestRule
+            .onNode(hasContentDescription("Back") and hasClickAction())
             .performClick()
         composeTestRule.waitUntilNodeIsDisplayed("What are you into?")
 

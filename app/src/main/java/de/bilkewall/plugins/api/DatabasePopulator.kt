@@ -12,7 +12,7 @@ class DatabasePopulator(
     private val drinkRepository: DrinkRepositoryInterface,
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
     private val categoryRepository: CategoryRepositoryInterface,
-    private val apiWrapper: APIWrapper
+    private val apiWrapper: APIWrapper,
 ) : DatabasePopulator {
     private val allDrinks = drinkRepository.getAllDrinks()
     private val allCategories = categoryRepository.getAllCategories()
@@ -25,7 +25,7 @@ class DatabasePopulator(
     override suspend fun insertInitialData() {
         val allCategoriesAPI = apiWrapper.getDrinkCategories()
         allCategoriesAPI.forEach { category ->
-            if(!allCategories.first().map { it.strCategory }.contains(category.strCategory)) {
+            if (!allCategories.first().map { it.strCategory }.contains(category.strCategory)) {
                 categoryRepository.insert(category)
             }
         }
@@ -43,7 +43,6 @@ class DatabasePopulator(
             var relationInsertionIndex = 0
             drink.ingredients.forEach { ingredient ->
                 if (!drink.ingredients.subList(0, relationInsertionIndex).contains(ingredient) && ingredient != "") {
-
                     var measurement = ""
                     // Sometimes the API returns a list of measurements that is shorter than the list of ingredients
                     try {
@@ -51,7 +50,7 @@ class DatabasePopulator(
                     } catch (e: Exception) {
                         Log.e(
                             "LandingPageService.insertInitialData",
-                            "Caught error while getting the measurement for drink with DrinkId: ${drink.drinkId}, because length of measurements (${drink.measurements.size}) < length of ingredients (${drink.ingredients.size})"
+                            "Caught error while getting the measurement for drink with DrinkId: ${drink.drinkId}, because length of measurements (${drink.measurements.size}) < length of ingredients (${drink.ingredients.size})",
                         )
                     }
 
@@ -59,8 +58,8 @@ class DatabasePopulator(
                         DrinkIngredientCrossRef(
                             drink.drinkId,
                             ingredient,
-                            measurement
-                        )
+                            measurement,
+                        ),
                     )
                     relationInsertionIndex++
                 }

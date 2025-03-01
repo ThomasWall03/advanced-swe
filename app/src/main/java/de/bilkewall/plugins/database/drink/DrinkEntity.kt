@@ -15,5 +15,5 @@ data class DrinkEntity(
     val instructionsEN: String = "",
     val instructionsDE: String = "",
     val thumbnailUrl: String = "",
-    val dateModified: String = ""
+    val dateModified: String = "",
 )

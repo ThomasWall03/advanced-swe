@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class ProfileRepository(private val profileDao: ProfileDao) : ProfileRepositoryInterface {
+class ProfileRepository(
+    private val profileDao: ProfileDao,
+) : ProfileRepositoryInterface {
     override val allProfiles: Flow<List<Profile>> =
         profileDao.getAllProfiles().map { profileEntities -> profileEntities.map { it.toProfile() } }
     override val activeProfile: Flow<Profile?> =
         profileDao.getActiveProfile().map { it?.toProfile() }
 
-    override suspend fun insert(profile: Profile): Long {
-        return profileDao.insert(profile.toProfileEntity())
-    }
+    override suspend fun insert(profile: Profile): Long = profileDao.insert(profile.toProfileEntity())
 
     override suspend fun delete(profile: Profile) {
         profileDao.delete(profile.toProfileEntity())
@@ -30,9 +30,7 @@ class ProfileRepository(private val profileDao: ProfileDao) : ProfileRepositoryI
         profileDao.deleteAllProfiles()
     }
 
-    override suspend fun getProfileCount(): Int {
-        return profileDao.getProfileCount()
-    }
+    override suspend fun getProfileCount(): Int = profileDao.getProfileCount()
 
     override suspend fun deactivateActiveProfile() {
         profileDao.deactivateActiveProfile()

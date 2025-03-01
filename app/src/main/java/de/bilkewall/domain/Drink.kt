@@ -12,5 +12,5 @@ data class Drink(
     val thumbnailUrl: String = "",
     val dateModified: String = "",
     val ingredients: List<String> = emptyList(),
-    val measurements: List<String> = emptyList()
+    val measurements: List<String> = emptyList(),
 )

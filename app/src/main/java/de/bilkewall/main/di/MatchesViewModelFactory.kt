@@ -8,14 +8,14 @@ import de.bilkewall.application.service.ProfileManagementService
 
 class MatchesViewModelFactory(
     private var profileManagementService: ProfileManagementService,
-    private var drinkFetchingService: DrinkFetchingService
+    private var drinkFetchingService: DrinkFetchingService,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MatchesViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return MatchesViewModel(
                 profileManagementService,
-                drinkFetchingService
+                drinkFetchingService,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

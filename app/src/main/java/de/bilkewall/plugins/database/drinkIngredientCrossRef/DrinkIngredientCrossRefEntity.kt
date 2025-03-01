@@ -6,5 +6,5 @@ import androidx.room.Entity
 data class DrinkIngredientCrossRefEntity(
     val drinkId: Int,
     val ingredientName: String,
-    val unit: String
+    val unit: String,
 )

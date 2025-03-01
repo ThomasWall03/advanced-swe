@@ -10,16 +10,16 @@ import de.bilkewall.plugins.util.toIngredientValueFilterEntity
 
 class SharedFilterRepository(
     private val drinkTypeFilterDao: DrinkTypeFilterDao,
-    private val ingredientValueFilterDao: IngredientValueFilterDao
+    private val ingredientValueFilterDao: IngredientValueFilterDao,
 ) : SharedFilterRepositoryInterface {
     override suspend fun insertDrinkTypeFilter(drinkTypeFilter: DrinkTypeFilter) {
         drinkTypeFilterDao.insertDrinkTypeFilter(drinkTypeFilter.toDrinkTypeFilterEntity())
     }
 
-    override suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<DrinkTypeFilter> {
-        return drinkTypeFilterDao.getDrinkTypeFiltersByProfileId(profileId)
+    override suspend fun getDrinkTypeFiltersByProfileId(profileId: Int): List<DrinkTypeFilter> =
+        drinkTypeFilterDao
+            .getDrinkTypeFiltersByProfileId(profileId)
             .map { it.toDrinkTypeFilter() }
-    }
 
     override suspend fun deleteDrinkTypeFiltersByProfileId(profileId: Int) {
         drinkTypeFilterDao.deleteDrinkTypeFiltersByProfileId(profileId)
@@ -33,10 +33,10 @@ class SharedFilterRepository(
         ingredientValueFilterDao.insertIngredientValueFilter(ingredientFilter.toIngredientValueFilterEntity())
     }
 
-    override suspend fun getIngredientFiltersByProfileId(profileId: Int): List<IngredientFilter> {
-        return ingredientValueFilterDao.getIngredientValueFiltersByProfileId(profileId)
+    override suspend fun getIngredientFiltersByProfileId(profileId: Int): List<IngredientFilter> =
+        ingredientValueFilterDao
+            .getIngredientValueFiltersByProfileId(profileId)
             .map { it.toIngredientValueFilter() }
-    }
 
     override suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int) {
         ingredientValueFilterDao.deleteIngredientValueFiltersByProfileId(profileId)

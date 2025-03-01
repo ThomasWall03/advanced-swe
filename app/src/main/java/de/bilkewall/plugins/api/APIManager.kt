@@ -19,31 +19,31 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
 class APIManager {
+    var jsonHTTPClient =
+        HttpClient {
+            expectSuccess = true
 
-    var jsonHTTPClient = HttpClient {
-        expectSuccess = true
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
 
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
+            defaultRequest {
+                url.host = "thecocktaildb.com"
+                url.protocol = URLProtocol.HTTPS
+                url.encodedPath = "/api/json/v1/1/" + url.encodedPath
+                contentType(ContentType.Application.Json)
+            }
+
+            HttpResponseValidator {
+                getCustomResponseValidator(this)
+            }
         }
 
-        defaultRequest {
-            url.host = "thecocktaildb.com"
-            url.protocol = URLProtocol.HTTPS
-            url.encodedPath = "/api/json/v1/1/" + url.encodedPath
-            contentType(ContentType.Application.Json)
-        }
-
-        HttpResponseValidator {
-            getCustomResponseValidator(this)
-        }
-    }
-
-    suspend fun get(urlString: String): HttpResponse {
-        return jsonHTTPClient.get(urlString)
-    }
+    suspend fun get(urlString: String): HttpResponse = jsonHTTPClient.get(urlString)
 
     private fun getCustomResponseValidator(responseValidator: HttpCallValidator.Config): HttpCallValidator.Config {
         responseValidator.handleResponseExceptionWithRequest { exception, _ ->

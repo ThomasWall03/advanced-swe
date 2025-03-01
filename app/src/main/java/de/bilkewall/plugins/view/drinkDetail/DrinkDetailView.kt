@@ -42,7 +42,7 @@ import de.bilkewall.domain.Drink
 fun DrinkDetailView(
     navController: NavHostController,
     drinkDetailViewModel: DrinkDetailViewModel,
-    drinkId: String
+    drinkId: String,
 ) {
     LaunchedEffect(Unit) {
         drinkDetailViewModel.setDrinkById(drinkId)
@@ -56,9 +56,9 @@ fun DrinkDetailView(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         DetailViewCard(innerPadding, drinkDetailViewModel.drink, drinkDetailViewModel.loading)
     }
@@ -69,15 +69,16 @@ fun DetailViewCard(
     innerPadding: PaddingValues = PaddingValues(0.dp),
     drink: Drink,
     loading: Boolean = false,
-    bottomSpacer: Dp = 0.dp
+    bottomSpacer: Dp = 0.dp,
 ) {
     if (loading) {
         CircularProgressIndicator()
     } else {
         LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth(),
         ) {
             item { ImageAndName(drink) }
             item { Ingredients(drink) }
@@ -93,9 +94,10 @@ fun DetailViewCard(
 @Composable
 private fun DetailPartCard(content: @Composable () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             content()
@@ -110,13 +112,14 @@ private fun ImageAndName(drink: Drink) {
             AsyncImage(
                 model = drink.thumbnailUrl,
                 contentDescription = drink.drinkName,
-                modifier = Modifier
-                    .padding(32.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .align(Alignment.CenterHorizontally),
-                contentScale = ContentScale.Crop
+                modifier =
+                    Modifier
+                        .padding(32.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(CircleShape)
+                        .align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.Crop,
             )
 
             Text(
@@ -127,7 +130,6 @@ private fun ImageAndName(drink: Drink) {
             )
         }
     }
-
 }
 
 @Composable
@@ -148,7 +150,6 @@ private fun Ingredients(drink: Drink) {
     }
 }
 
-
 @Composable
 private fun Instructions(drink: Drink) {
     DetailPartCard {
@@ -161,4 +162,3 @@ private fun Instructions(drink: Drink) {
         )
     }
 }
-

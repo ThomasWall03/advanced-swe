@@ -33,19 +33,26 @@ interface DrinkDao {
     @Query("SELECT * FROM drink_table WHERE drinkName LIKE '%' || :name || '%'")
     fun getDrinksByName(name: String): Flow<List<DrinkEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT d.*
         FROM drink_table d
         INNER JOIN match_table m ON d.drinkId = m.drinkId
         WHERE d.drinkName LIKE '%' || :name || '%' AND m.profileId = :profileId AND m.outcome = 1
-    """)
-    fun getMatchedDrinksByName(name: String, profileId: Int): Flow<List<DrinkEntity>>
+    """,
+    )
+    fun getMatchedDrinksByName(
+        name: String,
+        profileId: Int,
+    ): Flow<List<DrinkEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT d.*
         FROM drink_table d
         INNER JOIN match_table m ON d.drinkId = m.drinkId
         WHERE m.profileId = :profileId and m.outcome = 1
-    """)
+    """,
+    )
     fun getMatchedDrinksForProfile(profileId: Int): Flow<List<DrinkEntity>>
 }

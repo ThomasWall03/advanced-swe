@@ -56,7 +56,10 @@ import de.bilkewall.cinder.R
 import de.bilkewall.plugins.view.utils.ErrorCard
 
 @Composable
-fun CreateProfileView(navController: NavController, viewModel: CreateProfileViewModel) {
+fun CreateProfileView(
+    navController: NavController,
+    viewModel: CreateProfileViewModel,
+) {
     var currentDialogIndex by remember { mutableIntStateOf(0) }
     var profileName by remember { mutableStateOf("") }
     var isAlcoholic by remember { mutableStateOf(true) }
@@ -72,58 +75,68 @@ fun CreateProfileView(navController: NavController, viewModel: CreateProfileView
     }
 
     when (currentDialogIndex) {
-        0 -> FilterDialogName(
-            title = stringResource(R.string.create_profile),
-            onNext = { currentDialogIndex++ },
-            profileName,
-            setProfileName = { profileName = it }
-        )
+        0 ->
+            FilterDialogName(
+                title = stringResource(R.string.create_profile),
+                onNext = { currentDialogIndex++ },
+                profileName,
+                setProfileName = { profileName = it },
+            )
 
-        1 -> FilterDialog(
-            title = stringResource(R.string.whats_your_type_filterquestion),
-            options = drinkTypeFilterValues,
-            selectedOptions = viewModel.selectedDrinkTypeOptions.collectAsState().value,
-            onOptionSelected = { options ->
-                viewModel.updateDrinkTypeFilterValues(options)
-            },
-            onNext = { currentDialogIndex++ },
-            onBack = { currentDialogIndex-- },
-            enableNextButton = viewModel.selectedDrinkTypeOptions.collectAsState().value.size > 1
-        )
+        1 ->
+            FilterDialog(
+                title = stringResource(R.string.whats_your_type_filterquestion),
+                options = drinkTypeFilterValues,
+                selectedOptions = viewModel.selectedDrinkTypeOptions.collectAsState().value,
+                onOptionSelected = { options ->
+                    viewModel.updateDrinkTypeFilterValues(options)
+                },
+                onNext = { currentDialogIndex++ },
+                onBack = { currentDialogIndex-- },
+                enableNextButton =
+                    viewModel.selectedDrinkTypeOptions
+                        .collectAsState()
+                        .value.size > 1,
+            )
 
-        2 -> FilterDialog(
-            title = stringResource(R.string.what_are_you_into_filterquestion),
-            options = ingredientFilterValues,
-            selectedOptions = viewModel.selectedIngredientOptions.collectAsState().value,
-            onOptionSelected = { options ->
-                Log.d("DEBUG", "Selected options: ${options.toList()}")
-                viewModel.updateIngredientFilterValues(options)
-            },
-            onNext = { currentDialogIndex++ },
-            onBack = { currentDialogIndex-- },
-            enableNextButton = viewModel.selectedIngredientOptions.collectAsState().value.size > 5
-        )
+        2 ->
+            FilterDialog(
+                title = stringResource(R.string.what_are_you_into_filterquestion),
+                options = ingredientFilterValues,
+                selectedOptions = viewModel.selectedIngredientOptions.collectAsState().value,
+                onOptionSelected = { options ->
+                    Log.d("DEBUG", "Selected options: ${options.toList()}")
+                    viewModel.updateIngredientFilterValues(options)
+                },
+                onNext = { currentDialogIndex++ },
+                onBack = { currentDialogIndex-- },
+                enableNextButton =
+                    viewModel.selectedIngredientOptions
+                        .collectAsState()
+                        .value.size > 5,
+            )
 
-        3 -> FilterDialogAlcohol(
-            title = stringResource(R.string.what_s_your_kink_filterquestion),
-            isAlcoholic = isAlcoholic,
-            onAlcoholicFilterChange = { isAlcoholic = it },
-            onNext = {
-                viewModel.saveProfile(
-                    profileName
-                )
-                navController.navigate("mainView") {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                }
-            },
-            onBack = { currentDialogIndex-- }
-        )
+        3 ->
+            FilterDialogAlcohol(
+                title = stringResource(R.string.what_s_your_kink_filterquestion),
+                isAlcoholic = isAlcoholic,
+                onAlcoholicFilterChange = { isAlcoholic = it },
+                onNext = {
+                    viewModel.saveProfile(
+                        profileName,
+                    )
+                    navController.navigate("mainView") {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    }
+                },
+                onBack = { currentDialogIndex-- },
+            )
     }
 
     AnimatedVisibility(viewModel.errorMessage.isNotEmpty()) {
         ErrorCard(
             errorHeading = stringResource(R.string.generic_error_title),
-            errorInformation = viewModel.errorMessage
+            errorInformation = viewModel.errorMessage,
         )
     }
 }
@@ -133,33 +146,36 @@ fun FilterDialogName(
     title: String,
     onNext: () -> Unit,
     profileName: String,
-    setProfileName: (String) -> Unit
+    setProfileName: (String) -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
-            .padding(24.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                .padding(24.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(top = 20.dp)
+                modifier = Modifier.padding(top = 20.dp),
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
+                    style =
+                        MaterialTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
                     modifier = Modifier.padding(top = 16.dp),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 OutlinedTextField(
@@ -170,14 +186,16 @@ fun FilterDialogName(
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            if (profileName.isNotBlank()) onNext()
-                        }
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    )
+                    keyboardActions =
+                        KeyboardActions(
+                            onDone = {
+                                if (profileName.isNotBlank()) onNext()
+                            },
+                        ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                        ),
                 )
             }
 
@@ -186,14 +204,13 @@ fun FilterDialogName(
                     onNext()
                 },
                 enabled = profileName.isNotBlank(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.next))
             }
         }
     }
 }
-
 
 @Composable
 fun FilterDialog(
@@ -203,7 +220,7 @@ fun FilterDialog(
     onOptionSelected: (List<String>) -> Unit,
     onNext: () -> Unit,
     onBack: () -> Unit,
-    enableNextButton: Boolean
+    enableNextButton: Boolean,
 ) {
     var selectedOptionsState =
         remember { mutableStateListOf<String>().apply { addAll(selectedOptions) } }
@@ -211,27 +228,32 @@ fun FilterDialog(
     val atLeastOneSelected = selectedOptionsState.isNotEmpty()
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp)
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp),
+                ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             CreateProfileTitleRow(
-                onBack, title, modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1.5f)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
+                onBack,
+                title,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1.5f)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
             )
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(4f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(4f),
             ) {
                 ScrollableFlowRow(
                     options = options,
@@ -239,15 +261,16 @@ fun FilterDialog(
                     onOptionSelected = {
                         selectedOptionsState = it as SnapshotStateList<String>
                         onOptionSelected(it)
-                    }
+                    },
                 )
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                contentAlignment = Alignment.Center,
             ) {
                 Column {
                     Button(
@@ -255,10 +278,11 @@ fun FilterDialog(
                             selectedOptionsState.clear()
                             onOptionSelected(emptyList())
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp),
-                        enabled = atLeastOneSelected
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp),
+                        enabled = atLeastOneSelected,
                     ) {
                         Text(stringResource(R.string.reset_filter))
                     }
@@ -267,42 +291,47 @@ fun FilterDialog(
                         onClick = {
                             onNext()
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        enabled = enableNextButton
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        enabled = enableNextButton,
                     ) {
                         Text(stringResource(R.string.next))
                     }
                 }
-
             }
         }
     }
 }
 
 @Composable
-private fun CreateProfileTitleRow(onBack: () -> Unit, title: String, modifier: Modifier) {
+private fun CreateProfileTitleRow(
+    onBack: () -> Unit,
+    title: String,
+    modifier: Modifier,
+) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = { onBack() }) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
                 modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurface,
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineLarge.copy(
-                fontWeight = FontWeight.Bold
-            ),
-            color = MaterialTheme.colorScheme.onSurface
+            style =
+                MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                ),
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -312,28 +341,30 @@ private fun CreateProfileTitleRow(onBack: () -> Unit, title: String, modifier: M
 fun ScrollableFlowRow(
     options: List<String>,
     selectedOptions: MutableList<String>,
-    onOptionSelected: (List<String>) -> Unit
+    onOptionSelected: (List<String>) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var searchText by remember { mutableStateOf("") }
 
-    val filteredOptions = options.filter {
-        it.contains(searchText, ignoreCase = true)
-    }
+    val filteredOptions =
+        options.filter {
+            it.contains(searchText, ignoreCase = true)
+        }
 
     val allSelected = selectedOptions.size == filteredOptions.size
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 10.dp)
+            modifier = Modifier.padding(horizontal = 10.dp),
         ) {
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { searchText = it },
                 label = { Text(stringResource(R.string.search)) },
-                modifier = Modifier
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .weight(1f),
                 singleLine = true,
             )
 
@@ -346,58 +377,62 @@ fun ScrollableFlowRow(
                     onOptionSelected(selectedOptions)
                 },
                 enabled = !allSelected,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
             ) {
                 Text(stringResource(R.string.all_filter_option))
             }
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 500.dp)
-                .verticalScroll(scrollState)
-                .padding(horizontal = 10.dp, vertical = 5.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 500.dp)
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = 10.dp, vertical = 5.dp),
         ) {
             FlowRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 filteredOptions.forEach { option ->
                     val isSelected = selectedOptions.contains(option)
                     Text(
                         text = option,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                        ),
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .background(
-                                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(
-                                    alpha = 0.1f
-                                ) else Color.Transparent,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .border(
-                                width = 1.dp,
-                                shape = RoundedCornerShape(10.dp),
-                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                            )
-                            .clickable {
-                                if (isSelected) {
-                                    selectedOptions.remove(option)
-                                } else {
-                                    selectedOptions.add(option)
-                                }
-                                onOptionSelected(selectedOptions)
-                            }
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                        style =
+                            MaterialTheme.typography.bodyLarge.copy(
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            ),
+                        modifier =
+                            Modifier
+                                .padding(2.dp)
+                                .background(
+                                    color =
+                                        if (isSelected) {
+                                            MaterialTheme.colorScheme.primary.copy(
+                                                alpha = 0.1f,
+                                            )
+                                        } else {
+                                            Color.Transparent
+                                        },
+                                    shape = RoundedCornerShape(12.dp),
+                                ).border(
+                                    width = 1.dp,
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                ).clickable {
+                                    if (isSelected) {
+                                        selectedOptions.remove(option)
+                                    } else {
+                                        selectedOptions.add(option)
+                                    }
+                                    onOptionSelected(selectedOptions)
+                                }.padding(horizontal = 12.dp, vertical = 6.dp),
                     )
                 }
             }
         }
     }
 }
-
 
 @Composable
 fun FilterDialogAlcohol(
@@ -405,61 +440,67 @@ fun FilterDialogAlcohol(
     isAlcoholic: Boolean,
     onAlcoholicFilterChange: (Boolean) -> Unit,
     onNext: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp)
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp),
+                ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             CreateProfileTitleRow(
-                onBack, title, modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
+                onBack,
+                title,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(2f)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
             )
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(4f)
-                    .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(4f)
+                        .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(
                         checked = isAlcoholic,
                         onCheckedChange = {
                             onAlcoholicFilterChange(it)
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.alcoholic_drinks_filter_question),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                contentAlignment = Alignment.Center,
             ) {
                 Button(
                     onClick = { onNext() },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = isAlcoholic
+                    enabled = isAlcoholic,
                 ) {
                     Text(stringResource(R.string.finish))
                 }
@@ -467,5 +508,3 @@ fun FilterDialogAlcohol(
         }
     }
 }
-
-

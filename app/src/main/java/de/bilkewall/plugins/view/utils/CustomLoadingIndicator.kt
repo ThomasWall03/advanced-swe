@@ -22,18 +22,17 @@ import de.bilkewall.cinder.R
 import kotlin.math.cos
 import kotlin.math.sin
 
-
 @Composable
 fun CustomLoadingIndicator() {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Icon(
             painter = painterResource(id = R.drawable.glass),
             contentDescription = null,
             modifier = Modifier.size(100.dp),
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
         )
 
         CustomRotatingAnimation()
@@ -48,10 +47,11 @@ fun CustomRotatingAnimation() {
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(4000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        )
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(4000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart,
+            ),
     )
 
     // Calculating circular position
@@ -63,9 +63,10 @@ fun CustomRotatingAnimation() {
     Icon(
         painter = painterResource(id = R.drawable.cherry),
         contentDescription = null,
-        modifier = Modifier
-            .size(40.dp)
-            .offset(x = offsetX, y = offsetY),
-        tint = Color.Unspecified
+        modifier =
+            Modifier
+                .size(40.dp)
+                .offset(x = offsetX, y = offsetY),
+        tint = Color.Unspecified,
     )
 }

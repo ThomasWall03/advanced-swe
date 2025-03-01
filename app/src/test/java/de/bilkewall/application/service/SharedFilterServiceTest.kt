@@ -13,7 +13,7 @@ import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 
 class SharedFilterServiceTest {
-    //Mocking
+    // Mocking
     private val sharedFilterRepository: SharedFilterRepositoryInterface = mock()
 
     private lateinit var sharedFilterService: SharedFilterService
@@ -36,70 +36,70 @@ class SharedFilterServiceTest {
     }
 
     @Test
-    fun `getIngredientFilterValues returns ingredient filters`() = runTest {
-        val profileId = 1
-        val ingredientFilters = listOf(
-            IngredientFilter("Rum", profileId),
-            IngredientFilter("Lime", profileId)
-        )
-        whenever(sharedFilterRepository.getIngredientFiltersByProfileId(profileId)).thenReturn(ingredientFilters)
+    fun `getIngredientFilterValues returns ingredient filters`() =
+        runTest {
+            val profileId = 1
+            whenever(sharedFilterRepository.getIngredientFiltersByProfileId(profileId)).thenReturn(testIngredientFilters)
 
-        val result = sharedFilterService.getIngredientFilterValues(profileId)
+            val result = sharedFilterService.getIngredientFilterValues(profileId)
 
-        assertEquals(ingredientFilters, result)
-    }
+            assertEquals(testIngredientFilters, result)
+        }
 
     @Test
-    fun `getDrinkTypeFilterValues returns drink type filters`() = runTest {
-        val profileId = 1
-        val drinkTypeFilters = listOf(
-            DrinkTypeFilter("Cocktail", profileId),
-            DrinkTypeFilter("Mocktail", profileId)
-        )
-        whenever(sharedFilterRepository.getDrinkTypeFiltersByProfileId(profileId)).thenReturn(drinkTypeFilters)
+    fun `getDrinkTypeFilterValues returns drink type filters`() =
+        runTest {
+            val profileId = 1
+            whenever(sharedFilterRepository.getDrinkTypeFiltersByProfileId(profileId)).thenReturn(testDrinkTypeFilters)
 
-        val result = sharedFilterService.getDrinkTypeFilterValues(profileId)
+            val result = sharedFilterService.getDrinkTypeFilterValues(profileId)
 
-        assertEquals(drinkTypeFilters, result)
-    }
+            assertEquals(testDrinkTypeFilters, result)
+        }
 
     @Test
-    fun `saveFiltersForProfile saves filter options`() = runTest {
-        val profileId = 1
-        val drinkTypeFilters = listOf(
-            "Cocktail",
-            "Mocktail"
-        )
-        val ingredientFilters = listOf(
-            "Rum",
-            "Lime"
-        )
+    fun `saveFiltersForProfile saves filter options`() =
+        runTest {
+            val profileId = 1
+            val drinkTypeFilters =
+                listOf(
+                    "Cocktail",
+                    "Mocktail",
+                )
+            val ingredientFilters =
+                listOf(
+                    "Rum",
+                    "Lime",
+                )
 
-        val drinkTypeFilterList = listOf(
-            DrinkTypeFilter("Cocktail", profileId),
-            DrinkTypeFilter("Mocktail", profileId)
-        )
+            sharedFilterService.saveFiltersForProfile(profileId, drinkTypeFilters, ingredientFilters)
 
-        val ingredientFilterList = listOf(
-            IngredientFilter("Rum", profileId),
-            IngredientFilter("Lime", profileId)
-        )
-
-        sharedFilterService.saveFiltersForProfile(profileId, drinkTypeFilters, ingredientFilters)
-
-        verify(sharedFilterRepository).insertDrinkTypeFilter(drinkTypeFilterList[0])
-        verify(sharedFilterRepository).insertDrinkTypeFilter(drinkTypeFilterList[1])
-        verify(sharedFilterRepository).insertIngredientFilter(ingredientFilterList[0])
-        verify(sharedFilterRepository).insertIngredientFilter(ingredientFilterList[1])
-    }
+            verify(sharedFilterRepository).insertDrinkTypeFilter(testDrinkTypeFilters[0])
+            verify(sharedFilterRepository).insertDrinkTypeFilter(testDrinkTypeFilters[1])
+            verify(sharedFilterRepository).insertIngredientFilter(testIngredientFilters[0])
+            verify(sharedFilterRepository).insertIngredientFilter(testIngredientFilters[1])
+        }
 
     @Test
-    fun `deleteFiltersForProfile deletes filters`() = runTest {
-        val profileId = 1
+    fun `deleteFiltersForProfile deletes filters`() =
+        runTest {
+            val profileId = 1
 
-        sharedFilterService.deleteFiltersForProfile(profileId)
+            sharedFilterService.deleteFiltersForProfile(profileId)
 
-        verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(profileId)
-        verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(profileId)
-    }
+            verify(sharedFilterRepository).deleteIngredientValueFiltersByProfileId(profileId)
+            verify(sharedFilterRepository).deleteDrinkTypeFiltersByProfileId(profileId)
+        }
+
+    // TestData
+    private val testIngredientFilters =
+        listOf(
+            IngredientFilter("Rum", 1),
+            IngredientFilter("Lime", 1),
+        )
+    private val testDrinkTypeFilters =
+        listOf(
+            DrinkTypeFilter("Cocktail", 1),
+            DrinkTypeFilter("Mocktail", 1),
+        )
 }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 
 class DrinkFetchingService private constructor(
     private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
 ) {
     companion object {
         @Volatile
@@ -16,17 +16,16 @@ class DrinkFetchingService private constructor(
 
         fun getInstance(
             drinkRepository: DrinkRepositoryInterface,
-            drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface
-        ): DrinkFetchingService {
-            return instance ?: synchronized(this) {
+            drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+        ): DrinkFetchingService =
+            instance ?: synchronized(this) {
                 instance ?: DrinkFetchingService(
                     drinkRepository,
-                    drinkIngredientCrossRefRepository
+                    drinkIngredientCrossRefRepository,
                 ).also {
                     instance = it
                 }
             }
-        }
     }
 
     suspend fun getDrinkById(id: Int): Drink {
@@ -38,33 +37,32 @@ class DrinkFetchingService private constructor(
         val ingredients = drinkIngredientCrossRefRepository.getIngredientsForDrink(drink.drinkId)
         return drink.copy(
             ingredients = ingredients.map { it.ingredientName },
-            measurements = ingredients.map { it.unit }
+            measurements = ingredients.map { it.unit },
         )
     }
 
-    fun getAllDrinks(): Flow<List<Drink>> {
-        return drinkRepository.getAllDrinks().map { drinks ->
+    fun getAllDrinks(): Flow<List<Drink>> =
+        drinkRepository.getAllDrinks().map { drinks ->
             drinks.map { drink -> addIngredientsToDrink(drink) }
         }
-    }
 
-    fun getDrinksByName(name: String): Flow<List<Drink>> {
-        return drinkRepository.getDrinksByName(name).map { drinks ->
+    fun getDrinksByName(name: String): Flow<List<Drink>> =
+        drinkRepository.getDrinksByName(name).map { drinks ->
             drinks.map { drink -> addIngredientsToDrink(drink) }
         }
-    }
 
     suspend fun getDrinkCount() = drinkRepository.getDrinkCount()
 
-    fun getMatchedDrinksByNameAndProfile(name: String, profileId: Int): Flow<List<Drink>> {
-        return drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
+    fun getMatchedDrinksByNameAndProfile(
+        name: String,
+        profileId: Int,
+    ): Flow<List<Drink>> =
+        drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
             drinks.map { drink -> addIngredientsToDrink(drink) }
         }
-    }
 
-    fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>> {
-        return drinkRepository.getMatchedDrinksForProfile(profileId).map { drinks ->
+    fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>> =
+        drinkRepository.getMatchedDrinksForProfile(profileId).map { drinks ->
             drinks.map { drink -> addIngredientsToDrink(drink) }
         }
-    }
 }

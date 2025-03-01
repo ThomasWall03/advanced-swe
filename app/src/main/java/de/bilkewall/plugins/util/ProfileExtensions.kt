@@ -3,22 +3,20 @@ package de.bilkewall.plugins.util
 import de.bilkewall.domain.Profile
 import de.bilkewall.plugins.database.profile.ProfileEntity
 
-fun ProfileEntity.toProfile(): Profile {
-    return Profile(
+fun ProfileEntity.toProfile(): Profile =
+    Profile(
         profileId = profileId,
         profileName = profileName,
         isActiveProfile = isActiveProfile,
         creationDate = creationDate,
-        creationDateString = creationDateString
+        creationDateString = creationDateString,
     )
-}
 
-fun Profile.toProfileEntity(): ProfileEntity {
-    return ProfileEntity(
+fun Profile.toProfileEntity(): ProfileEntity =
+    ProfileEntity(
         profileId = profileId,
         profileName = profileName,
         isActiveProfile = isActiveProfile,
         creationDate = creationDate,
-        creationDateString = creationDateString
+        creationDateString = creationDateString,
     )
-}

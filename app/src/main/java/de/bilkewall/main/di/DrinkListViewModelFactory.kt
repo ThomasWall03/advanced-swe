@@ -6,7 +6,7 @@ import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 import de.bilkewall.application.service.DrinkFetchingService
 
 class DrinkListViewModelFactory(
-    private val drinkFetchingService: DrinkFetchingService
+    private val drinkFetchingService: DrinkFetchingService,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DrinkListViewModel::class.java)) {

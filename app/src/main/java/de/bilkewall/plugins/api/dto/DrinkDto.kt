@@ -43,5 +43,5 @@ data class DrinkDto(
     val strMeasure13: String?,
     val strMeasure14: String?,
     val strMeasure15: String?,
-    val dateModified: String?
+    val dateModified: String?,
 )

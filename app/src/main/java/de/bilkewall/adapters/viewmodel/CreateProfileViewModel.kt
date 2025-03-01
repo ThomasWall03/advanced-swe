@@ -20,7 +20,7 @@ class CreateProfileViewModel(
     private val profileManagementService: ProfileManagementService,
     private val sharedFilterService: SharedFilterService,
     private val ingredientService: IngredientService,
-    private val categoryService: CategoryService
+    private val categoryService: CategoryService,
 ) : ViewModel() {
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
@@ -36,26 +36,28 @@ class CreateProfileViewModel(
     var errorMessage: String by mutableStateOf("")
     private var loading: Boolean by mutableStateOf(false)
 
-    fun saveProfile(profileName: String) = viewModelScope.launch {
-        val id = profileManagementService.saveProfile(
-            profileName
-        )
-        sharedFilterService.saveFiltersForProfile(
-            id,
-            _selectedDrinkTypeOptions.value,
-            _selectedIngredientOptions.value
-        )
-
-    }
+    fun saveProfile(profileName: String) =
+        viewModelScope.launch {
+            val id =
+                profileManagementService.saveProfile(
+                    profileName,
+                )
+            sharedFilterService.saveFiltersForProfile(
+                id,
+                _selectedDrinkTypeOptions.value,
+                _selectedIngredientOptions.value,
+            )
+        }
 
     fun fetchDrinkTypeFilterValues() {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
             try {
-                val values = categoryService.getAllCategories().map { categories ->
-                    categories.map { it.strCategory }
-                }
+                val values =
+                    categoryService.getAllCategories().map { categories ->
+                        categories.map { it.strCategory }
+                    }
                 _drinkTypeFilterValues.value = values.first()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()

@@ -6,5 +6,5 @@ import androidx.room.Entity
 data class MatchEntity(
     val drinkId: Int,
     val profileId: Int,
-    val outcome: Boolean
+    val outcome: Boolean,
 )

@@ -5,17 +5,43 @@ import de.bilkewall.plugins.api.dto.DrinkDto
 import de.bilkewall.plugins.database.drink.DrinkEntity
 
 fun DrinkDto.toDrink(): Drink {
-    val ingredientsList = listOfNotNull(
-        strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5,
-        strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10,
-        strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15
-    )
+    val ingredientsList =
+        listOfNotNull(
+            strIngredient1,
+            strIngredient2,
+            strIngredient3,
+            strIngredient4,
+            strIngredient5,
+            strIngredient6,
+            strIngredient7,
+            strIngredient8,
+            strIngredient9,
+            strIngredient10,
+            strIngredient11,
+            strIngredient12,
+            strIngredient13,
+            strIngredient14,
+            strIngredient15,
+        )
 
-    val measurementsList = listOfNotNull(
-        strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5,
-        strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10,
-        strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15
-    )
+    val measurementsList =
+        listOfNotNull(
+            strMeasure1,
+            strMeasure2,
+            strMeasure3,
+            strMeasure4,
+            strMeasure5,
+            strMeasure6,
+            strMeasure7,
+            strMeasure8,
+            strMeasure9,
+            strMeasure10,
+            strMeasure11,
+            strMeasure12,
+            strMeasure13,
+            strMeasure14,
+            strMeasure15,
+        )
 
     return Drink(
         drinkId = idDrink.toInt(),
@@ -29,12 +55,12 @@ fun DrinkDto.toDrink(): Drink {
         thumbnailUrl = strDrinkThumb,
         dateModified = dateModified ?: "",
         ingredients = ingredientsList,
-        measurements = measurementsList
+        measurements = measurementsList,
     )
 }
 
-fun Drink.toDrinkEntity(): DrinkEntity {
-    return DrinkEntity(
+fun Drink.toDrinkEntity(): DrinkEntity =
+    DrinkEntity(
         drinkId = drinkId,
         drinkName = drinkName,
         videoUrl = videoUrl,
@@ -44,15 +70,14 @@ fun Drink.toDrinkEntity(): DrinkEntity {
         instructionsEN = instructionsEN,
         instructionsDE = instructionsDE,
         thumbnailUrl = thumbnailUrl,
-        dateModified = dateModified
+        dateModified = dateModified,
     )
-}
 
 fun DrinkEntity.toDrink(
     ingredients: List<String> = emptyList(),
-    measurements: List<String> = emptyList()
-): Drink {
-    return Drink(
+    measurements: List<String> = emptyList(),
+): Drink =
+    Drink(
         drinkId = drinkId,
         drinkName = drinkName,
         videoUrl = videoUrl,
@@ -64,6 +89,5 @@ fun DrinkEntity.toDrink(
         thumbnailUrl = thumbnailUrl,
         dateModified = dateModified,
         ingredients = ingredients,
-        measurements = measurements
+        measurements = measurements,
     )
-}

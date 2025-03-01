@@ -18,9 +18,8 @@ import kotlinx.coroutines.launch
 
 class MatchesViewModel(
     private var profileManagementService: ProfileManagementService,
-    private var drinkFetchingService: DrinkFetchingService
+    private var drinkFetchingService: DrinkFetchingService,
 ) : ViewModel() {
-
     private val _visibleDrinks = MutableStateFlow<List<Drink>>(emptyList())
     val visibleDrinks: StateFlow<List<Drink>> get() = _visibleDrinks
     var errorMessage: String by mutableStateOf("")
@@ -28,14 +27,15 @@ class MatchesViewModel(
 
     var matchSearchText: String by mutableStateOf("")
 
-    fun loadMatchedDrinks() = viewModelScope.launch(Dispatchers.IO) {
-        val currentProfile = profileManagementService.getActiveProfile().firstOrNull()
-        if (currentProfile != null) {
-            _visibleDrinks.value = drinkFetchingService.getMatchedDrinksForProfile(currentProfile.profileId).first()
-        } else {
-            Log.e("loadVisibleDrinks", "No active profile found.")
+    fun loadMatchedDrinks() =
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentProfile = profileManagementService.getActiveProfile().firstOrNull()
+            if (currentProfile != null) {
+                _visibleDrinks.value = drinkFetchingService.getMatchedDrinksForProfile(currentProfile.profileId).first()
+            } else {
+                Log.e("loadVisibleDrinks", "No active profile found.")
+            }
         }
-    }
 
     fun getMatchesByName(drinkSearchText: String) {
         viewModelScope.launch {
@@ -44,7 +44,8 @@ class MatchesViewModel(
             loading = true
             try {
                 if (currentProfile != null) {
-                    _visibleDrinks.value = drinkFetchingService.getMatchedDrinksByNameAndProfile(drinkSearchText, currentProfile.profileId).first()
+                    _visibleDrinks.value =
+                        drinkFetchingService.getMatchedDrinksByNameAndProfile(drinkSearchText, currentProfile.profileId).first()
                 } else {
                     Log.e("getMatchesByName", "No active profile found.")
                 }

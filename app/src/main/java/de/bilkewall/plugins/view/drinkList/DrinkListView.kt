@@ -36,7 +36,7 @@ import de.bilkewall.plugins.view.utils.ErrorCard
 fun DrinkListView(
     navController: NavController,
     drinkListViewModel: DrinkListViewModel,
-    bottomBar: @Composable () -> Unit
+    bottomBar: @Composable () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         drinkListViewModel.getAllDrinks()
@@ -46,9 +46,8 @@ fun DrinkListView(
         topBar = {
             TopAppBar(title = { Text(stringResource(R.string.all_drinks)) })
         },
-        bottomBar = bottomBar
+        bottomBar = bottomBar,
     ) { innerPadding ->
-
 
         Column(modifier = Modifier.padding(innerPadding)) {
             SearchBar(
@@ -60,7 +59,8 @@ fun DrinkListView(
                     } else {
                         drinkListViewModel.getDrinksByName(drinkListViewModel.drinkSearchText)
                     }
-                })
+                },
+            )
             if (drinkListViewModel.loading) {
                 CustomLoadingIndicator()
             } else {
@@ -72,17 +72,18 @@ fun DrinkListView(
                     },
                     onRetryClick = {
                         drinkListViewModel.getDrinksByName(drinkListViewModel.drinkSearchText)
-                    }
+                    },
                 )
             }
         }
-
     }
 }
 
 @Composable
-fun SearchBar(searchBarText: String, onTextChange: (String) -> (Unit)) {
-
+fun SearchBar(
+    searchBarText: String,
+    onTextChange: (String) -> (Unit),
+) {
     TextField(
         value = searchBarText,
         onValueChange = {
@@ -91,12 +92,13 @@ fun SearchBar(searchBarText: String, onTextChange: (String) -> (Unit)) {
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = stringResource(R.string.search)
+                contentDescription = stringResource(R.string.search),
             )
         },
         placeholder = { Text(stringResource(R.string.search_for_drink)) },
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     )
 }
 
@@ -105,13 +107,13 @@ fun DrinkList(
     errorMessage: String,
     drinks: List<Drink>,
     onClick: (String) -> (Unit),
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
 ) {
     if (errorMessage.isEmpty()) {
         if (drinks.isEmpty()) {
             ErrorCard(
                 errorHeading = stringResource(R.string.no_drinks_found),
-                errorInformation = stringResource(R.string.no_drinks_found_information)
+                errorInformation = stringResource(R.string.no_drinks_found_information),
             )
         }
         LazyColumn {
@@ -127,11 +129,11 @@ fun DrinkList(
                 Button(
                     onClick = onRetryClick,
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 ) {
                     Text(text = stringResource(R.string.retry))
                 }
-            }
+            },
         )
     }
 }

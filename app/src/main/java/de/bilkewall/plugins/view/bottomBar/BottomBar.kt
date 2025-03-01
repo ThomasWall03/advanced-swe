@@ -21,11 +21,14 @@ data class TabBarItem(
     val title: String,
     val selectedIcon: Painter,
     val unselectedIcon: Painter,
-    val badgeAmount: Int? = null
+    val badgeAmount: Int? = null,
 )
 
 @Composable
-fun CinderBar(tabBarItems: List<TabBarItem>, navController: NavController) {
+fun CinderBar(
+    tabBarItems: List<TabBarItem>,
+    navController: NavController,
+) {
     var selectedTabIndex by rememberSaveable {
         mutableStateOf(0)
     }
@@ -46,7 +49,7 @@ fun CinderBar(tabBarItems: List<TabBarItem>, navController: NavController) {
                         selectedIcon = tabBarItem.selectedIcon,
                         unselectedIcon = tabBarItem.unselectedIcon,
                         title = tabBarItem.title,
-                        badgeAmount = tabBarItem.badgeAmount
+                        badgeAmount = tabBarItem.badgeAmount,
                     )
                 },
             )
@@ -60,17 +63,18 @@ fun CinderBarIconView(
     selectedIcon: Painter,
     unselectedIcon: Painter,
     title: String,
-    badgeAmount: Int? = null
+    badgeAmount: Int? = null,
 ) {
     BadgedBox(badge = { CinderBarBadgeView(badgeAmount) }) {
         Icon(
-            painter = if (isSelected) {
-                selectedIcon
-            } else {
-                unselectedIcon
-            },
+            painter =
+                if (isSelected) {
+                    selectedIcon
+                } else {
+                    unselectedIcon
+                },
             modifier = Modifier.size(40.dp),
-            contentDescription = title
+            contentDescription = title,
         )
     }
 }

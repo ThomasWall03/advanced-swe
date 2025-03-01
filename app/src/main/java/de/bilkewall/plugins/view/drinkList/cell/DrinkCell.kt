@@ -22,13 +22,17 @@ import de.bilkewall.domain.Drink
 import sv.lib.squircleshape.SquircleShape
 
 @Composable
-fun DrinkCell(drink: Drink, onClick: (String) -> (Unit)) {
+fun DrinkCell(
+    drink: Drink,
+    onClick: (String) -> (Unit),
+) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .aspectRatio(2f)
-            .clickable { onClick(drink.drinkId.toString()) },
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .aspectRatio(2f)
+                .clickable { onClick(drink.drinkId.toString()) },
         shape = SquircleShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
@@ -36,17 +40,19 @@ fun DrinkCell(drink: Drink, onClick: (String) -> (Unit)) {
             AsyncImage(
                 model = drink.thumbnailUrl,
                 contentDescription = drink.drinkName,
-                modifier = Modifier
-                    .weight(0.5f)
-                    .aspectRatio(1f)
-                    .padding(8.dp)
-                    .clip(SquircleShape(8.dp)),
-                contentScale = ContentScale.Crop
+                modifier =
+                    Modifier
+                        .weight(0.5f)
+                        .aspectRatio(1f)
+                        .padding(8.dp)
+                        .clip(SquircleShape(8.dp)),
+                contentScale = ContentScale.Crop,
             )
             Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(0.5f)
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .weight(0.5f),
             ) {
                 Text(
                     drink.drinkName,

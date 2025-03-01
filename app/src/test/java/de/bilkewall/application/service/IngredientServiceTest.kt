@@ -4,17 +4,18 @@ import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
 class IngredientServiceTest {
-    //Mocking
+    // Mocking
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface = mock()
 
     private lateinit var ingredientService: IngredientService
+
     @Before
     fun setUp() {
         val field = IngredientService::class.java.getDeclaredField("instance")
@@ -33,15 +34,17 @@ class IngredientServiceTest {
     }
 
     @Test
-    fun `getAllIngredientsSortedByName returns sorted ingredients`() = runTest {
-        val ingredients = listOf(
-            "Rum",
-            "Lime"
-        )
-        whenever(drinkIngredientCrossRefRepository.getAllIngredientsSortedByName()).thenReturn(flowOf(ingredients))
+    fun `getAllIngredientsSortedByName returns sorted ingredients`() =
+        runTest {
+            val ingredients =
+                listOf(
+                    "Rum",
+                    "Lime",
+                )
+            whenever(drinkIngredientCrossRefRepository.getAllIngredientsSortedByName()).thenReturn(flowOf(ingredients))
 
-        val result = ingredientService.getAllIngredientsSortedByName().first()
+            val result = ingredientService.getAllIngredientsSortedByName().first()
 
-        assertEquals(ingredients, result)
-    }
+            assertEquals(ingredients, result)
+        }
 }

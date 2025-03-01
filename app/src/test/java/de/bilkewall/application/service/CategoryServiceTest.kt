@@ -5,15 +5,15 @@ import de.bilkewall.domain.Category
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
 class CategoryServiceTest {
-    //Mocking
+    // Mocking
     private val categoryRepository: CategoryRepositoryInterface = mock()
 
     private lateinit var categoryService: CategoryService
@@ -36,15 +36,17 @@ class CategoryServiceTest {
     }
 
     @Test
-    fun `getAllCategories returns categories`() = runTest {
-        val categories = listOf(
-            Category("Cocktail"),
-            Category("Mocktail")
-        )
-        whenever(categoryRepository.getAllCategories()).thenReturn(flowOf(categories))
+    fun `getAllCategories returns categories`() =
+        runTest {
+            val categories =
+                listOf(
+                    Category("Cocktail"),
+                    Category("Mocktail"),
+                )
+            whenever(categoryRepository.getAllCategories()).thenReturn(flowOf(categories))
 
-        val result = categoryService.getAllCategories().first()
+            val result = categoryService.getAllCategories().first()
 
-        assertEquals(categories, result)
-    }
+            assertEquals(categories, result)
+        }
 }

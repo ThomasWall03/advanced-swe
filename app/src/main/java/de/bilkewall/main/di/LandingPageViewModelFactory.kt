@@ -11,7 +11,7 @@ import de.bilkewall.application.service.ProfileManagementService
 class LandingPageViewModelFactory(
     private val drinkFetchingService: DrinkFetchingService,
     private val profileManagementService: ProfileManagementService,
-    private val populator: DatabasePopulator
+    private val populator: DatabasePopulator,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LandingPageViewModel::class.java)) {
@@ -19,7 +19,7 @@ class LandingPageViewModelFactory(
             return LandingPageViewModel(
                 drinkFetchingService,
                 profileManagementService,
-                populator
+                populator,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

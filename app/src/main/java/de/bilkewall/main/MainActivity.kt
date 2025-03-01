@@ -63,90 +63,105 @@ fun CinderApp() {
     DependencyProvider.initialize(context)
 
     val navController = rememberNavController()
-    val mainViewModel: MainViewModel = viewModel(
-        factory = MainViewModelFactory(
-            DrinkFilterService.getInstance(
-                DrinkFetchingService.getInstance(
-                    DependencyProvider.drinkRepository,
-                    DependencyProvider.drinkIngredientCrossRefRepository
-                )
-            ),
-            ProfileManagementService.getInstance(
-                DependencyProvider.profileRepository
-            ),
-            MatchService.getInstance(DependencyProvider.matchRepository),
-            SharedFilterService.getInstance(DependencyProvider.sharedFilterRepository),
-            DrinkFetchingService.getInstance(
-                DependencyProvider.drinkRepository,
-                DependencyProvider.drinkIngredientCrossRefRepository
-            )
+    val mainViewModel: MainViewModel =
+        viewModel(
+            factory =
+                MainViewModelFactory(
+                    DrinkFilterService.getInstance(
+                        DrinkFetchingService.getInstance(
+                            DependencyProvider.drinkRepository,
+                            DependencyProvider.drinkIngredientCrossRefRepository,
+                        ),
+                    ),
+                    ProfileManagementService.getInstance(
+                        DependencyProvider.profileRepository,
+                    ),
+                    MatchService.getInstance(DependencyProvider.matchRepository),
+                    SharedFilterService.getInstance(DependencyProvider.sharedFilterRepository),
+                    DrinkFetchingService.getInstance(
+                        DependencyProvider.drinkRepository,
+                        DependencyProvider.drinkIngredientCrossRefRepository,
+                    ),
+                ),
         )
-    )
-    val drinkListViewModel: DrinkListViewModel = viewModel(
-        factory = DrinkListViewModelFactory(
-            DrinkFetchingService.getInstance(
-                DependencyProvider.drinkRepository,
-                DependencyProvider.drinkIngredientCrossRefRepository
-            )
+    val drinkListViewModel: DrinkListViewModel =
+        viewModel(
+            factory =
+                DrinkListViewModelFactory(
+                    DrinkFetchingService.getInstance(
+                        DependencyProvider.drinkRepository,
+                        DependencyProvider.drinkIngredientCrossRefRepository,
+                    ),
+                ),
         )
-    )
-    val drinkViewModel: DrinkDetailViewModel = viewModel(
-        factory = DrinkDetailViewModelFactory(
-            DrinkFetchingService.getInstance(
-                DependencyProvider.drinkRepository,
-                DependencyProvider.drinkIngredientCrossRefRepository
-            )
+    val drinkViewModel: DrinkDetailViewModel =
+        viewModel(
+            factory =
+                DrinkDetailViewModelFactory(
+                    DrinkFetchingService.getInstance(
+                        DependencyProvider.drinkRepository,
+                        DependencyProvider.drinkIngredientCrossRefRepository,
+                    ),
+                ),
         )
-    )
-    val matchesViewModel: MatchesViewModel = viewModel(
-        factory = MatchesViewModelFactory(
-            ProfileManagementService.getInstance(
-                DependencyProvider.profileRepository
-            ),
-            DrinkFetchingService.getInstance(
-                DependencyProvider.drinkRepository,
-                DependencyProvider.drinkIngredientCrossRefRepository
-            )
+    val matchesViewModel: MatchesViewModel =
+        viewModel(
+            factory =
+                MatchesViewModelFactory(
+                    ProfileManagementService.getInstance(
+                        DependencyProvider.profileRepository,
+                    ),
+                    DrinkFetchingService.getInstance(
+                        DependencyProvider.drinkRepository,
+                        DependencyProvider.drinkIngredientCrossRefRepository,
+                    ),
+                ),
         )
-    )
-    val createProfileViewModel: CreateProfileViewModel = viewModel(
-        factory = CreateProfileViewModelFactory(
-            ProfileManagementService.getInstance(
-                DependencyProvider.profileRepository
-            ),
-            SharedFilterService.getInstance(DependencyProvider.sharedFilterRepository),
-            IngredientService.getInstance(DependencyProvider.drinkIngredientCrossRefRepository),
-            CategoryService.getInstance(DependencyProvider.categoryRepository)
+    val createProfileViewModel: CreateProfileViewModel =
+        viewModel(
+            factory =
+                CreateProfileViewModelFactory(
+                    ProfileManagementService.getInstance(
+                        DependencyProvider.profileRepository,
+                    ),
+                    SharedFilterService.getInstance(DependencyProvider.sharedFilterRepository),
+                    IngredientService.getInstance(DependencyProvider.drinkIngredientCrossRefRepository),
+                    CategoryService.getInstance(DependencyProvider.categoryRepository),
+                ),
         )
-    )
-    val landingPageViewModel: LandingPageViewModel = viewModel(
-        factory = LandingPageViewModelFactory(
-            DrinkFetchingService.getInstance(
-                DependencyProvider.drinkRepository,
-                DependencyProvider.drinkIngredientCrossRefRepository
-            ),
-            ProfileManagementService.getInstance(
-                DependencyProvider.profileRepository
-            ),
-            DependencyProvider.databasePopulator
+    val landingPageViewModel: LandingPageViewModel =
+        viewModel(
+            factory =
+                LandingPageViewModelFactory(
+                    DrinkFetchingService.getInstance(
+                        DependencyProvider.drinkRepository,
+                        DependencyProvider.drinkIngredientCrossRefRepository,
+                    ),
+                    ProfileManagementService.getInstance(
+                        DependencyProvider.profileRepository,
+                    ),
+                    DependencyProvider.databasePopulator,
+                ),
         )
-    )
 
-    val matchesTab = TabBarItem(
-        title = "matchesView",
-        selectedIcon = painterResource(id = R.drawable.cherry),
-        unselectedIcon = painterResource(id = R.drawable.cherry)
-    )
-    val mainTab = TabBarItem(
-        title = "mainView",
-        selectedIcon = painterResource(id = R.drawable.flame),
-        unselectedIcon = painterResource(id = R.drawable.flame)
-    )
-    val cocktailListTab = TabBarItem(
-        title = "cocktailListView",
-        selectedIcon = painterResource(id = R.drawable.glass),
-        unselectedIcon = painterResource(id = R.drawable.glass)
-    )
+    val matchesTab =
+        TabBarItem(
+            title = "matchesView",
+            selectedIcon = painterResource(id = R.drawable.cherry),
+            unselectedIcon = painterResource(id = R.drawable.cherry),
+        )
+    val mainTab =
+        TabBarItem(
+            title = "mainView",
+            selectedIcon = painterResource(id = R.drawable.flame),
+            unselectedIcon = painterResource(id = R.drawable.flame),
+        )
+    val cocktailListTab =
+        TabBarItem(
+            title = "cocktailListView",
+            selectedIcon = painterResource(id = R.drawable.glass),
+            unselectedIcon = painterResource(id = R.drawable.glass),
+        )
 
     val tabBarItems = listOf(cocktailListTab, mainTab, matchesTab)
     val bottomBar = @Composable { CinderBar(tabBarItems, navController) }
@@ -157,7 +172,7 @@ fun CinderApp() {
         }
 
         composable(
-            route = "startUpView"
+            route = "startUpView",
         ) {
             StartUpView(navController, landingPageViewModel)
         }

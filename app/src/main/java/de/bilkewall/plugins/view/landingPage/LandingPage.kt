@@ -18,17 +18,19 @@ import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 
 @Composable
-fun StartUpView(navController: NavController, viewModel: LandingPageViewModel) {
-    Scaffold(
-    ) { innerPadding ->
+fun StartUpView(
+    navController: NavController,
+    viewModel: LandingPageViewModel,
+) {
+    Scaffold { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
-
             val isLoading by viewModel.isLoading.collectAsState()
             val profilesExist by viewModel.profilesExist.collectAsState()
 
@@ -38,7 +40,7 @@ fun StartUpView(navController: NavController, viewModel: LandingPageViewModel) {
 
             LaunchedEffect(isLoading) {
                 if (!isLoading) {
-                    //TODO ins viewmodel hier, nur noch auslesen
+                    // TODO ins viewmodel hier, nur noch auslesen
                     var navigationRoute = "mainView"
 
                     if (!profilesExist) {

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class LandingPageViewModel(
     private val drinkFetchingService: DrinkFetchingService,
     private val profileManagementService: ProfileManagementService,
-    private val populator: DatabasePopulator
+    private val populator: DatabasePopulator,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -30,32 +30,35 @@ class LandingPageViewModel(
         populateDatabase()
     }
 
-    private fun populateDatabase() = viewModelScope.launch {
-        val currentDrinkCount = drinkFetchingService.getDrinkCount()
+    private fun populateDatabase() =
+        viewModelScope.launch {
+            val currentDrinkCount = drinkFetchingService.getDrinkCount()
 
-        if (currentDrinkCount < 100) {
-            Log.d("DEBUG", "Insufficient drinks in the database. Populating data...")
-            // Clear existing data and populate new
-            populator.clearExistingData()
-            insertInitialData()
-        } else {
-            _isLoading.value = false
+            if (currentDrinkCount < 100) {
+                Log.d("DEBUG", "Insufficient drinks in the database. Populating data...")
+                // Clear existing data and populate new
+                populator.clearExistingData()
+                insertInitialData()
+            } else {
+                _isLoading.value = false
+            }
         }
-    }
 
-    private fun insertInitialData() = viewModelScope.launch {
-        _isLoading.value = true
-        try {
-            populator.insertInitialData()
-        } catch (e: Exception) {
-            Log.e("LandingPageViewModel.insertInitialData", e.message.toString())
-            errorMessage = e.message.toString()
-        } finally {
-            _isLoading.value = false
+    private fun insertInitialData() =
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                populator.insertInitialData()
+            } catch (e: Exception) {
+                Log.e("LandingPageViewModel.insertInitialData", e.message.toString())
+                errorMessage = e.message.toString()
+            } finally {
+                _isLoading.value = false
+            }
         }
-    }
 
-    fun checkIfProfilesExist() = viewModelScope.launch {
-        _profilesExist.value = profileManagementService.checkIfProfilesExist()
-    }
+    fun checkIfProfilesExist() =
+        viewModelScope.launch {
+            _profilesExist.value = profileManagementService.checkIfProfilesExist()
+        }
 }

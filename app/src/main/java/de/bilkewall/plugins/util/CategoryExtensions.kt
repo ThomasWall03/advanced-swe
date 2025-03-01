@@ -4,15 +4,13 @@ import de.bilkewall.domain.Category
 import de.bilkewall.plugins.database.category.CategoryEntity
 
 // Converting from Category to AppCategory
-fun CategoryEntity.toCategory(): Category {
-    return Category(
-        strCategory = this.strCategory
+fun CategoryEntity.toCategory(): Category =
+    Category(
+        strCategory = this.strCategory,
     )
-}
 
 // Converting from AppCategory to Category
-fun Category.toCategoryEntity(): CategoryEntity {
-    return CategoryEntity(
-        strCategory = this.strCategory
+fun Category.toCategoryEntity(): CategoryEntity =
+    CategoryEntity(
+        strCategory = this.strCategory,
     )
-}

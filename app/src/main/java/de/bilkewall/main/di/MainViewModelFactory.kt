@@ -14,7 +14,7 @@ class MainViewModelFactory(
     private val profileManagementService: ProfileManagementService,
     private val matchService: MatchService,
     private val sharedFilterService: SharedFilterService,
-    private val drinkFetchingService: DrinkFetchingService
+    private val drinkFetchingService: DrinkFetchingService,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
@@ -24,7 +24,7 @@ class MainViewModelFactory(
                 matchService,
                 drinkFilterService,
                 drinkFetchingService,
-                sharedFilterService
+                sharedFilterService,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class DrinkListViewModel(
-    private val drinkFetchingService: DrinkFetchingService
+    private val drinkFetchingService: DrinkFetchingService,
 ) : ViewModel() {
     var drinks: Flow<List<Drink>> = drinkFetchingService.getAllDrinks()
     var errorMessage: String by mutableStateOf("")
