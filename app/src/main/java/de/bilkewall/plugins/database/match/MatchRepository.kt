@@ -15,17 +15,8 @@ class MatchRepository(
         matchDao.insert(match.toMatchEntity())
     }
 
-    override suspend fun delete(match: Match) {
-        matchDao.delete(match.toMatchEntity())
-    }
-
     override fun getAllMatchesForCurrentProfile(profileId: Int): List<Match> =
         matchDao.getAllMatchesForProfileId(profileId).map {
-            it.toMatch()
-        }
-
-    override fun getAllPositiveMatchesForCurrentProfile(profileId: Int): List<Match> =
-        matchDao.getAllPositiveMatchesForProfileId(profileId).map {
             it.toMatch()
         }
 

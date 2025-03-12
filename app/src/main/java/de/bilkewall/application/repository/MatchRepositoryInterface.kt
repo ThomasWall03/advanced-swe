@@ -8,11 +8,7 @@ interface MatchRepositoryInterface {
 
     suspend fun insert(match: Match)
 
-    suspend fun delete(match: Match)
-
     fun getAllMatchesForCurrentProfile(profileId: Int): List<Match>
-
-    fun getAllPositiveMatchesForCurrentProfile(profileId: Int): List<Match>
 
     fun deleteMatchesForProfile(profileId: Int)
 }

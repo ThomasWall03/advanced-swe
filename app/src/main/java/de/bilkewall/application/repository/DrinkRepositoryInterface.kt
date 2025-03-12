@@ -14,8 +14,6 @@ interface DrinkRepositoryInterface {
 
     fun getDrinksByName(name: String): Flow<List<Drink>>
 
-    suspend fun delete(drink: Drink)
-
     suspend fun deleteAllDrinks()
 
     suspend fun getDrinkCount(): Int

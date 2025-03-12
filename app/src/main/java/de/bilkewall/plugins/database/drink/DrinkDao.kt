@@ -21,9 +21,6 @@ interface DrinkDao {
     @Query("SELECT * FROM drink_table WHERE drinkId = :drinkId")
     suspend fun getDrinkById(drinkId: Int): DrinkEntity
 
-    @Delete
-    suspend fun delete(drink: DrinkEntity)
-
     @Query("DELETE FROM drink_table")
     suspend fun deleteAllDrinks()
 

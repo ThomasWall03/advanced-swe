@@ -11,8 +11,6 @@ interface ProfileRepositoryInterface {
 
     suspend fun delete(profile: Profile)
 
-    suspend fun deleteAllProfiles()
-
     suspend fun getProfileCount(): Int
 
     suspend fun deactivateActiveProfile()

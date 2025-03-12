@@ -17,9 +17,6 @@ interface ProfileDao {
     @Delete
     suspend fun delete(profile: ProfileEntity)
 
-    @Query("DELETE FROM profile_table")
-    suspend fun deleteAllProfiles()
-
     @Query("SELECT COUNT(*) FROM profile_table")
     suspend fun getProfileCount(): Int
 

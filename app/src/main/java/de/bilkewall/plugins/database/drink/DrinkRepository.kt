@@ -20,10 +20,6 @@ class DrinkRepository(
         drinkDao.update(drink.toDrinkEntity())
     }
 
-    override suspend fun delete(drink: Drink) {
-        drinkDao.delete(drink.toDrinkEntity())
-    }
-
     override suspend fun deleteAllDrinks() {
         drinkDao.deleteAllDrinks()
     }

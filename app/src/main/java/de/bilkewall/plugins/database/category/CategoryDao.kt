@@ -14,13 +14,4 @@ interface CategoryDao {
 
     @Insert
     suspend fun insert(category: CategoryEntity)
-
-    @Update
-    suspend fun update(category: CategoryEntity)
-
-    @Delete
-    suspend fun delete(category: CategoryEntity)
-
-    @Query("DELETE FROM category_table")
-    suspend fun deleteAllCategories()
 }

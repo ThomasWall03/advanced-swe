@@ -14,16 +14,4 @@ class CategoryRepository(
     override suspend fun insert(category: Category) {
         categoryDao.insert(category.toCategoryEntity())
     }
-
-    override suspend fun update(category: Category) {
-        categoryDao.update(category.toCategoryEntity())
-    }
-
-    override suspend fun delete(category: Category) {
-        categoryDao.delete(category.toCategoryEntity())
-    }
-
-    override suspend fun deleteAllCategories() {
-        categoryDao.deleteAllCategories()
-    }
 }

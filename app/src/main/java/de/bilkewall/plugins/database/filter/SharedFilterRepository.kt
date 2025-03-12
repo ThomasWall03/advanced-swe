@@ -25,10 +25,6 @@ class SharedFilterRepository(
         drinkTypeFilterDao.deleteDrinkTypeFiltersByProfileId(profileId)
     }
 
-    override suspend fun deleteAllDrinkTypeFilters() {
-        drinkTypeFilterDao.deleteAllDrinkTypeFilters()
-    }
-
     override suspend fun insertIngredientFilter(ingredientFilter: IngredientFilter) {
         ingredientValueFilterDao.insertIngredientValueFilter(ingredientFilter.toIngredientValueFilterEntity())
     }
@@ -40,9 +36,5 @@ class SharedFilterRepository(
 
     override suspend fun deleteIngredientValueFiltersByProfileId(profileId: Int) {
         ingredientValueFilterDao.deleteIngredientValueFiltersByProfileId(profileId)
-    }
-
-    override suspend fun deleteAllIngredientValueFilters() {
-        ingredientValueFilterDao.deleteAllIngredientValueFilters()
     }
 }

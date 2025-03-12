@@ -26,10 +26,6 @@ class ProfileRepository(
         }
     }
 
-    override suspend fun deleteAllProfiles() {
-        profileDao.deleteAllProfiles()
-    }
-
     override suspend fun getProfileCount(): Int = profileDao.getProfileCount()
 
     override suspend fun deactivateActiveProfile() {
