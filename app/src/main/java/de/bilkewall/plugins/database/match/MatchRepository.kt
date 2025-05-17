@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.map
 class MatchRepository(
     private val matchDao: MatchDao,
 ) : MatchRepositoryInterface {
-    override val allMatches = matchDao.getAllMatches().map { it.map { it.toMatch() } }
-
     override suspend fun insert(match: Match) {
         matchDao.insert(match.toMatchEntity())
     }

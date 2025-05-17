@@ -2,16 +2,16 @@ package de.bilkewall.plugins.api
 
 import android.util.Log
 import de.bilkewall.adapters.DatabasePopulator
-import de.bilkewall.application.repository.CategoryRepositoryInterface
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.category.CategoryRepositoryManipulatorInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefManipulatorInterface
+import de.bilkewall.application.repository.drink.DrinkRepositoryManipulatorInterface
 import de.bilkewall.domain.DrinkIngredientCrossRef
 import kotlinx.coroutines.flow.first
 
 class DatabasePopulator(
-    private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
-    private val categoryRepository: CategoryRepositoryInterface,
+    private val drinkRepository: DrinkRepositoryManipulatorInterface,
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefManipulatorInterface,
+    private val categoryRepository: CategoryRepositoryManipulatorInterface,
     private val apiWrapper: APIWrapper,
 ) : DatabasePopulator {
     private val allDrinks = drinkRepository.getAllDrinks()

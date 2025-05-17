@@ -1,6 +1,6 @@
 package de.bilkewall.application.service
 
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -12,7 +12,7 @@ import org.mockito.kotlin.whenever
 
 class IngredientServiceTest {
     // Mocking
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface = mock()
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefFetchingInterface = mock()
 
     private lateinit var ingredientService: IngredientService
 

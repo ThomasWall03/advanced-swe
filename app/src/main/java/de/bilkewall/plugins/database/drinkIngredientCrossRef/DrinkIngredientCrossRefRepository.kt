@@ -1,6 +1,7 @@
 package de.bilkewall.plugins.database.drinkIngredientCrossRef
 
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefManipulatorInterface
 import de.bilkewall.domain.DrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toDrinkIngredientCrossRef
 import de.bilkewall.plugins.util.toDrinkIngredientCrossRefEntity
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 class DrinkIngredientCrossRefRepository(
     private val drinkIngredientDao: DrinkIngredientDao,
-) : DrinkIngredientCrossRefInterface {
+) : DrinkIngredientCrossRefFetchingInterface, DrinkIngredientCrossRefManipulatorInterface {
     private val allIngredients: Flow<List<String>> = drinkIngredientDao.getAllIngredientsSortedByName()
 
     override fun getAllIngredientsSortedByName(): Flow<List<String>> = allIngredients

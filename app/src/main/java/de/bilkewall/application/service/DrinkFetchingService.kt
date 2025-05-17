@@ -1,22 +1,22 @@
 package de.bilkewall.application.service
 
-import de.bilkewall.application.repository.DrinkIngredientCrossRefInterface
-import de.bilkewall.application.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
+import de.bilkewall.application.repository.drink.DrinkRepositoryFetchingInterface
 import de.bilkewall.domain.Drink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DrinkFetchingService private constructor(
-    private val drinkRepository: DrinkRepositoryInterface,
-    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+    private val drinkRepository: DrinkRepositoryFetchingInterface,
+    private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefFetchingInterface,
 ) {
     companion object {
         @Volatile
         private var instance: DrinkFetchingService? = null
 
         fun getInstance(
-            drinkRepository: DrinkRepositoryInterface,
-            drinkIngredientCrossRefRepository: DrinkIngredientCrossRefInterface,
+            drinkRepository: DrinkRepositoryFetchingInterface,
+            drinkIngredientCrossRefRepository: DrinkIngredientCrossRefFetchingInterface,
         ): DrinkFetchingService =
             instance ?: synchronized(this) {
                 instance ?: DrinkFetchingService(

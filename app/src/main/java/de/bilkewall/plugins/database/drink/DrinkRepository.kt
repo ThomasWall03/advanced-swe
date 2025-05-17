@@ -1,6 +1,7 @@
 package de.bilkewall.plugins.database.drink
 
-import de.bilkewall.application.repository.DrinkRepositoryInterface
+import de.bilkewall.application.repository.drink.DrinkRepositoryFetchingInterface
+import de.bilkewall.application.repository.drink.DrinkRepositoryManipulatorInterface
 import de.bilkewall.domain.Drink
 import de.bilkewall.plugins.util.toDrink
 import de.bilkewall.plugins.util.toDrinkEntity
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.map
 
 class DrinkRepository(
     private val drinkDao: DrinkDao,
-) : DrinkRepositoryInterface {
+) : DrinkRepositoryFetchingInterface, DrinkRepositoryManipulatorInterface {
     override fun getAllDrinks() = drinkDao.getAllDrinks().map { drinks -> drinks.map { it.toDrink() } }
 
     override suspend fun insert(drink: Drink) {

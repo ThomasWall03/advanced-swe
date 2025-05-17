@@ -1,6 +1,6 @@
 package de.bilkewall.application.service
 
-import de.bilkewall.application.repository.CategoryRepositoryInterface
+import de.bilkewall.application.repository.category.CategoryRepositoryFetchingInterface
 import de.bilkewall.domain.Category
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -14,7 +14,7 @@ import org.mockito.kotlin.whenever
 
 class CategoryServiceTest {
     // Mocking
-    private val categoryRepository: CategoryRepositoryInterface = mock()
+    private val categoryRepository: CategoryRepositoryFetchingInterface = mock()
 
     private lateinit var categoryService: CategoryService
 
