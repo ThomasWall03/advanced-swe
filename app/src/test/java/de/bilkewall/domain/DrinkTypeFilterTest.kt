@@ -1,36 +1,46 @@
 package de.bilkewall.domain
 
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class DrinkTypeFilterTest {
     @Test
     fun `apply returns true when drink category matches filter`() {
-        val drink =
-            Drink(
-                drinkId = 1,
-                drinkName = "Mojito",
-                categoryName = "Cocktail",
-                ingredients = listOf("Rum", "Lime"),
-                measurements = listOf("1", "1"),
-            )
-        val filter = DrinkTypeFilter(drinkTypeFilterValue = "Cocktail", profileId = 1)
+        // Arrange
+        val given = Drink(
+            drinkId = 1,
+            drinkName = "Mojito",
+            categoryName = "Cocktail",
+            ingredients = listOf("Rum", "Lime"),
+            measurements = listOf("1", "1"),
+        )
+        val target = DrinkTypeFilter(drinkTypeFilterValue = "Cocktail", profileId = 1)
 
-        assertTrue(filter.apply(drink), "apply should return true when drink category matches the filter")
+        // Act
+        val actual = target.apply(given)
+
+        // Assert
+        assertTrue(actual, "apply should return true when drink category matches the filter")
     }
 
     @Test
     fun `apply returns false when drink category does not match filter`() {
-        val drink =
-            Drink(
-                drinkId = 2,
-                drinkName = "Martini",
-                categoryName = "Martini",
-                ingredients = listOf("Vodka", "Vermouth"),
-                measurements = listOf("1", "1"),
-            )
-        val filter = DrinkTypeFilter(drinkTypeFilterValue = "Cocktail", profileId = 1)
+        // Arrange
+        val given = Drink(
+            drinkId = 2,
+            drinkName = "Martini",
+            categoryName = "Martini",
+            ingredients = listOf("Vodka", "Vermouth"),
+            measurements = listOf("1", "1"),
+        )
+        val target = DrinkTypeFilter(drinkTypeFilterValue = "Cocktail", profileId = 1)
 
-        assertFalse(filter.apply(drink), "apply should return false when drink category does not match the filter")
+        // Act
+        val actual = target.apply(given)
+
+        // Assert
+        assertFalse(actual, "apply should return false when drink category does not match the filter")
     }
+
 }

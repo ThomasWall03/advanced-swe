@@ -5,7 +5,6 @@ import de.bilkewall.domain.Category
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -16,37 +15,40 @@ class CategoryServiceTest {
     // Mocking
     private val categoryRepository: CategoryRepositoryFetchingInterface = mock()
 
-    private lateinit var categoryService: CategoryService
-
-    @Before
-    fun setup() {
+    private fun createServiceInstance(): CategoryService{
         val field = CategoryService::class.java.getDeclaredField("instance")
         field.isAccessible = true
         field.set(null, null)
 
-        categoryService = CategoryService.getInstance(categoryRepository)
+        return CategoryService.getInstance(categoryRepository)
     }
 
     @Test
     fun `getInstance returns singleton instance`() {
+        //Arrange + Act
         val instance1 = CategoryService.getInstance(categoryRepository)
         val instance2 = CategoryService.getInstance(categoryRepository)
 
+        //Assert
         assertSame(instance1, instance2, "getInstance should return the same instance")
     }
 
     @Test
-    fun `getAllCategories returns categories`() =
-        runTest {
-            val categories =
-                listOf(
-                    Category("Cocktail"),
-                    Category("Mocktail"),
-                )
-            whenever(categoryRepository.getAllCategories()).thenReturn(flowOf(categories))
+    fun `getAllCategories returns categories`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenCategories = listOf(
+            Category("Cocktail"),
+            Category("Mocktail"),
+        )
+        val expected = givenCategories
+        whenever(categoryRepository.getAllCategories()).thenReturn(flowOf(givenCategories))
 
-            val result = categoryService.getAllCategories().first()
+        // Act
+        val actual = target.getAllCategories().first()
 
-            assertEquals(categories, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
+
 }

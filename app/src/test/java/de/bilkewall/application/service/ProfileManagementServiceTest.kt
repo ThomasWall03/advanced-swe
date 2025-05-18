@@ -5,9 +5,12 @@ import de.bilkewall.domain.Profile
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
@@ -18,116 +21,144 @@ class ProfileManagementServiceTest {
     // Mocking
     private val profileRepository: ProfileRepositoryInterface = mock()
 
-    private lateinit var profileManagementService: ProfileManagementService
-
-    @Before
-    fun setup() {
+    private fun createServiceInstance(): ProfileManagementService {
         val field = ProfileManagementService::class.java.getDeclaredField("instance")
         field.isAccessible = true
         field.set(null, null)
 
-        profileManagementService = ProfileManagementService.getInstance(profileRepository)
+        return ProfileManagementService.getInstance(profileRepository)
     }
 
     @Test
     fun `getInstance returns singleton instance`() {
+        // Arrange + Act
         val instance1 = ProfileManagementService.getInstance(profileRepository)
         val instance2 = ProfileManagementService.getInstance(profileRepository)
 
+        // Assert
         assertSame(instance1, instance2, "getInstance should return the same instance")
     }
 
     @Test
-    fun `allProfiles returns flow of profiles`() =
-        runTest {
-            whenever(profileRepository.allProfiles).thenReturn(flowOf(testProfiles))
+    fun `allProfiles returns flow of profiles`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val expected = mockProfiles
+        whenever(profileRepository.allProfiles).thenReturn(flowOf(expected))
 
-            val result = profileManagementService.allProfiles
+        // Act
+        val actual = target.allProfiles.first()
 
-            assertEquals(testProfiles, result.first())
-        }
-
-    @Test
-    fun `getActiveProfile returns active profile`() =
-        runTest {
-            whenever(profileRepository.activeProfile).thenReturn(flowOf(testProfile))
-
-            val result = profileManagementService.getActiveProfile().first()
-
-            assertEquals(testProfile, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
     @Test
-    fun `getActiveProfile returns null`() =
-        runTest {
-            whenever(profileRepository.activeProfile).thenReturn(flowOf(null))
+    fun `getActiveProfile returns active profile`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val expected = mockProfile
+        whenever(profileRepository.activeProfile).thenReturn(flowOf(expected))
 
-            val result = profileManagementService.getActiveProfile().first()
+        // Act
+        val actual = target.getActiveProfile().first()
 
-            assertNull(result)
-        }
-
-    @Test
-    fun `saveProfile creates profile and adds filters`() =
-        runTest {
-            val profileName = "TestProfile"
-
-            whenever(profileRepository.insert(any())).thenReturn(10)
-
-            val resultId = profileManagementService.saveProfile(profileName)
-
-            assertEquals(10, resultId)
-
-            verify(profileRepository).deactivateActiveProfile()
-            verify(profileRepository).insert(
-                argThat { profile ->
-                    profile.profileName == profileName && profile.isActiveProfile
-                },
-            )
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
     @Test
-    fun `deleteProfile removes profile and cleans up related data`() =
-        runTest {
-            profileManagementService.deleteProfile(testProfile)
+    fun `getActiveProfile returns null`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        whenever(profileRepository.activeProfile).thenReturn(flowOf(null))
 
-            verify(profileRepository).delete(testProfile)
-        }
+        // Act
+        val actual = target.getActiveProfile().first()
 
-    @Test
-    fun `setCurrentProfile deactivates current profile and sets new active profile`() =
-        runTest {
-            profileManagementService.setCurrentProfile(testProfile)
-
-            verify(profileRepository).deactivateActiveProfile()
-            verify(profileRepository).setActiveProfile(testProfile.profileId)
-        }
+        // Assert
+        assertNull(actual)
+    }
 
     @Test
-    fun `checkIfProfilesExist returns true if profiles exist`() =
-        runTest {
-            whenever(profileRepository.getProfileCount()).thenReturn(1)
+    fun `saveProfile creates profile and adds filters`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenProfileName = "TestProfile"
+        val expectedId = 10
+        whenever(profileRepository.insert(any())).thenReturn(expectedId.toLong())
 
-            val result = profileManagementService.checkIfProfilesExist()
+        // Act
+        val actual = target.saveProfile(givenProfileName)
 
-            assertTrue(result)
-        }
+        // Assert
+        assertEquals(expectedId, actual)
+        verify(profileRepository).deactivateActiveProfile()
+        verify(profileRepository).insert(
+            argThat { profile ->
+                profile.profileName == givenProfileName && profile.isActiveProfile
+            },
+        )
+    }
 
     @Test
-    fun `checkIfProfilesExist returns false if no profiles exist`() =
-        runTest {
-            whenever(profileRepository.getProfileCount()).thenReturn(0)
+    fun `deleteProfile removes profile and cleans up related data`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenProfile = mockProfile
 
-            val result = profileManagementService.checkIfProfilesExist()
+        // Act
+        target.deleteProfile(givenProfile)
 
-            assertFalse(result)
-        }
+        // Assert
+        verify(profileRepository).delete(givenProfile)
+    }
+
+    @Test
+    fun `setCurrentProfile deactivates current profile and sets new active profile`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenProfile = mockProfile
+
+        // Act
+        target.setCurrentProfile(givenProfile)
+
+        // Assert
+        verify(profileRepository).deactivateActiveProfile()
+        verify(profileRepository).setActiveProfile(givenProfile.profileId)
+    }
+
+    @Test
+    fun `checkIfProfilesExist returns true if profiles exist`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        whenever(profileRepository.getProfileCount()).thenReturn(1)
+
+        // Act
+        val actual = target.checkIfProfilesExist()
+
+        // Assert
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `checkIfProfilesExist returns false if no profiles exist`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        whenever(profileRepository.getProfileCount()).thenReturn(0)
+
+        // Act
+        val actual = target.checkIfProfilesExist()
+
+        // Assert
+        assertFalse(actual)
+    }
 
     // Test Data
-    private val testProfiles =
+    private val mockProfiles =
         listOf(
             Profile(profileId = 1, profileName = "Profile1", isActiveProfile = true),
             Profile(profileId = 2, profileName = "Profile2", isActiveProfile = false),
         )
-    private val testProfile = Profile(profileId = 1, profileName = "Profile1", isActiveProfile = true)
+    private val mockProfile = Profile(profileId = 1, profileName = "Profile1", isActiveProfile = true)
 }

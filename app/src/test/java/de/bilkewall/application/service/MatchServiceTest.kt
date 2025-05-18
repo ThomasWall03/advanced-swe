@@ -3,9 +3,9 @@ package de.bilkewall.application.service
 import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.domain.Match
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -14,58 +14,66 @@ class MatchServiceTest {
     // Mocking
     private val matchRepository: MatchRepositoryInterface = mock()
 
-    private lateinit var matchService: MatchService
-
-    @Before
-    fun setUp() {
+    private fun createServiceInstance(): MatchService {
         val field = MatchService::class.java.getDeclaredField("instance")
         field.isAccessible = true
         field.set(null, null)
 
-        matchService = MatchService.getInstance(matchRepository)
+        return MatchService.getInstance(matchRepository)
     }
 
     @Test
     fun `getInstance returns singleton instance`() {
+        // Arrange + Act
         val instance1 = MatchService.getInstance(matchRepository)
         val instance2 = MatchService.getInstance(matchRepository)
 
+        // Assert
         assertSame(instance1, instance2, "getInstance should return the same instance")
     }
 
     @Test
-    fun `insert calls repository to insert match`() =
-        runTest {
-            val match = Match(drinkId = 1, profileId = 1, outcome = true)
+    fun `insert calls repository to insert match`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenMatch = Match(drinkId = 1, profileId = 1, outcome = true)
+        whenever(matchRepository.insert(givenMatch)).thenReturn(Unit)
 
-            matchService.insert(match)
+        // Act
+        target.insert(givenMatch)
 
-            verify(matchRepository).insert(match)
-        }
-
-    @Test
-    fun `getMatchesForProfile returns matches for given profile`() =
-        runTest {
-            val profileId = 1
-            val matches =
-                listOf(
-                    Match(drinkId = 1, profileId = profileId, outcome = true),
-                    Match(drinkId = 2, profileId = profileId, outcome = true),
-                )
-            whenever(matchRepository.getAllMatchesForCurrentProfile(profileId)).thenReturn(matches)
-
-            val result = matchService.getMatchesForProfile(profileId)
-
-            assertEquals(matches, result)
-        }
+        // Assert
+        verify(matchRepository).insert(givenMatch)
+    }
 
     @Test
-    fun `deleteMatchesForProfile deletes matches for profile`() =
-        runTest {
-            val profileId = 1
+    fun `getMatchesForProfile returns matches for given profile`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenProfileId = 1
+        val expected = listOf(
+            Match(drinkId = 1, profileId = givenProfileId, outcome = true),
+            Match(drinkId = 2, profileId = givenProfileId, outcome = true),
+        )
+        whenever(matchRepository.getAllMatchesForCurrentProfile(givenProfileId)).thenReturn(expected)
 
-            matchService.deleteMatchesForProfile(profileId)
+        // Act
+        val actual = target.getMatchesForProfile(givenProfileId)
 
-            verify(matchRepository).deleteMatchesForProfile(profileId)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `deleteMatchesForProfile deletes matches for profile`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenProfileId = 1
+
+        // Act
+        target.deleteMatchesForProfile(givenProfileId)
+
+        // Assert
+        verify(matchRepository).deleteMatchesForProfile(givenProfileId)
+    }
 }

@@ -1,15 +1,15 @@
 package de.bilkewall.application.service
 
-import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
 import de.bilkewall.application.repository.drink.DrinkRepositoryFetchingInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.DrinkIngredientCrossRef
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
@@ -18,108 +18,129 @@ class DrinkFetchingServiceTest {
     private val drinkRepository: DrinkRepositoryFetchingInterface = mock()
     private val drinkIngredientCrossRefRepository: DrinkIngredientCrossRefFetchingInterface = mock()
 
-    private lateinit var drinkFetchingService: DrinkFetchingService
-
-    @Before
-    fun setUp() {
+    private fun createServiceInstance(): DrinkFetchingService {
         val field = DrinkFetchingService::class.java.getDeclaredField("instance")
         field.isAccessible = true
         field.set(null, null)
 
-        drinkFetchingService = DrinkFetchingService.getInstance(drinkRepository, drinkIngredientCrossRefRepository)
+        return DrinkFetchingService.getInstance(drinkRepository, drinkIngredientCrossRefRepository)
     }
 
     @Test
     fun `getInstance returns singleton instance`() {
+        //Arrange + Act
         val instance1 = DrinkFetchingService.getInstance(drinkRepository, drinkIngredientCrossRefRepository)
         val instance2 = DrinkFetchingService.getInstance(drinkRepository, drinkIngredientCrossRefRepository)
 
+        //Assert
         assertSame(instance1, instance2, "getInstance should return the same instance")
     }
 
     @Test
-    fun `getDrinkById returns drink with ingredients`() =
-        runTest {
-            whenever(drinkRepository.getDrinkById(1)).thenReturn(testDrinks[0])
-            expectMockCallsForAddIngredientsToDrink(1, testIngredients)
+    fun `getDrinkById returns drink with ingredients`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenId = 1
+        val givenIngredients = mockIngredients
+        val expected = mockDrinks[0]
+        whenever(drinkRepository.getDrinkById(givenId)).thenReturn(expected)
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(givenId)).thenReturn(givenIngredients)
 
-            val result = drinkFetchingService.getDrinkById(1)
+        // Act
+        val actual = target.getDrinkById(givenId)
 
-            assertEquals(testDrinks[0], result)
-        }
-
-    @Test
-    fun `getAllDrinks returns all drinks`() =
-        runTest {
-            whenever(drinkRepository.getAllDrinks()).thenReturn(flowOf(testDrinks))
-
-            expectMockCallsForAddIngredientsToDrink(1, testIngredients)
-            expectMockCallsForAddIngredientsToDrink(2, testIngredients)
-
-            val result = drinkFetchingService.getAllDrinks().first()
-
-            assertEquals(testDrinks, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
     @Test
-    fun `getDrinksByName returns drinks with given name`() =
-        runTest {
-            whenever(drinkRepository.getDrinksByName("Mojito")).thenReturn(flowOf(testDrinks))
-            expectMockCallsForAddIngredientsToDrink(1, testIngredients)
-            expectMockCallsForAddIngredientsToDrink(2, testIngredients)
+    fun `getAllDrinks returns all drinks`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenIngredients = mockIngredients
+        val expected = mockDrinks
+        whenever(drinkRepository.getAllDrinks()).thenReturn(flowOf(expected))
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(1)).thenReturn(givenIngredients)
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(2)).thenReturn(givenIngredients)
 
-            val result = drinkFetchingService.getDrinksByName("Mojito").first()
+        // Act
+        val actual = target.getAllDrinks().first()
 
-            assertEquals(testDrinks, result)
-        }
-
-    @Test
-    fun `getDrinkCount returns count of drinks`() =
-        runTest {
-            val drinkCount = 2
-            whenever(drinkRepository.getDrinkCount()).thenReturn(drinkCount)
-
-            val result = drinkFetchingService.getDrinkCount()
-
-            assertEquals(drinkCount, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
     @Test
-    fun `getMatchedDrinksByName returns matched drinks for given name and profile`() =
-        runTest {
-            val profileId = 1
-            whenever(drinkRepository.getMatchedDrinksByName("Mojito", profileId)).thenReturn(flowOf(testDrinks))
-            expectMockCallsForAddIngredientsToDrink(1, testIngredients)
-            expectMockCallsForAddIngredientsToDrink(2, testIngredients)
+    fun `getDrinksByName returns drinks with given name`() = runTest {
+        // Arrange
+        val target = createServiceInstance()
+        val givenName = "Mojito"
+        val givenIngredients = mockIngredients
+        val expected = mockDrinks
+        whenever(drinkRepository.getDrinksByName(givenName)).thenReturn(flowOf(expected))
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(1)).thenReturn(givenIngredients)
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(2)).thenReturn(givenIngredients)
 
-            val result = drinkFetchingService.getMatchedDrinksByNameAndProfile("Mojito", profileId).first()
+        // Act
+        val actual = target.getDrinksByName(givenName).first()
 
-            assertEquals(testDrinks, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
     @Test
-    fun `getMatchedDrinksForProfile returns matched drinks for given profile`() =
-        runTest {
-            val profileId = 1
-            whenever(drinkRepository.getMatchedDrinksForProfile(profileId)).thenReturn(flowOf(testDrinks))
-            expectMockCallsForAddIngredientsToDrink(1, testIngredients)
-            expectMockCallsForAddIngredientsToDrink(2, testIngredients)
+    fun `getDrinkCount returns count of drinks`() = runTest {
+        // Arrange
+        val expected = 2
+        val target = createServiceInstance()
+        whenever(drinkRepository.getDrinkCount()).thenReturn(expected)
 
-            val result = drinkFetchingService.getMatchedDrinksForProfile(profileId).first()
+        // Act
+        val actual = target.getDrinkCount()
 
-            assertEquals(testDrinks, result)
-        }
+        // Assert
+        assertEquals(expected, actual)
+    }
 
-    // Helper Functions
-    private suspend fun expectMockCallsForAddIngredientsToDrink(
-        drinkId: Int,
-        ingredients: List<DrinkIngredientCrossRef>,
-    ) {
-        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(drinkId)).thenReturn(ingredients)
+    @Test
+    fun `getMatchedDrinksByName returns matched drinks for given name and profile`() = runTest {
+        // Arrange
+        val givenName = "Mojito"
+        val givenProfileId = 1
+        val givenIngredients = mockIngredients
+        val expected = mockDrinks
+        val target = createServiceInstance()
+        whenever(drinkRepository.getMatchedDrinksByName(givenName, givenProfileId)).thenReturn(flowOf(expected))
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(1)).thenReturn(givenIngredients)
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(2)).thenReturn(givenIngredients)
+
+        // Act
+        val actual = target.getMatchedDrinksByNameAndProfile(givenName, givenProfileId).first()
+
+        // Assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getMatchedDrinksForProfile returns matched drinks for given profile`() = runTest {
+        // Arrange
+        val givenProfileId = 1
+        val givenIngredients = mockIngredients
+        val expected = mockDrinks
+        val target = createServiceInstance()
+        whenever(drinkRepository.getMatchedDrinksForProfile(givenProfileId)).thenReturn(flowOf(expected))
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(1)).thenReturn(givenIngredients)
+        whenever(drinkIngredientCrossRefRepository.getIngredientsForDrink(2)).thenReturn(givenIngredients)
+
+        // Act
+        val actual = target.getMatchedDrinksForProfile(givenProfileId).first()
+
+        // Assert
+        assertEquals(expected, actual)
     }
 
     // Test Data
-    private val testDrinks =
+    private val mockDrinks =
         listOf(
             Drink(
                 drinkId = 1,
@@ -136,7 +157,7 @@ class DrinkFetchingServiceTest {
                 measurements = listOf("1", "1"),
             ),
         )
-    private val testIngredients =
+    private val mockIngredients =
         listOf(
             DrinkIngredientCrossRef(1, "Rum", "1"),
             DrinkIngredientCrossRef(1, "Lime", "1"),
