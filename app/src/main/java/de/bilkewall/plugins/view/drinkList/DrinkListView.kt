@@ -23,10 +23,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
+import de.bilkewall.plugins.theme.errorCardRoundedButton
 import de.bilkewall.plugins.view.drinkList.cell.DrinkCell
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -133,7 +133,7 @@ fun DrinkList(
             bottomComposable = {
                 Button(
                     onClick = onRetryClick,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(errorCardRoundedButton),
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 ) {
                     Text(text = stringResource(R.string.retry))

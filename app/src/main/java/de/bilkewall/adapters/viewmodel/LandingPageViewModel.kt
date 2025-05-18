@@ -17,9 +17,6 @@ class LandingPageViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _profilesExist = MutableStateFlow(false)
-    val profilesExist: StateFlow<Boolean> = _profilesExist
-
     suspend fun populateDatabase() {
         val currentDrinkCount = drinkFetchingService.getDrinkCount()
 
@@ -43,7 +40,7 @@ class LandingPageViewModel(
         }
     }
 
-    suspend fun checkIfProfilesExist() {
-        _profilesExist.value = profileManagementService.checkIfProfilesExist()
+    suspend fun checkIfProfilesExist(): Boolean {
+        return profileManagementService.checkIfProfilesExist()
     }
 }

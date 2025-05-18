@@ -57,6 +57,7 @@ import coil.compose.AsyncImage
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.Profile
+import de.bilkewall.plugins.theme.*
 import de.bilkewall.plugins.view.drinkDetail.DetailViewCard
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 import de.bilkewall.plugins.view.utils.ErrorCard
@@ -143,7 +144,7 @@ fun MainView(
                                 mainViewModel.toggleFilterBypass(true)
                                 mainViewModel.evaluateCurrentDrink()
                             },
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(errorCardRoundedButton),
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                         ) {
                             Text(text = stringResource(R.string.no_more_drinks_button))
@@ -180,14 +181,14 @@ fun ImageCard(
         Modifier
             .fillMaxSize()
             .clickable { setIsFlipped(!isFlipped) }
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(imageCardRoundedShape))
             .background(MaterialTheme.colorScheme.surface),
     ) {
         Card(
             modifier =
             Modifier
                 .fillMaxSize(),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(imageCardRoundedShape),
             elevation = CardDefaults.cardElevation(),
         ) {
             AnimatedVisibility(!isFlipped) {
@@ -287,15 +288,15 @@ private fun BottomButtonRow(
                             color = MaterialTheme.colorScheme.surface,
                             shape = CircleShape,
                         )
-                        .padding(8.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
-                        .padding(4.dp),
+                        .padding(iconPadding)
+                        .border(iconButtonBorderWidth, MaterialTheme.colorScheme.onSurface, CircleShape)
+                        .padding(iconPadding/2),
                     enabled = !isLoading,
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "Close Icon",
-                        modifier = Modifier.size(70.dp),
+                        modifier = Modifier.size(iconSize),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -308,15 +309,15 @@ private fun BottomButtonRow(
                             color = MaterialTheme.colorScheme.surface,
                             shape = CircleShape,
                         )
-                        .padding(8.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
-                        .padding(4.dp),
+                        .padding(iconPadding)
+                        .border(iconButtonBorderWidth, MaterialTheme.colorScheme.onSurface, CircleShape)
+                        .padding(iconPadding/2),
                     enabled = !isLoading,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cherry),
                         contentDescription = "Like Icon",
-                        modifier = Modifier.size(70.dp),
+                        modifier = Modifier.size(iconSize),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -357,7 +358,7 @@ fun TopBar(
                             shape = RoundedCornerShape(16.dp),
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
-                        .width(250.dp),
+                        .width(profileBoxWidth),
                 ) {
                     ProfileRow(
                         currentProfile,
@@ -410,7 +411,7 @@ private fun ProfileDropDown(
         onDismissRequest = { setProfileDropdownState(false) },
         modifier =
         Modifier
-            .width(250.dp)
+            .width(profileBoxWidth)
             .background(MaterialTheme.colorScheme.onPrimary),
     ) {
         profiles.forEach { profile ->
@@ -431,15 +432,15 @@ private fun ProfileDropDown(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .padding(horizontal = profileDropDownPadding, vertical = profileDropDownPadding/2)
                     .border(
                         1.dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(profileDropDownRoundedShape),
                     )
                     .background(
                         color = MaterialTheme.colorScheme.onPrimary,
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(profileDropDownRoundedShape),
                     ),
             )
         }
@@ -463,10 +464,10 @@ private fun ProfileDropDown(
             modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = profileDropDownPadding, vertical = profileDropDownPadding/2)
                 .background(
                     color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(profileDropDownRoundedShape),
                 ),
         )
     }

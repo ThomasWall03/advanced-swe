@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 class LandingPageAndroidViewModel (
     val viewModel: LandingPageViewModel
 ): ViewModel() {
+    var navigationRoute = "mainView"
+
     init {
         populateDatabase()
     }
@@ -17,6 +19,8 @@ class LandingPageAndroidViewModel (
     }
 
     fun checkIfProfilesExist() = viewModelScope.launch {
-        viewModel.checkIfProfilesExist()
+        if(!viewModel.checkIfProfilesExist()) {
+            navigationRoute = "createProfileView"
+        }
     }
 }

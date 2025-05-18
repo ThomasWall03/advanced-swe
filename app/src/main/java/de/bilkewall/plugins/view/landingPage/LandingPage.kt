@@ -32,7 +32,6 @@ fun StartUpView(
         ) {
             val adapter = viewModel.viewModel
             val isLoading by adapter.isLoading.collectAsState()
-            val profilesExist by adapter.profilesExist.collectAsState()
 
             LaunchedEffect(Unit) {
                 viewModel.checkIfProfilesExist()
@@ -40,16 +39,9 @@ fun StartUpView(
 
             LaunchedEffect(isLoading) {
                 if (!isLoading) {
-                    // TODO ins viewmodel hier, nur noch auslesen
-                    var navigationRoute = "mainView"
+                    Log.d("LandingPage", "Navigate to ${viewModel.navigationRoute}")
 
-                    if (!profilesExist) {
-                        navigationRoute = "createProfileView"
-                    }
-
-                    Log.d("LandingPage", "Navigate to $navigationRoute")
-
-                    navController.navigate(navigationRoute) {
+                    navController.navigate(viewModel.navigationRoute) {
                         popUpTo("startUpScreen") {
                             inclusive = true
                         } // Remove start screen from back stack

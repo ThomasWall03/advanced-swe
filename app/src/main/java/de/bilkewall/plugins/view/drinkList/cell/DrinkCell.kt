@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import de.bilkewall.domain.Drink
+import de.bilkewall.plugins.theme.cellPaddingValue
+import de.bilkewall.plugins.theme.squircleShapeValue
 import sv.lib.squircleshape.SquircleShape
 
 @Composable
@@ -29,11 +31,11 @@ fun DrinkCell(
     Card(
         modifier =
             Modifier
-                .padding(8.dp)
+                .padding(cellPaddingValue)
                 .fillMaxWidth()
                 .aspectRatio(2f)
                 .clickable { onClick(drink.drinkId.toString()) },
-        shape = SquircleShape(8.dp),
+        shape = SquircleShape(squircleShapeValue),
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Row {
@@ -44,14 +46,14 @@ fun DrinkCell(
                     Modifier
                         .weight(0.5f)
                         .aspectRatio(1f)
-                        .padding(8.dp)
-                        .clip(SquircleShape(8.dp)),
+                        .padding(cellPaddingValue)
+                        .clip(SquircleShape(squircleShapeValue)),
                 contentScale = ContentScale.Crop,
             )
             Column(
                 modifier =
                     Modifier
-                        .padding(8.dp)
+                        .padding(cellPaddingValue)
                         .weight(0.5f),
             ) {
                 Text(

@@ -52,6 +52,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.bilkewall.cinder.R
+import de.bilkewall.plugins.theme.*
 import de.bilkewall.plugins.view.utils.ErrorCard
 
 @Composable
@@ -155,21 +156,21 @@ fun FilterDialogName(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(roundedCornerShape))
                 .padding(24.dp),
     ) {
         Column(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(columnPaddingCreateProfileView),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(top = 20.dp),
+                modifier = Modifier.padding(top = columnPaddingCreateProfileView),
             ) {
                 Text(
                     text = title,
@@ -236,7 +237,7 @@ fun FilterDialog(
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(roundedCornerShape),
                 ),
     ) {
         Column(
@@ -284,7 +285,7 @@ fun FilterDialog(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 32.dp),
+                                .padding(horizontal = buttonPadding),
                         enabled = atLeastOneSelected,
                     ) {
                         Text(stringResource(R.string.reset_filter))
@@ -297,7 +298,7 @@ fun FilterDialog(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
+                                .padding(horizontal = buttonPadding/2),
                         enabled = enableNextButton,
                     ) {
                         Text(stringResource(R.string.next))
@@ -417,10 +418,10 @@ fun ScrollableFlowRow(
                                         } else {
                                             Color.Transparent
                                         },
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(roundedCornerShape),
                                 ).border(
                                     width = 1.dp,
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(roundedCornerShape),
                                     color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                                 ).clickable {
                                     if (isSelected) {
@@ -451,7 +452,7 @@ fun FilterDialogAlcohol(
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(roundedCornerShape),
                 ),
     ) {
         Column(
@@ -472,7 +473,7 @@ fun FilterDialogAlcohol(
                     Modifier
                         .fillMaxWidth()
                         .weight(4f)
-                        .padding(vertical = 16.dp),
+                        .padding(vertical = columnPaddingCreateProfileView),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Row(
@@ -502,7 +503,7 @@ fun FilterDialogAlcohol(
             ) {
                 Button(
                     onClick = { onNext() },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(buttonPadding/2),
                     enabled = isAlcoholic,
                 ) {
                     Text(stringResource(R.string.finish))

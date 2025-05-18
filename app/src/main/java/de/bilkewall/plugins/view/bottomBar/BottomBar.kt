@@ -14,8 +14,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.bilkewall.plugins.theme.bottomBarSize
 
 data class TabBarItem(
     val title: String,
@@ -73,7 +73,7 @@ fun CinderBarIconView(
                 } else {
                     unselectedIcon
                 },
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(bottomBarSize),
             contentDescription = title,
         )
     }

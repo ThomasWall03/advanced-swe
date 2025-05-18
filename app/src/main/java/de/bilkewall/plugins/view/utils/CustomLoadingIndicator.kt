@@ -41,7 +41,7 @@ fun CustomLoadingIndicator() {
 
 @Composable
 fun CustomRotatingAnimation() {
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "")
 
     // Animation for rotation angle
     val angle by infiniteTransition.animateFloat(
@@ -52,6 +52,7 @@ fun CustomRotatingAnimation() {
                 animation = tween(4000, easing = LinearEasing),
                 repeatMode = RepeatMode.Restart,
             ),
+        label = "",
     )
 
     // Calculating circular position
