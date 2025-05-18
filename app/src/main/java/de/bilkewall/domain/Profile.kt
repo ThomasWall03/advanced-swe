@@ -8,4 +8,8 @@ open class Profile(
     open val isActiveProfile: Boolean = false,
     open val creationDate: Long = System.currentTimeMillis(),
     open val creationDateString: String = LocalDateTime.now().toString(),
-)
+) {
+    open fun getDisplayInfo(): String {
+        return "Profil: $profileName"
+    }
+}

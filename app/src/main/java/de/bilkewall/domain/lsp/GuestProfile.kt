@@ -9,4 +9,8 @@ data class GuestProfile(
     fun generateNewSession(): GuestProfile {
         return this.copy(sessionId = "GUEST-${System.currentTimeMillis()}")
     }
+
+    override fun getDisplayInfo(): String {
+        return "Gastprofil – Session ID: $sessionId"
+    }
 }

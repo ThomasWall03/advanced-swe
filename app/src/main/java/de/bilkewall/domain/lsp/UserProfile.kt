@@ -12,4 +12,8 @@ data class UserProfile(
     fun getProfileInfo(): String {
         return "Email: $email" + (phoneNumber?.let { ", Phone: $it" } ?: "")
     }
+
+    override fun getDisplayInfo(): String {
+        return "Userprofil – Email: $email"
+    }
 }
