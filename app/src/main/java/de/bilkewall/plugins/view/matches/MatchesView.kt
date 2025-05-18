@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import de.bilkewall.adapters.viewmodel.MatchesViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.view.drinkList.DrinkList
 import de.bilkewall.plugins.view.drinkList.SearchBar
@@ -23,10 +22,14 @@ import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 @Composable
 fun MatchesView(
     navController: NavController,
-    matchesViewModel: MatchesViewModel,
+    matchesViewModel: MatchesAndroidViewModel,
     bottomBar: @Composable () -> Unit,
 ) {
-    val visibleDrinks by matchesViewModel.visibleDrinks.collectAsState()
+    val adapter = matchesViewModel.viewModel
+    val isLoading by adapter.isLoading.collectAsState()
+    val errorMessage by adapter.errorMessage.collectAsState()
+
+    val visibleDrinks by adapter.visibleDrinks.collectAsState()
 
     Scaffold(
         topBar = {
@@ -50,11 +53,11 @@ fun MatchesView(
                     }
                 },
             )
-            if (matchesViewModel.loading) {
+            if (isLoading) {
                 CustomLoadingIndicator()
             } else {
                 DrinkList(
-                    matchesViewModel.errorMessage,
+                    errorMessage,
                     visibleDrinks,
                     onClick = {
                         navController.navigate("cocktailDetailView/$it")

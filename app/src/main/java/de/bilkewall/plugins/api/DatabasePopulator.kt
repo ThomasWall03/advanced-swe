@@ -3,8 +3,8 @@ package de.bilkewall.plugins.api
 import android.util.Log
 import de.bilkewall.adapters.DatabasePopulator
 import de.bilkewall.application.repository.category.CategoryRepositoryManipulatorInterface
-import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefManipulatorInterface
 import de.bilkewall.application.repository.drink.DrinkRepositoryManipulatorInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefManipulatorInterface
 import de.bilkewall.domain.DrinkIngredientCrossRef
 import kotlinx.coroutines.flow.first
 

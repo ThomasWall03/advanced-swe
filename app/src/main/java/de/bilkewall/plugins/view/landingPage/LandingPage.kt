@@ -14,25 +14,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import de.bilkewall.adapters.viewmodel.LandingPageViewModel
 import de.bilkewall.plugins.view.utils.CustomLoadingIndicator
 
 @Composable
 fun StartUpView(
     navController: NavController,
-    viewModel: LandingPageViewModel,
+    viewModel: LandingPageAndroidViewModel,
 ) {
     Scaffold { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            val isLoading by viewModel.isLoading.collectAsState()
-            val profilesExist by viewModel.profilesExist.collectAsState()
+            val adapter = viewModel.viewModel
+            val isLoading by adapter.isLoading.collectAsState()
+            val profilesExist by adapter.profilesExist.collectAsState()
 
             LaunchedEffect(Unit) {
                 viewModel.checkIfProfilesExist()

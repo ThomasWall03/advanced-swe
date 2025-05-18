@@ -1,7 +1,7 @@
 package de.bilkewall.application.service
 
-import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
 import de.bilkewall.application.repository.drink.DrinkRepositoryFetchingInterface
+import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredientCrossRefFetchingInterface
 import de.bilkewall.domain.Drink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

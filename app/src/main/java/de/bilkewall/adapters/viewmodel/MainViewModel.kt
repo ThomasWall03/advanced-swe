@@ -1,9 +1,5 @@
 package de.bilkewall.adapters.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.DrinkFetchingService
 import de.bilkewall.application.service.DrinkFilterService
 import de.bilkewall.application.service.MatchService
@@ -12,12 +8,10 @@ import de.bilkewall.application.service.SharedFilterService
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.Match
 import de.bilkewall.domain.Profile
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val profileManagementService: ProfileManagementService,
@@ -25,88 +19,101 @@ class MainViewModel(
     private val drinkFilterService: DrinkFilterService,
     private val drinkFetchingService: DrinkFetchingService,
     private val sharedFilterService: SharedFilterService,
-) : ViewModel() {
+) {
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     val allProfiles: Flow<List<Profile>> = profileManagementService.allProfiles
     val currentProfile = profileManagementService.getActiveProfile()
 
     private val _currentDrink = MutableStateFlow(Drink())
     val currentDrink: StateFlow<Drink> get() = _currentDrink
 
-    private val _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> get() = _loading
-    var isInitialLoad = mutableStateOf(true)
+    private var bypassFilter = false
+    private var matchingActive = true
+    private val _isInitialLoad = MutableStateFlow(true)
+    val isInitialLoad: StateFlow<Boolean> get() = _isInitialLoad
 
-    private val bypassFilter = mutableStateOf(false)
-    val allDrinksMatched = mutableStateOf(false)
-    val noMoreDrinksAvailable = mutableStateOf(false)
+    private val _allDrinksMatched = MutableStateFlow(false)
+    val allDrinksMatched: StateFlow<Boolean> get() = _allDrinksMatched
 
-    fun evaluateCurrentDrink() =
-        viewModelScope.launch(Dispatchers.IO) {
-            _loading.value = true
-            try {
-                val profile = currentProfile.firstOrNull()
-                if (profile != null) {
-                    val filters =
-                        listOf(
-                            sharedFilterService.getIngredientFilterValues(profile.profileId),
-                            sharedFilterService.getDrinkTypeFilterValues(profile.profileId),
-                        )
-                    val filteredDrinks =
-                        drinkFilterService.evaluateCurrentDrinks(
-                            bypassFilter.value,
-                            matchService.getMatchesForProfile(profile.profileId),
-                            filters,
-                        )
-                    allDrinksMatched.value = drinkFilterService.areAllDrinksMatched(bypassFilter.value, filteredDrinks)
-                    noMoreDrinksAvailable.value = drinkFilterService.noMoreDrinksAvailable(filteredDrinks)
-                    if (noMoreDrinksAvailable.value) {
-                        _currentDrink.value = Drink()
-                    } else {
-                        _currentDrink.value = drinkFetchingService.getDrinkById(filteredDrinks.first().drinkId)
-                    }
+    private val _noMoreDrinksAvailable = MutableStateFlow(false)
+    val noMoreDrinksAvailable: StateFlow<Boolean> get() = _noMoreDrinksAvailable
+
+    suspend fun evaluateCurrentDrink() {
+        _isInitialLoad.value = true
+        try {
+            val profile = currentProfile.firstOrNull()
+            if (profile != null) {
+                val filters =
+                    listOf(
+                        sharedFilterService.getIngredientFilterValues(profile.profileId),
+                        sharedFilterService.getDrinkTypeFilterValues(profile.profileId),
+                    )
+                val filteredDrinks =
+                    drinkFilterService.evaluateCurrentDrinks(
+                        bypassFilter,
+                        matchService.getMatchesForProfile(profile.profileId),
+                        filters,
+                    )
+                _allDrinksMatched.value =
+                    drinkFilterService.areAllDrinksMatched(bypassFilter, filteredDrinks)
+                _noMoreDrinksAvailable.value =
+                    drinkFilterService.noMoreDrinksAvailable(filteredDrinks)
+                if (_noMoreDrinksAvailable.value) {
+                    _currentDrink.value = Drink()
+                } else {
+                    _currentDrink.value =
+                        drinkFetchingService.getDrinkById(filteredDrinks.first().drinkId)
                 }
-            } catch (e: Exception) {
-                Log.e("MainViewModel.evaluateCurrentDrink", "Error: ${e.message}")
-            } finally {
-                isInitialLoad.value = false
-                _loading.value = false
             }
+        } catch (e: Exception) {
+            _errorMessage.value = "Error: ${e.message}"
+        } finally {
+            matchingActive = true
+            _isInitialLoad.value = false
+            _isLoading.value = false
         }
-
-    fun toggleFilterBypass(byPassFilter: Boolean) {
-        bypassFilter.value = byPassFilter
     }
 
-    fun setCurrentProfile(profile: Profile) =
-        viewModelScope.launch {
-            profileManagementService.setCurrentProfile(profile)
+    fun toggleFilterBypass(byPassFilter: Boolean) {
+        bypassFilter = byPassFilter
+    }
 
-            bypassFilter.value = false
-            allDrinksMatched.value = false
-            isInitialLoad.value = true
-            evaluateCurrentDrink()
-        }
+    suspend fun setCurrentProfile(profile: Profile) {
+        profileManagementService.setCurrentProfile(profile)
 
-    fun handleMatchingRequest(
-        match: Boolean,
-        drinkId: Int,
-        profileId: Int,
-    ) = viewModelScope.launch {
-        matchService.insert(Match(drinkId, profileId, match))
+        bypassFilter = false
+        _allDrinksMatched.value = false
+        _isInitialLoad.value = true
         evaluateCurrentDrink()
     }
 
-    fun deleteProfile(profile: Profile) =
-        viewModelScope.launch(Dispatchers.IO) {
-            sharedFilterService.deleteFiltersForProfile(profile.profileId)
-            matchService.deleteMatchesForProfile(profile.profileId)
-            profileManagementService.deleteProfile(profile)
+    suspend fun handleMatchingRequest(
+        match: Boolean,
+        drinkId: Int,
+        profileId: Int,
+    ) {
+        if (matchingActive) {
+            matchService.insert(Match(drinkId, profileId, match))
+            matchingActive = false
+            evaluateCurrentDrink()
+        }
+    }
 
-            if (profile.isActiveProfile) {
-                val firstProfile = allProfiles.firstOrNull()?.first()
-                firstProfile?.let {
-                    setCurrentProfile(it)
-                }
+    suspend fun deleteProfile(profile: Profile) {
+        sharedFilterService.deleteFiltersForProfile(profile.profileId)
+        matchService.deleteMatchesForProfile(profile.profileId)
+        profileManagementService.deleteProfile(profile)
+
+        if (profile.isActiveProfile) {
+            val firstProfile = allProfiles.firstOrNull()?.first()
+            firstProfile?.let {
+                setCurrentProfile(it)
             }
         }
+    }
 }

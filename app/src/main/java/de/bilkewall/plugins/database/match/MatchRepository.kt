@@ -4,7 +4,6 @@ import de.bilkewall.application.repository.MatchRepositoryInterface
 import de.bilkewall.domain.Match
 import de.bilkewall.plugins.util.toMatch
 import de.bilkewall.plugins.util.toMatchEntity
-import kotlinx.coroutines.flow.map
 
 class MatchRepository(
     private val matchDao: MatchDao,

@@ -20,11 +20,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.bilkewall.adapters.viewmodel.DrinkListViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
 import de.bilkewall.plugins.view.drinkList.cell.DrinkCell
@@ -35,9 +35,14 @@ import de.bilkewall.plugins.view.utils.ErrorCard
 @Composable
 fun DrinkListView(
     navController: NavController,
-    drinkListViewModel: DrinkListViewModel,
+    drinkListViewModel: DrinkListAndroidViewModel,
     bottomBar: @Composable () -> Unit,
 ) {
+    val adapter = drinkListViewModel.viewModel
+
+    val isLoading by adapter.isLoading.collectAsState()
+    val errorMessage by adapter.errorMessage.collectAsState()
+
     LaunchedEffect(Unit) {
         drinkListViewModel.getAllDrinks()
     }
@@ -61,12 +66,12 @@ fun DrinkListView(
                     }
                 },
             )
-            if (drinkListViewModel.loading) {
+            if (isLoading) {
                 CustomLoadingIndicator()
             } else {
                 DrinkList(
-                    drinkListViewModel.errorMessage,
-                    drinkListViewModel.drinks.collectAsState(initial = emptyList()).value,
+                    errorMessage,
+                    adapter.drinks.collectAsState(initial = emptyList()).value,
                     onClick = {
                         navController.navigate("cocktailDetailView/$it")
                     },

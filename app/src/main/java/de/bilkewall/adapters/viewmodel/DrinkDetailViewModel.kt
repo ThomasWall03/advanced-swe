@@ -1,33 +1,28 @@
 package de.bilkewall.adapters.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.DrinkFetchingService
 import de.bilkewall.domain.Drink
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class DrinkDetailViewModel(
     private var drinkFetchingService: DrinkFetchingService,
-) : ViewModel() {
-    var drink: Drink by mutableStateOf(Drink())
-    private var errorMessage: String by mutableStateOf("")
-    var loading: Boolean by mutableStateOf(false)
+) {
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
 
-    fun setDrinkById(id: String) {
-        viewModelScope.launch {
-            loading = true
-            try {
-                drink = drinkFetchingService.getDrinkById(id.toInt())
-            } catch (e: Exception) {
-                errorMessage = e.message ?: "Unknown error"
-                Log.e("DrinkDetailViewModel.setDrinkById", errorMessage)
-            } finally {
-                loading = false
-            }
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    suspend fun setDrinkById(id: String): Drink {
+        _isLoading.value = true
+        try {
+            return drinkFetchingService.getDrinkById(id.toInt())
+        } catch (e: Exception) {
+            _errorMessage.value = e.message.toString()
+            return Drink()
+        } finally {
+            _isLoading.value = false
         }
     }
 }

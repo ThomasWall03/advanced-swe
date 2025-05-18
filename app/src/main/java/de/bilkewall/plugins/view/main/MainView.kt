@@ -54,7 +54,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import de.bilkewall.adapters.viewmodel.MainViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
 import de.bilkewall.domain.Profile
@@ -65,16 +64,22 @@ import de.bilkewall.plugins.view.utils.ErrorCard
 @Composable
 fun MainView(
     navController: NavController,
-    mainViewModel: MainViewModel,
+    mainViewModel: MainAndroidViewModel,
     bottomBar: @Composable () -> Unit,
 ) {
-    val profiles by mainViewModel.allProfiles.collectAsState(initial = emptyList())
-    val currentProfile by mainViewModel.currentProfile.collectAsState(
+    val adapter = mainViewModel.viewModel
+    val profiles by adapter.allProfiles.collectAsState(initial = emptyList())
+    val currentProfile by adapter.currentProfile.collectAsState(
         initial = null,
     )
 
-    val currentDrink by mainViewModel.currentDrink.collectAsState(initial = Drink())
-    val isLoading by mainViewModel.loading.collectAsState()
+    val currentDrink by adapter.currentDrink.collectAsState(initial = Drink())
+    val isLoading by adapter.isLoading.collectAsState()
+    val errorMessage by adapter.errorMessage.collectAsState()
+
+    val isInitialLoad by adapter.isInitialLoad.collectAsState()
+    val allDrinksMatched by adapter.allDrinksMatched.collectAsState()
+    val noMoreDrinksAvailable by adapter.noMoreDrinksAvailable.collectAsState()
 
     var isFlipped by remember { mutableStateOf(false) }
 
@@ -103,7 +108,7 @@ fun MainView(
                 mainViewModel.evaluateCurrentDrink()
             }
 
-            if (!mainViewModel.noMoreDrinksAvailable.value && !mainViewModel.allDrinksMatched.value) {
+            if (!noMoreDrinksAvailable && !allDrinksMatched) {
                 ImageCard(
                     currentDrink,
                     onCheckClick = {
@@ -126,9 +131,9 @@ fun MainView(
                     setIsFlipped = { isFlipped = it },
                     isLoading = isLoading,
                 )
-            } else if (mainViewModel.isInitialLoad.value) {
+            } else if (isInitialLoad) {
                 CustomLoadingIndicator()
-            } else if (mainViewModel.noMoreDrinksAvailable.value && !mainViewModel.allDrinksMatched.value) {
+            } else if (noMoreDrinksAvailable && !allDrinksMatched) {
                 ErrorCard(
                     errorHeading = stringResource(R.string.no_more_drinks_title),
                     errorInformation = stringResource(R.string.no_more_drinks_information),
@@ -148,13 +153,13 @@ fun MainView(
             } else {
                 ErrorCard(
                     errorHeading =
-                        stringResource(
-                            R.string.all_drinks_are_matched_title,
-                        ),
+                    stringResource(
+                        R.string.all_drinks_are_matched_title,
+                    ),
                     errorInformation =
-                        stringResource(
-                            R.string.all_drinks_matched_information,
-                        ),
+                    stringResource(
+                        R.string.all_drinks_matched_information,
+                    ),
                 )
             }
         }
@@ -172,16 +177,16 @@ fun ImageCard(
 ) {
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .clickable { setIsFlipped(!isFlipped) }
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surface),
+        Modifier
+            .fillMaxSize()
+            .clickable { setIsFlipped(!isFlipped) }
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.surface),
     ) {
         Card(
             modifier =
-                Modifier
-                    .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(),
         ) {
@@ -195,29 +200,29 @@ fun ImageCard(
                     )
                     Box(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(160.dp)
-                                .align(Alignment.BottomCenter),
+                        Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .align(Alignment.BottomCenter),
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        brush =
-                                            Brush.verticalGradient(
-                                                colors =
-                                                    listOf(
-                                                        Color.Transparent,
-                                                        Color.Black.copy(alpha = 0.4f),
-                                                        Color.Black.copy(alpha = 0.6f),
-                                                        Color.Black.copy(alpha = 0.7f),
-                                                        Color.Black.copy(alpha = 1f),
-                                                    ),
-                                            ),
-                                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                            Modifier
+                                .fillMaxSize()
+                                .background(
+                                    brush =
+                                    Brush.verticalGradient(
+                                        colors =
+                                        listOf(
+                                            Color.Transparent,
+                                            Color.Black.copy(alpha = 0.4f),
+                                            Color.Black.copy(alpha = 0.6f),
+                                            Color.Black.copy(alpha = 0.7f),
+                                            Color.Black.copy(alpha = 1f),
+                                        ),
                                     ),
+                                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                                ),
                         )
                     }
                 }
@@ -249,9 +254,9 @@ private fun BottomButtonRow(
 ) {
     Row(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom,
     ) {
@@ -266,8 +271,8 @@ private fun BottomButtonRow(
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.White,
                     modifier =
-                        Modifier
-                            .padding(bottom = 8.dp),
+                    Modifier
+                        .padding(bottom = 8.dp),
                 )
             }
             Row(
@@ -277,13 +282,14 @@ private fun BottomButtonRow(
                 IconButton(
                     onClick = onCrossClick,
                     modifier =
-                        Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surface,
-                                shape = CircleShape,
-                            ).padding(8.dp)
-                            .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
-                            .padding(4.dp),
+                    Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = CircleShape,
+                        )
+                        .padding(8.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
+                        .padding(4.dp),
                     enabled = !isLoading,
                 ) {
                     Icon(
@@ -297,13 +303,14 @@ private fun BottomButtonRow(
                 IconButton(
                     onClick = onCheckClick,
                     modifier =
-                        Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surface,
-                                shape = CircleShape,
-                            ).padding(8.dp)
-                            .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
-                            .padding(4.dp),
+                    Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = CircleShape,
+                        )
+                        .padding(8.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)
+                        .padding(4.dp),
                     enabled = !isLoading,
                 ) {
                     Icon(
@@ -335,21 +342,22 @@ fun TopBar(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(end = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
             ) {
                 // Profile Box
                 Column(
                     modifier =
-                        Modifier
-                            .clickable { showProfileDropdown = !showProfileDropdown }
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(16.dp),
-                            ).padding(horizontal = 8.dp, vertical = 4.dp)
-                            .width(250.dp),
+                    Modifier
+                        .clickable { showProfileDropdown = !showProfileDropdown }
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp),
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .width(250.dp),
                 ) {
                     ProfileRow(
                         currentProfile,
@@ -359,8 +367,8 @@ fun TopBar(
                     )
                     Box(
                         modifier =
-                            Modifier
-                                .offset(y = 5.dp),
+                        Modifier
+                            .offset(y = 5.dp),
                     ) {
                         ProfileDropDown(
                             showProfileDropdown,
@@ -401,9 +409,9 @@ private fun ProfileDropDown(
         expanded = showProfileDropdown,
         onDismissRequest = { setProfileDropdownState(false) },
         modifier =
-            Modifier
-                .width(250.dp)
-                .background(MaterialTheme.colorScheme.onPrimary),
+        Modifier
+            .width(250.dp)
+            .background(MaterialTheme.colorScheme.onPrimary),
     ) {
         profiles.forEach { profile ->
             DropdownMenuItem(
@@ -421,17 +429,18 @@ private fun ProfileDropDown(
                 },
                 interactionSource = dropdownInteractionSource,
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                        .border(
-                            1.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(8.dp),
-                        ).background(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(8.dp),
-                        ),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .border(
+                        1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    .background(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        shape = RoundedCornerShape(8.dp),
+                    ),
             )
         }
         // Add profile item (action button)
@@ -452,13 +461,13 @@ private fun ProfileDropDown(
                 ProfileRow(messageProfile, R.drawable.profile_plus_icon, {}, false)
             },
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        shape = RoundedCornerShape(8.dp),
-                    ),
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(8.dp),
+                ),
         )
     }
 }
@@ -478,21 +487,21 @@ private fun ProfileRow(
             painter = painterResource(id = painterResourceId),
             contentDescription = null,
             modifier =
-                Modifier
-                    .size(30.dp)
-                    .offset(x = (-4).dp)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = CircleShape,
-                    ),
+            Modifier
+                .size(30.dp)
+                .offset(x = (-4).dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                ),
         )
         Text(
             text = profile.profileName,
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(start = 4.dp),
+            Modifier
+                .weight(1f)
+                .padding(start = 4.dp),
         )
         if (showDeleteButton) {
             IconButton(

@@ -51,21 +51,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.bilkewall.adapters.viewmodel.CreateProfileViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.plugins.view.utils.ErrorCard
 
 @Composable
 fun CreateProfileView(
     navController: NavController,
-    viewModel: CreateProfileViewModel,
+    viewModel: CreateProfileAndroidViewModel,
 ) {
     var currentDialogIndex by remember { mutableIntStateOf(0) }
     var profileName by remember { mutableStateOf("") }
     var isAlcoholic by remember { mutableStateOf(true) }
 
-    val drinkTypeFilterValues by viewModel.drinkTypeFilterValues.collectAsState()
-    val ingredientFilterValues by viewModel.allIngredients.collectAsState(initial = emptyList())
+    val adapter = viewModel.createProfileViewModel
+    val isLoading by adapter.isLoading.collectAsState()
+    val errorMessage by adapter.errorMessage.collectAsState()
+
+    val drinkTypeFilterValues by adapter.drinkTypeFilterValues.collectAsState()
+    val ingredientFilterValues by adapter.allIngredients.collectAsState(initial = emptyList())
 
     LaunchedEffect(Unit) {
         viewModel.fetchDrinkTypeFilterValues()
@@ -87,14 +90,14 @@ fun CreateProfileView(
             FilterDialog(
                 title = stringResource(R.string.whats_your_type_filterquestion),
                 options = drinkTypeFilterValues,
-                selectedOptions = viewModel.selectedDrinkTypeOptions.collectAsState().value,
+                selectedOptions = adapter.selectedDrinkTypeOptions.collectAsState().value,
                 onOptionSelected = { options ->
                     viewModel.updateDrinkTypeFilterValues(options)
                 },
                 onNext = { currentDialogIndex++ },
                 onBack = { currentDialogIndex-- },
                 enableNextButton =
-                    viewModel.selectedDrinkTypeOptions
+                    adapter.selectedDrinkTypeOptions
                         .collectAsState()
                         .value.size > 1,
             )
@@ -103,7 +106,7 @@ fun CreateProfileView(
             FilterDialog(
                 title = stringResource(R.string.what_are_you_into_filterquestion),
                 options = ingredientFilterValues,
-                selectedOptions = viewModel.selectedIngredientOptions.collectAsState().value,
+                selectedOptions = adapter.selectedIngredientOptions.collectAsState().value,
                 onOptionSelected = { options ->
                     Log.d("DEBUG", "Selected options: ${options.toList()}")
                     viewModel.updateIngredientFilterValues(options)
@@ -111,7 +114,7 @@ fun CreateProfileView(
                 onNext = { currentDialogIndex++ },
                 onBack = { currentDialogIndex-- },
                 enableNextButton =
-                    viewModel.selectedIngredientOptions
+                    adapter.selectedIngredientOptions
                         .collectAsState()
                         .value.size > 5,
             )
@@ -133,10 +136,10 @@ fun CreateProfileView(
             )
     }
 
-    AnimatedVisibility(viewModel.errorMessage.isNotEmpty()) {
+    AnimatedVisibility(errorMessage.isNotEmpty()) {
         ErrorCard(
             errorHeading = stringResource(R.string.generic_error_title),
-            errorInformation = viewModel.errorMessage,
+            errorInformation = errorMessage,
         )
     }
 }

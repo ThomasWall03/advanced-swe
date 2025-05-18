@@ -1,10 +1,5 @@
 package de.bilkewall.adapters.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import de.bilkewall.application.service.CategoryService
 import de.bilkewall.application.service.IngredientService
 import de.bilkewall.application.service.ProfileManagementService
@@ -14,14 +9,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class CreateProfileViewModel(
     private val profileManagementService: ProfileManagementService,
     private val sharedFilterService: SharedFilterService,
     private val ingredientService: IngredientService,
     private val categoryService: CategoryService,
-) : ViewModel() {
+)  {
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     private val _drinkTypeFilterValues = MutableStateFlow<List<String>>(emptyList())
     val drinkTypeFilterValues: StateFlow<List<String>> = _drinkTypeFilterValues
 
@@ -33,37 +33,31 @@ class CreateProfileViewModel(
     var allIngredients: Flow<List<String>> =
         ingredientService.getAllIngredientsSortedByName()
 
-    var errorMessage: String by mutableStateOf("")
-    private var loading: Boolean by mutableStateOf(false)
-
-    fun saveProfile(profileName: String) =
-        viewModelScope.launch {
-            val id =
-                profileManagementService.saveProfile(
-                    profileName,
-                )
-            sharedFilterService.saveFiltersForProfile(
-                id,
-                _selectedDrinkTypeOptions.value,
-                _selectedIngredientOptions.value,
+    suspend fun saveProfile(profileName: String) {
+        val id =
+            profileManagementService.saveProfile(
+                profileName,
             )
-        }
+        sharedFilterService.saveFiltersForProfile(
+            id,
+            _selectedDrinkTypeOptions.value,
+            _selectedIngredientOptions.value,
+        )
+    }
 
-    fun fetchDrinkTypeFilterValues() {
-        viewModelScope.launch {
-            errorMessage = ""
-            loading = true
-            try {
-                val values =
-                    categoryService.getAllCategories().map { categories ->
-                        categories.map { it.strCategory }
-                    }
-                _drinkTypeFilterValues.value = values.first()
-            } catch (e: Exception) {
-                errorMessage = e.message.toString()
-            } finally {
-                loading = false
-            }
+    suspend fun fetchDrinkTypeFilterValues() {
+        _errorMessage.value = ""
+        _isLoading.value = true
+        try {
+            val values =
+                categoryService.getAllCategories().map { categories ->
+                    categories.map { it.strCategory }
+                }
+            _drinkTypeFilterValues.value = values.first()
+        } catch (e: Exception) {
+            _errorMessage.value = e.message.toString()
+        } finally {
+            _isLoading.value = false
         }
     }
 

@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import de.bilkewall.adapters.viewmodel.DrinkDetailViewModel
 import de.bilkewall.cinder.R
 import de.bilkewall.domain.Drink
 
@@ -41,9 +42,13 @@ import de.bilkewall.domain.Drink
 @Composable
 fun DrinkDetailView(
     navController: NavHostController,
-    drinkDetailViewModel: DrinkDetailViewModel,
+    drinkDetailViewModel: DrinkDetailAndroidViewModel,
     drinkId: String,
 ) {
+    val adapter = drinkDetailViewModel.viewModel
+    val isLoading by adapter.isLoading.collectAsState()
+    val errorMessage by adapter.errorMessage.collectAsState()
+
     LaunchedEffect(Unit) {
         drinkDetailViewModel.setDrinkById(drinkId)
     }
@@ -60,7 +65,7 @@ fun DrinkDetailView(
             )
         },
     ) { innerPadding ->
-        DetailViewCard(innerPadding, drinkDetailViewModel.drink, drinkDetailViewModel.loading)
+        DetailViewCard(innerPadding, drinkDetailViewModel.drink, isLoading)
     }
 }
 
