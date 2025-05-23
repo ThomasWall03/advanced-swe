@@ -5,6 +5,7 @@ import de.bilkewall.application.repository.drinkingredientcrossref.DrinkIngredie
 import de.bilkewall.domain.Drink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.reflect.typeOf
 
 class DrinkFetchingService private constructor(
     private val drinkRepository: DrinkRepositoryFetchingInterface,
@@ -56,10 +57,17 @@ class DrinkFetchingService private constructor(
     fun getMatchedDrinksByNameAndProfile(
         name: String,
         profileId: Int,
-    ): Flow<List<Drink>> =
-        drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
+    ): Flow<List<Drink>> {
+        if (name.isEmpty()) {
+            throw IllegalArgumentException("Name cannot be empty")
+        }
+        if (profileId < 0) {
+            throw IllegalArgumentException("Profile ID cannot be negative")
+        }
+        return drinkRepository.getMatchedDrinksByName(name, profileId).map { drinks ->
             drinks.map { drink -> addIngredientsToDrink(drink) }
         }
+    }
 
     fun getMatchedDrinksForProfile(profileId: Int): Flow<List<Drink>> =
         drinkRepository.getMatchedDrinksForProfile(profileId).map { drinks ->

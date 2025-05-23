@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
@@ -119,6 +120,38 @@ class DrinkFetchingServiceTest {
 
         // Assert
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getMatchedDrinksByName throws error upon invalid input name`() = runTest {
+        // Arrange
+        val givenName = ""
+        val givenProfileId = 1
+        val target = createServiceInstance()
+
+        // Act & Assert
+        val exception = assertThrows<IllegalArgumentException> {
+            target.getMatchedDrinksByNameAndProfile(givenName, givenProfileId).first()
+        }
+
+        // Verify the exception message
+        assertEquals("Name cannot be empty", exception.message)
+    }
+
+    @Test
+    fun `getMatchedDrinksByName throws error upon invalid profile id`() = runTest {
+        // Arrange
+        val givenName = "validName"
+        val givenProfileId = -1
+        val target = createServiceInstance()
+
+        // Act & Assert
+        val exception = assertThrows<IllegalArgumentException> {
+            target.getMatchedDrinksByNameAndProfile(givenName, givenProfileId).first()
+        }
+
+        // Verify the exception message
+        assertEquals("Profile ID cannot be negative", exception.message)
     }
 
     @Test

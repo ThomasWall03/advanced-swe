@@ -50,5 +50,4 @@ class CategoryServiceTest {
         // Assert
         assertEquals(expected, actual)
     }
-
 }
